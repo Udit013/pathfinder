@@ -1,4 +1,4 @@
-import { StorageUnavailableError, type StorageAdapter } from './adapter'
+import { CorruptDataError, StorageUnavailableError, type StorageAdapter } from './adapter'
 import { migrate } from './migrate'
 import { STORAGE_KEY, looksLikePersistedState, type PersistedState } from './schema'
 
@@ -38,11 +38,32 @@ export class LocalStorageAdapter implements StorageAdapter {
     try {
       parsed = JSON.parse(raw)
     } catch {
-      return null
+      throw new CorruptDataError(this.quarantine(raw))
     }
 
-    if (!looksLikePersistedState(parsed)) return null
+    if (!looksLikePersistedState(parsed)) {
+      throw new CorruptDataError(this.quarantine(raw))
+    }
+
     return migrate(parsed).state
+  }
+
+  /**
+   * Moves unreadable data aside instead of letting the next save overwrite it.
+   *
+   * Starting fresh is the only way to make the app usable again, but doing that
+   * silently would destroy someone's history on a single bad write. The copy is
+   * kept so it can be inspected or recovered by hand.
+   */
+  private quarantine(raw: string): string {
+    const backupKey = `${this.key}:corrupt:${Date.now()}`
+    try {
+      window.localStorage.setItem(backupKey, raw)
+      window.localStorage.removeItem(this.key)
+      return backupKey
+    } catch {
+      return backupKey
+    }
   }
 
   async save(state: PersistedState): Promise<void> {

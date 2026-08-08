@@ -1,7 +1,8 @@
 import { Link, useParams } from 'react-router'
-import { ArrowLeft, ArrowRight, Check, Info } from 'lucide-react'
+import { ArrowRight, Check, Info } from 'lucide-react'
 import type { InterviewTrack, PrepStage } from '@/types'
 import { Card, SectionHeading } from '@/ui/Card'
+import { BackLink } from '@/ui/BackLink'
 import { Badge } from '@/ui/Badge'
 import { ButtonLink } from '@/ui/Button'
 import { ProgressBar } from '@/ui/Progress'
@@ -44,13 +45,7 @@ export function TrackPage() {
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-8 pt-2">
-      <Link
-        to="/interview"
-        className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-ink"
-      >
-        <ArrowLeft className="size-3.5" aria-hidden />
-        Interview prep
-      </Link>
+      <BackLink to="/interview">Interview prep</BackLink>
 
       <header className="animate-rise">
         <h1 className="font-display text-2xl leading-tight text-ink">{meta.title}</h1>
@@ -58,7 +53,7 @@ export function TrackPage() {
 
         <div className="mt-3 flex flex-wrap gap-1.5">
           {meta.skillIds.map((skillId) => (
-            <Link key={skillId} to="/roadmap">
+            <Link key={skillId} to="/roadmap" className="inline-flex min-h-8 items-center">
               <Badge tone="neutral">{skillName(skillId)}</Badge>
             </Link>
           ))}

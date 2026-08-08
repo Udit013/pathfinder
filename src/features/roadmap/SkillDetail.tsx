@@ -5,6 +5,7 @@ import type { ResolvedNode } from '@/domain/roadmap'
 import { importanceExplanations, importanceLabels } from '@/domain/roadmap'
 import { Badge } from '@/ui/Badge'
 import { Button } from '@/ui/Button'
+import { AskAiButton } from '@/features/ai/AskAiButton'
 import { TextArea } from '@/ui/Field'
 import { FreeResources } from '@/ui/ResourceLinks'
 import { resourcesByIds, resourcesForSkill } from '@/data/resources'
@@ -166,6 +167,10 @@ export function SkillDetail({
           One task to know it stuck
         </p>
         <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">{skill.practiceTask}</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <AskAiButton kind="learn_skill" label="Teach me this" />
+          <AskAiButton kind="hint" label="I'm stuck" variant="ghost" />
+        </div>
       </div>
 
       {/* Resources — the reason this panel exists */}

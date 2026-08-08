@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router'
-import { ArrowLeft, ArrowRight, Check, Eye, EyeOff, Mic, Timer } from 'lucide-react'
+import { useParams } from 'react-router'
+import { ArrowRight, Check, Eye, EyeOff, Mic, Timer } from 'lucide-react'
 import type { InterviewTrack, PrepStage } from '@/types'
 import { Card, SectionHeading } from '@/ui/Card'
+import { BackLink } from '@/ui/BackLink'
 import { Badge } from '@/ui/Badge'
 import { Button, ButtonLink } from '@/ui/Button'
 import { TextArea } from '@/ui/Field'
@@ -64,13 +65,7 @@ export function QuestionPage() {
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-7 pt-2">
-      <Link
-        to={`/interview/${meta.id}`}
-        className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-ink"
-      >
-        <ArrowLeft className="size-3.5" aria-hidden />
-        {meta.title}
-      </Link>
+      <BackLink to={`/interview/${meta.id}`}>{meta.title}</BackLink>
 
       <header className="animate-rise">
         <Badge tone="neutral">{question.difficulty}</Badge>

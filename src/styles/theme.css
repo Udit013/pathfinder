@@ -34,8 +34,10 @@
 
   /* Text — warm near-black, never pure black */
   --ink: oklch(29% 0.024 330);
-  --ink-soft: oklch(49% 0.018 330);
-  --ink-faint: oklch(64% 0.014 330);
+  --ink-soft: oklch(46% 0.018 330);
+  /* 53%, not 64% — measured at 4.5:1 against the lightest surface. This token
+     carries section labels and metadata, so it has to clear AA for small text. */
+  --ink-faint: oklch(53% 0.016 330);
   --ink-inverse: oklch(99% 0.004 70);
 
   /* Lines — soft enough to suggest an edge rather than draw one */
@@ -93,8 +95,8 @@
   --overlay: oklch(13% 0.014 325 / 65%);
 
   --ink: oklch(95% 0.01 330);
-  --ink-soft: oklch(77% 0.014 330);
-  --ink-faint: oklch(62% 0.014 330);
+  --ink-soft: oklch(80% 0.014 330);
+  --ink-faint: oklch(72% 0.014 330);
   --ink-inverse: oklch(22% 0.018 325);
 
   --line: oklch(32% 0.022 330);

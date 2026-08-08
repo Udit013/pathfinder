@@ -1,3 +1,6 @@
+import { Card } from '@/ui/Card'
+import { SproutDoodle } from '@/ui/Doodles'
+import { AskAiButton } from '@/features/ai/AskAiButton'
 import { EnergyCheckIn } from './EnergyCheckIn'
 import { TodaysQuest } from './TodaysQuest'
 import { ExplorationNudge } from './ExplorationNudge'
@@ -12,7 +15,8 @@ import { friendlyGreeting, subheadingForDay } from '@/lib/utils'
 export function TodayPage() {
   const profile = useProfile()
   const checkIn = useTodayCheckIn()
-  const { shape } = useTodayMode()
+  const { shape, mode } = useTodayMode()
+  const lightDay = mode === 'light'
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-8 pt-2">
@@ -34,12 +38,51 @@ export function TodayPage() {
 
       <TodaysQuest />
 
-      <ExplorationNudge />
+      {/*
+        Low-energy days hide the rest of the day entirely.
 
-      <InterviewNudge />
+        Not "collapse into a smaller list" — actually gone. Showing someone three
+        unfinished things while they've just told you they're running on empty is
+        the exact moment this product could start feeling like every other one.
+        One thing, and permission to stop.
+      */}
+      {lightDay ? (
+        <Card tone="sunken" className="p-5 text-center">
+          <SproutDoodle className="mx-auto size-10" />
+          <p className="font-display mt-2 text-lg text-ink">That&rsquo;s the whole day.</p>
+          <p className="mx-auto mt-1.5 max-w-sm text-sm leading-relaxed text-ink-soft">
+            The rest is put away for now. It&rsquo;ll be here tomorrow, exactly as you left it —
+            nothing expires and nothing is lost.
+          </p>
+          <details className="group mt-4">
+            <summary className="inline-flex min-h-11 cursor-pointer list-none items-center justify-center rounded-full px-3 text-sm font-medium text-ink-soft hover:text-ink">
+              Show me the rest anyway
+            </summary>
+            <div className="animate-rise mt-4 space-y-8 text-left">
+              <ExplorationNudge />
+              <InterviewNudge />
+            </div>
+          </details>
+        </Card>
+      ) : (
+        <>
+          <ExplorationNudge />
+          <InterviewNudge />
+        </>
+      )}
 
-      <p className="pt-2 text-center text-xs text-ink-faint">
-        {shape.label} day — {shape.contains.length} things, and none of them are mandatory.
+      <div className="flex justify-center pt-1">
+        <AskAiButton
+          kind={lightDay ? 'low_energy' : 'next_step'}
+          variant="ghost"
+          label={lightDay ? 'Ask AI for one small thing' : 'Ask AI what to do next'}
+        />
+      </div>
+
+      <p className="pt-2 text-center text-xs leading-relaxed text-ink-faint">
+        {lightDay
+          ? 'Whatever you manage today is enough. Genuinely.'
+          : `${shape.label} day — nothing here is mandatory.`}
       </p>
     </div>
   )

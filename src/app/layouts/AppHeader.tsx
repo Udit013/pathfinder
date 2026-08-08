@@ -3,6 +3,7 @@ import { Settings } from 'lucide-react'
 import { brand } from '@/config/brand'
 import { navItems, purposeFor } from '@/app/navigation'
 import { useTodayMode } from '@/lib/store/selectors'
+import { AskAiIconButton } from '@/features/ai/AskAiButton'
 import { cn, formatMinutes } from '@/lib/utils'
 
 /**
@@ -26,7 +27,7 @@ export function AppHeader() {
       {/* Mobile: where you are. Desktop: the sidebar says it already. */}
       <div className="min-w-0 lg:hidden">
         {location.pathname === '/' ? (
-          <Link to="/" className="font-display text-base tracking-tight text-ink">
+          <Link to="/" className="font-display -mx-2 inline-flex min-h-11 items-center rounded-full px-2 text-base tracking-tight text-ink">
             {brand.name}
           </Link>
         ) : (
@@ -44,6 +45,8 @@ export function AppHeader() {
           {shape.label} day · about {formatMinutes(budgetMinutes)}
         </span>
       ) : null}
+
+      <AskAiIconButton />
 
       <NavLink
         to="/settings"

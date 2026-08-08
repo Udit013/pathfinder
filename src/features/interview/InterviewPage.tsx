@@ -3,6 +3,7 @@ import { ArrowRight, Check, MessagesSquare, Mic } from 'lucide-react'
 import { Card, SectionHeading } from '@/ui/Card'
 import { Badge } from '@/ui/Badge'
 import { ButtonLink } from '@/ui/Button'
+import { AskAiButton } from '@/features/ai/AskAiButton'
 import { ProgressBar } from '@/ui/Progress'
 import { SparkDoodle } from '@/ui/Doodles'
 import { stages } from '@/data/interviewTracks'
@@ -92,6 +93,10 @@ export function InterviewPage() {
           <ArrowRight className="size-4 shrink-0 text-ink-faint" aria-hidden />
         </Link>
       </Card>
+
+      <div className="flex justify-center">
+        <AskAiButton kind="interview" label="Have ChatGPT or Claude interview me" />
+      </div>
 
       {/* How the ladder works — explained once, not repeated on every card */}
       <section>

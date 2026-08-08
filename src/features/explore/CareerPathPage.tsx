@@ -1,6 +1,5 @@
 import { Link, useParams } from 'react-router'
 import {
-  ArrowLeft,
   Check,
   Clock,
   FlaskConical,
@@ -11,8 +10,10 @@ import {
   X,
 } from 'lucide-react'
 import { Card, SectionHeading } from '@/ui/Card'
+import { BackLink } from '@/ui/BackLink'
 import { Badge } from '@/ui/Badge'
 import { Button, ButtonLink } from '@/ui/Button'
+import { AskAiButton } from '@/features/ai/AskAiButton'
 import { EmptyState } from '@/ui/States'
 import { FreeResources } from '@/ui/ResourceLinks'
 import { pathById, pathTitle } from '@/data/careerPaths'
@@ -60,13 +61,7 @@ export function CareerPathPage() {
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-8 pt-2">
-      <Link
-        to="/explore"
-        className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-ink"
-      >
-        <ArrowLeft className="size-3.5" aria-hidden />
-        Explore
-      </Link>
+      <BackLink to="/explore">Explore</BackLink>
 
       <header>
         <h1 className="font-display text-2xl leading-tight text-ink sm:text-3xl">
@@ -132,6 +127,10 @@ export function CareerPathPage() {
       ) : null}
 
       {signal ? <SignalBars signals={[signal]} title="Your signal for this path" /> : null}
+
+      <div className="flex justify-center">
+        <AskAiButton kind="career_reflection" label="Ask AI if this fits me" />
+      </div>
 
       {!path ? (
         <Card tone="sunken" className="p-5">

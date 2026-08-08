@@ -4,7 +4,7 @@ import { SCHEMA_VERSION, looksLikePersistedState, reconcileState, type Persisted
 import { migrate } from './migrate'
 
 export type { StorageAdapter } from './adapter'
-export { StorageUnavailableError } from './adapter'
+export { CorruptDataError, StorageUnavailableError } from './adapter'
 export type { PersistedState } from './schema'
 export { SCHEMA_VERSION, STORAGE_KEY, createEmptyState, defaultPreferences } from './schema'
 

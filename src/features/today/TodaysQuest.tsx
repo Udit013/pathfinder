@@ -10,7 +10,7 @@ import { selectQuest } from '@/domain/planToday'
 import { lighterMode } from '@/domain/energy'
 import { useAppStore } from '@/lib/store/useAppStore'
 import { useCurrentSkillIds, useProfile, useTodayMode } from '@/lib/store/selectors'
-import { formatMinutes, todayIso } from '@/lib/utils'
+import { cn, formatMinutes, todayIso } from '@/lib/utils'
 
 export function TodaysQuest() {
   const profile = useProfile()
@@ -127,7 +127,21 @@ export function TodaysQuest() {
           ) : null}
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 border-t border-line bg-sunken px-5 py-3.5">
+        {/* On a light day, say plainly that stopping is allowed — before the
+            buttons, not buried after them. */}
+        {mode === 'light' && !alreadyDone ? (
+          <p className="border-t border-line bg-sunken px-5 pt-3.5 text-xs leading-relaxed text-ink-soft">
+            This is the smaller version. Starting it and stopping halfway still counts as a day you
+            showed up.
+          </p>
+        ) : null}
+
+        <div
+          className={cn(
+            'flex flex-wrap items-center gap-2 bg-sunken px-5 py-3.5',
+            !(mode === 'light' && !alreadyDone) && 'border-t border-line',
+          )}
+        >
           {alreadyDone ? (
             <p className="flex items-center gap-2 text-sm font-medium text-positive-ink">
               <Check className="size-4" aria-hidden />

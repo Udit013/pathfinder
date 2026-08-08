@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import {
-  ArrowLeft,
   Check,
   ClipboardList,
   Clock,
@@ -13,8 +12,10 @@ import {
 } from 'lucide-react'
 import type { ProjectInstance, ProjectTemplate } from '@/types'
 import { Card, SectionHeading } from '@/ui/Card'
+import { BackLink } from '@/ui/BackLink'
 import { Badge } from '@/ui/Badge'
 import { Button, ButtonLink } from '@/ui/Button'
+import { AskAiButton } from '@/features/ai/AskAiButton'
 import { ProgressBar } from '@/ui/Progress'
 import { EmptyState } from '@/ui/States'
 import { TextInput } from '@/ui/Field'
@@ -109,13 +110,7 @@ function ProjectView({
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-8 pt-2">
-      <Link
-        to="/build"
-        className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-ink"
-      >
-        <ArrowLeft className="size-3.5" aria-hidden />
-        Build
-      </Link>
+      <BackLink to="/build">Build</BackLink>
 
       <header className="animate-rise">
         <div className="flex flex-wrap items-center gap-1.5">
@@ -162,7 +157,7 @@ function ProjectView({
         <Card className="p-5">
           <div className="flex flex-wrap gap-1.5">
             {template.skillIds.map((skillId) => (
-              <Link key={skillId} to="/roadmap">
+              <Link key={skillId} to="/roadmap" className="inline-flex min-h-8 items-center">
                 <Badge tone="accent">{skillName(skillId)}</Badge>
               </Link>
             ))}
@@ -336,6 +331,10 @@ function ProjectView({
           </ul>
         </Card>
       </section>
+
+      <div className="flex justify-center">
+        <AskAiButton kind="review_project" label="Ask AI to review this project" />
+      </div>
 
       {/* README checklist */}
       <section>

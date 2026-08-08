@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { BrowserRouter, Navigate, Outlet, Route, Routes, useLocation } from 'react-router'
 import { AppShell } from './layouts/AppShell'
+import { NotFoundPage } from './NotFoundPage'
 import { BuildPage } from '@/features/build/BuildPage'
 import { InterviewPage } from '@/features/interview/InterviewPage'
 import { TrackPage } from '@/features/interview/TrackPage'
@@ -56,9 +57,10 @@ export function App() {
             <Route path="interview/:trackId/:questionId" element={<QuestionPage />} />
             <Route path="progress" element={<ProgressPage />} />
             <Route path="settings" element={<SettingsPage />} />
+            {/* Unknown routes land here inside the shell, so the nav stays. */}
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Route>
-        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   )

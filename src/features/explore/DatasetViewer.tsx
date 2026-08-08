@@ -138,7 +138,7 @@ export function DatasetViewer({ dataset }: { dataset: Dataset }) {
         <button
           type="button"
           onClick={() => setSpoiled(!spoiled)}
-          className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-ink-soft hover:text-ink"
+          className="-ml-2 mt-1 inline-flex min-h-11 items-center gap-1.5 rounded-full px-2 text-xs font-medium text-ink-soft hover:bg-surface hover:text-ink"
         >
           {spoiled ? <EyeOff className="size-3.5" aria-hidden /> : <Eye className="size-3.5" aria-hidden />}
           {spoiled ? 'Hide what’s in here' : 'Stuck? Reveal what’s in this data'}

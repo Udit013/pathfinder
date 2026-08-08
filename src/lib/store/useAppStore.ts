@@ -18,6 +18,7 @@ import type {
   WorkloadMode,
 } from '@/types'
 import {
+  CorruptDataError,
   createEmptyState,
   parseImport,
   storage,
@@ -233,7 +234,9 @@ export const useAppStore = create<AppStore>((set, get) => {
           storageError:
             error instanceof StorageUnavailableError
               ? "Your browser is blocking local storage, so PathFinder can't remember anything between visits. Everything else still works."
-              : 'Something went wrong loading your data. Nothing was deleted — try reloading.',
+              : error instanceof CorruptDataError
+                ? "We couldn't read your saved progress, so PathFinder has started fresh. The unreadable copy was kept rather than deleted — if you have an export, Settings → Import will restore you properly."
+                : 'Something went wrong loading your data. Nothing was deleted — try reloading.',
         })
       }
     },

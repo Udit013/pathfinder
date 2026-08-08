@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router'
-import { ArrowLeft, ArrowRight, Check, Mic, RefreshCw, Timer } from 'lucide-react'
+import { ArrowRight, Check, Mic, RefreshCw, Timer } from 'lucide-react'
 import { Card, SectionHeading } from '@/ui/Card'
+import { BackLink } from '@/ui/BackLink'
 import { Badge } from '@/ui/Badge'
 import { Button, ButtonLink } from '@/ui/Button'
 import { ProgressBar } from '@/ui/Progress'
@@ -63,17 +64,11 @@ export function MockInterviewPage() {
 
     return (
       <div className="mx-auto w-full max-w-3xl space-y-7 pt-2">
-        <Link
-          to="/interview"
-          className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-ink"
-        >
-          <ArrowLeft className="size-3.5" aria-hidden />
-          Interview prep
-        </Link>
+        <BackLink to="/interview">Interview prep</BackLink>
 
         <Card tone="spark" className="animate-rise p-6 text-center">
           <ConfettiDoodle className="mx-auto size-12" />
-          <p className="font-display mt-1 text-xl text-spark-ink">That&rsquo;s the whole set.</p>
+          <h1 className="font-display mt-1 text-xl text-spark-ink">That&rsquo;s the whole set.</h1>
           <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-spark-ink/85">
             You just answered five questions cold. That is genuinely harder than the real thing,
             where you get a warm-up and a human being being kind to you.
@@ -148,14 +143,12 @@ export function MockInterviewPage() {
 
   return (
     <div className="mx-auto w-full max-w-2xl space-y-6 pt-2">
+      {/* The question card carries the visual weight, so the page heading is
+          for screen readers only — the page still needs exactly one h1. */}
+      <h1 className="sr-only">Mock interview</h1>
+
       <div className="flex items-center justify-between gap-3">
-        <Link
-          to="/interview"
-          className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-ink"
-        >
-          <ArrowLeft className="size-3.5" aria-hidden />
-          Leave
-        </Link>
+        <BackLink to="/interview">Leave</BackLink>
         <span className="text-xs tabular-nums text-ink-faint">
           {index + 1} of {questions.length}
         </span>

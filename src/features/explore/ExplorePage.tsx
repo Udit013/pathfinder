@@ -73,7 +73,7 @@ export function ExplorePage() {
             action={
               <Link
                 to="/explore/lab"
-                className="text-sm font-medium text-accent-ink hover:underline"
+                className="-my-1.5 inline-flex min-h-11 items-center rounded-full px-2 py-1.5 text-sm font-medium text-accent-ink hover:bg-accent-soft"
               >
                 Career Lab
               </Link>

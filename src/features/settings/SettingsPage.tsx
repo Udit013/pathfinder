@@ -190,6 +190,7 @@ export function SettingsPage() {
               ref={fileInput}
               type="file"
               accept="application/json,.json"
+              aria-label="Choose a PathFinder backup file to import"
               className="hidden"
               onChange={(event) => {
                 const file = event.target.files?.[0]

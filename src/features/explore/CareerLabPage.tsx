@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
-import { ArrowLeft, Check, Clock, FlaskConical, PlayCircle } from 'lucide-react'
+import { Check, Clock, FlaskConical, PlayCircle } from 'lucide-react'
 import { Card, SectionHeading } from '@/ui/Card'
+import { BackLink } from '@/ui/BackLink'
 import { Badge } from '@/ui/Badge'
 import { careerExperiments } from '@/data/experiments'
 import { pathTitle } from '@/data/careerPaths'
@@ -31,13 +32,7 @@ export function CareerLabPage() {
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-7 pt-2">
-      <Link
-        to="/explore"
-        className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-ink"
-      >
-        <ArrowLeft className="size-3.5" aria-hidden />
-        Explore
-      </Link>
+      <BackLink to="/explore">Explore</BackLink>
 
       <header>
         <h1 className="font-display text-2xl leading-tight text-ink">Career Lab</h1>

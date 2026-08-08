@@ -14,6 +14,22 @@ export interface StorageAdapter {
   clear(): Promise<void>
 }
 
+/**
+ * Thrown when saved data exists but can't be read. Distinct from "no data" on
+ * purpose: the UI has to tell the user, because the alternative is someone
+ * opening the app to a blank slate with no idea why.
+ */
+export class CorruptDataError extends Error {
+  /** Where the unreadable copy was moved to, so it isn't simply gone. */
+  readonly backupKey: string
+
+  constructor(backupKey: string) {
+    super('Saved data could not be read.')
+    this.name = 'CorruptDataError'
+    this.backupKey = backupKey
+  }
+}
+
 export class StorageUnavailableError extends Error {
   constructor(cause?: unknown) {
     super('Storage is unavailable in this browser.')

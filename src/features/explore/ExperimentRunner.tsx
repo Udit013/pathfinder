@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router'
-import { ArrowLeft, Check, Clock, Lightbulb, Target } from 'lucide-react'
+import { useParams } from 'react-router'
+import { Check, Clock, Lightbulb, Target } from 'lucide-react'
 import { Card, SectionHeading } from '@/ui/Card'
+import { BackLink } from '@/ui/BackLink'
 import { Badge } from '@/ui/Badge'
 import { Button, ButtonLink } from '@/ui/Button'
 import { EmptyState } from '@/ui/States'
@@ -65,13 +66,7 @@ export function ExperimentRunner() {
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-7 pt-2">
-      <Link
-        to="/explore/lab"
-        className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-ink"
-      >
-        <ArrowLeft className="size-3.5" aria-hidden />
-        Career Lab
-      </Link>
+      <BackLink to="/explore/lab">Career Lab</BackLink>
 
       <header>
         <div className="flex flex-wrap items-center gap-2">
