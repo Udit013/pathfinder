@@ -10,6 +10,7 @@ import { questionById } from '@/data/interviewQuestions'
 import { trackTitle } from '@/data/interviewTracks'
 import { computeSignals } from '@/domain/signals'
 import { modeShapes } from '@/domain/energy'
+import { pickForSkill } from '@/data/resources'
 import { todayIso } from '@/lib/utils'
 
 /**
@@ -44,9 +45,12 @@ import { todayIso } from '@/lib/utils'
 
 export type PromptKind =
   | 'learn_skill'
+  | 'explain_resource'
   | 'hint'
   | 'quiz'
+  | 'practice_problem'
   | 'review_project'
+  | 'debug_project'
   | 'interview'
   | 'career_reflection'
   | 'next_step'
@@ -82,6 +86,7 @@ interface Snapshot {
   interview: { track: string; question: string; guidance: string[] } | null
   interviewReady: number
   experiments: { title: string; enjoyment: number; wantMore: number }[]
+  currentResource: { title: string; provider: string; url: string } | null
   energy: string | null
   mode: string
   topSignals: { path: string; score: number; strength: string }[]
@@ -115,6 +120,16 @@ function snapshot(state: PersistedState): Snapshot {
     .filter((entry) => entry.stage !== 'interview')
     .sort((a, b) => b.lastPractisedAt.localeCompare(a.lastPractisedAt))[0]
   const openQuestion = openPrep ? questionById(openPrep.questionId) : undefined
+
+  // The resource PathFinder would currently point at for the active skill.
+  const currentResource = (() => {
+    if (!inProgress) return null
+    const pick = pickForSkill(inProgress.skillId, { careerPathId: primaryPathId })
+    const resource = pick.start ?? pick.practice
+    return resource
+      ? { title: resource.title, provider: resource.provider, url: resource.url }
+      : null
+  })()
 
   const checkIn = state.checkIns.find((entry) => entry.date === todayIso())
 
@@ -165,6 +180,7 @@ function snapshot(state: PersistedState): Snapshot {
         enjoyment: entry.ratings!.enjoyment,
         wantMore: entry.ratings!.wantMore,
       })),
+    currentResource,
     energy: checkIn ? (checkIn.roughDay ? 'low (rough day)' : checkIn.energy) : null,
     mode: modeShapes[checkIn?.roughDay ? 'light' : 'normal'].label,
     topSignals: signals.slice(0, 3).map((signal) => ({
@@ -223,6 +239,14 @@ export function availableActions(state: PersistedState): PromptAction[] {
         : 'Start a skill on your Roadmap and this will fill itself in.',
     },
     {
+      kind: 'explain_resource',
+      title: 'Explain this resource to me',
+      description: 'Unpack what you\u2019re reading or watching, in plainer terms.',
+      unavailableReason: snap.currentResource
+        ? undefined
+        : 'Start a skill on your Roadmap so there\u2019s a resource to explain.',
+    },
+    {
       kind: 'hint',
       title: 'Give me a hint',
       description: 'For when you’re stuck. Asks for a nudge rather than the answer.',
@@ -237,12 +261,25 @@ export function availableActions(state: PersistedState): PromptAction[] {
           : 'Learn or start a skill first, so there’s something to be quizzed on.',
     },
     {
+      kind: 'practice_problem',
+      title: 'Give me a practice problem',
+      description: 'One problem at your level for the skill you\u2019re on, with no answer up front.',
+      unavailableReason: snap.currentSkill
+        ? undefined
+        : 'Start a skill on your Roadmap and this will know what to set you.',
+    },
+    {
       kind: 'review_project',
       title: 'Review my project',
       description: 'Honest feedback on what’s strong, what’s weak, and what to fix.',
       unavailableReason: snap.project
         ? undefined
         : 'Start a project in Build and this will know what to ask about.',
+    },
+    {
+      kind: 'debug_project',
+      title: 'Help me debug this',
+      description: 'Walks you through the problem instead of just handing you a fix.',
     },
     {
       kind: 'interview',
@@ -296,6 +333,74 @@ export function buildPrompt(kind: PromptKind, state: PersistedState): BuiltPromp
             skill ? `For reference, my app suggests this practice task: "${skill.practiceTask}"` : null,
           ]),
           GUIDANCE_SOCRATIC,
+        ]),
+      }
+    }
+
+    case 'explain_resource': {
+      const resource = snap.currentResource
+      return {
+        kind,
+        title: 'Explain this resource to me',
+        includes: ['The resource you\u2019re on', 'Your current skill', 'Your direction'],
+        text: assemble([
+          `${who}I'm working through a learning resource and I'd like help understanding it.`,
+          whereIAm(snap),
+          section('## What I\u2019m reading or watching', [
+            resource ? `${resource.title} \u2014 ${resource.provider}` : null,
+            resource ? resource.url : null,
+            '<< Paste the specific section, code, or idea you are stuck on here. >>',
+          ]),
+          section('## What I\u2019d like from you', [
+            'Explain the part I pasted in plainer terms, with a concrete example.',
+            'Tell me what it is actually for \u2014 when would I reach for this in real work?',
+            'Then check my understanding with one question.',
+          ]),
+          GUIDANCE_SOCRATIC,
+        ]),
+      }
+    }
+
+    case 'practice_problem': {
+      const skill = snap.currentSkill
+      return {
+        kind,
+        title: 'Give me a practice problem',
+        includes: ['Your current skill', 'Skills you\u2019ve completed', 'Your direction'],
+        text: assemble([
+          `${who}Please set me one practice problem on ${skill?.name ?? 'what I am learning'}.`,
+          whereIAm(snap),
+          section('## What I\u2019d like from you', [
+            'ONE problem, at the level of someone who has just learned this.',
+            'Make it realistic \u2014 something resembling actual work rather than a puzzle.',
+            'Do not show me the solution. Wait for my attempt.',
+            'When I answer, tell me what is right, what is wrong, and give me a nudge rather than a correction.',
+            'If I get it, set me a slightly harder one.',
+          ]),
+        ]),
+      }
+    }
+
+    case 'debug_project': {
+      return {
+        kind,
+        title: 'Help me debug this',
+        includes: ['Your current project', 'Your current skill', 'A space for the error'],
+        text: assemble([
+          `${who}Something is not working and I would like help working out why.`,
+          whereIAm(snap, { project: true }),
+          section('## The problem', [
+            '<< Paste the error message and the relevant code here. >>',
+            '<< What you expected to happen: >>',
+            '<< What actually happened: >>',
+            '<< What you have already tried: >>',
+          ]),
+          section('## What I\u2019d like from you', [
+            'Start by telling me what the error message is actually saying.',
+            'Ask me what I have checked before suggesting a fix.',
+            'Point me at where to look rather than rewriting it for me \u2014 I want to be able to fix the next one myself.',
+            'Once it works, tell me what I should have noticed sooner.',
+          ]),
         ]),
       }
     }

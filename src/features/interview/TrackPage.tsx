@@ -9,7 +9,7 @@ import { ProgressBar } from '@/ui/Progress'
 import { EmptyState } from '@/ui/States'
 import { FreeResources } from '@/ui/ResourceLinks'
 import { trackById, stageIndex, stageMeta } from '@/data/interviewTracks'
-import { resourcesByIds, resourcesForSkills } from '@/data/resources'
+import { pickForInterview, resourcesByIds } from '@/data/resources'
 import { skillName } from '@/data/skills'
 import { useInterviewTracks, useInterviewPrep } from '@/lib/store/selectors'
 import { cn } from '@/lib/utils'
@@ -39,7 +39,7 @@ export function TrackPage() {
     const seen = new Set(chosen.map((resource) => resource.id))
     return [
       ...chosen,
-      ...resourcesForSkills(meta.skillIds, 4).filter((resource) => !seen.has(resource.id)),
+      ...pickForInterview(meta.skillIds, null, 3).filter((resource) => !seen.has(resource.id)),
     ].slice(0, 4)
   })()
 

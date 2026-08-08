@@ -1,4 +1,15 @@
-import { ArrowUpRight, BookOpen, FileCode2, GraduationCap, Map as MapIcon, MousePointerClick, Play } from 'lucide-react'
+import {
+  ArrowUpRight,
+  BookOpen,
+  Briefcase,
+  FileCode2,
+  Code2,
+  GraduationCap,
+  Map as MapIcon,
+  Mic,
+  MousePointerClick,
+  Play,
+} from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { difficultyLabels, resourceKindLabels, type Resource, type ResourceKind } from '@/types'
 import { Card, SectionHeading } from './Card'
@@ -11,10 +22,14 @@ const kindIcons: Record<ResourceKind, LucideIcon> = {
   article: BookOpen,
   youtube_video: Play,
   youtube_playlist: Play,
+  youtube_channel: Play,
   book: BookOpen,
   practice: MousePointerClick,
   dataset: FileCode2,
   roadmap: MapIcon,
+  github: Code2,
+  job_simulation: Briefcase,
+  mock_interview: Mic,
 }
 
 /**

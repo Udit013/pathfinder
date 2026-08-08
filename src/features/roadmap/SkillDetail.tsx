@@ -7,8 +7,8 @@ import { Badge } from '@/ui/Badge'
 import { Button } from '@/ui/Button'
 import { AskAiButton } from '@/features/ai/AskAiButton'
 import { TextArea } from '@/ui/Field'
-import { FreeResources } from '@/ui/ResourceLinks'
-import { resourcesByIds, resourcesForSkill } from '@/data/resources'
+import { CuratedResources } from '@/ui/CuratedResources'
+import { pickForSkill } from '@/data/resources'
 import { skillName } from '@/data/skills'
 import { projectTemplates } from '@/data/projects'
 import { useAppStore } from '@/lib/store/useAppStore'
@@ -43,13 +43,10 @@ export function SkillDetail({
 
   if (!skill) return null
 
-  // Explicit picks lead, then anything else tagged for this skill.
-  const pinned = resourcesByIds(skill.resourceIds)
-  const seen = new Set(pinned.map((resource) => resource.id))
-  const resources = [
-    ...pinned,
-    ...resourcesForSkill(skill.id, 6).filter((resource) => !seen.has(resource.id)),
-  ].slice(0, 4)
+  // Three at most: one to start, one to practise with, one to go deeper.
+  // Everything else for this skill sits behind "see more".
+  const pick = pickForSkill(skill.id, { careerPathId })
+  const resources = pick.primary
 
   const done = progress?.completedResourceIds ?? []
 
@@ -177,12 +174,7 @@ export function SkillDetail({
       <div className="mt-5">
         {resources.length > 0 ? (
           <>
-            <FreeResources
-              bare
-              resources={resources}
-              title="Free resources"
-              hint="Everything you need for this skill. Opens in a new tab — no searching required."
-            />
+            <CuratedResources pick={pick} />
             <div className="mt-3 space-y-1.5">
               <p className="text-xs tracking-[0.14em] text-ink-faint uppercase">
                 Keep your place

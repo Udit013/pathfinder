@@ -48,6 +48,46 @@ export function validateContent(): string[] {
         `Resource "${resource.id}" claims cost "free" but is unverified — the UI will hide the Free label`,
       )
     }
+    // A free certificate claim on a paid resource is the single most damaging
+    // error this library could contain: someone plans around a credential they
+    // cannot actually get.
+    if (resource.credential === 'free_certificate' && resource.cost === 'paid') {
+      problems.push(
+        `Resource "${resource.id}" claims a free certificate but is marked paid`,
+      )
+    }
+    if (resource.credential === 'free_certificate' && !resource.verified) {
+      problems.push(
+        `Resource "${resource.id}" claims a free certificate but has not been verified`,
+      )
+    }
+    // Free-tier resources must say what the tier actually covers, or the user
+    // finds out only after investing time.
+    if (resource.cost === 'free_tier' && !resource.accessNote) {
+      problems.push(
+        `Resource "${resource.id}" is free_tier but has no accessNote explaining what is free`,
+      )
+    }
+    if (!resource.url.startsWith('https://')) {
+      problems.push(`Resource "${resource.id}" does not use https`)
+    }
+  }
+
+  // Duplicate ids and duplicate URLs both make the library untrustworthy.
+  const seenResourceIds = new Set<string>()
+  const seenUrls = new Map<string, string>()
+  for (const resource of resources) {
+    if (seenResourceIds.has(resource.id)) {
+      problems.push(`Duplicate resource id "${resource.id}"`)
+    }
+    seenResourceIds.add(resource.id)
+
+    const normalised = resource.url.replace(/\/$/, '')
+    const existing = seenUrls.get(normalised)
+    if (existing) {
+      problems.push(`Resources "${existing}" and "${resource.id}" share the URL ${resource.url}`)
+    }
+    seenUrls.set(normalised, resource.id)
   }
 
   for (const path of careerPathSummaries) {

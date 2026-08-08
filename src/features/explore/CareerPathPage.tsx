@@ -19,7 +19,7 @@ import { FreeResources } from '@/ui/ResourceLinks'
 import { pathById, pathTitle } from '@/data/careerPaths'
 import { fullPathById } from '@/data/careerPathDetails'
 import { experimentsForPath } from '@/data/experiments'
-import { resourcesByIds } from '@/data/resources'
+import { pickForCareerPath, resourcesByIds } from '@/data/resources'
 import { useAppStore } from '@/lib/store/useAppStore'
 import { useProfile, useSignalFor } from '@/lib/store/selectors'
 import { MarketDataPanel } from './MarketDataPanel'
@@ -218,7 +218,11 @@ export function CareerPathPage() {
           </div>
 
           <FreeResources
-            resources={resourcesByIds(path.starterResourceIds)}
+            resources={(() => {
+              const chosen = resourcesByIds(path.starterResourceIds)
+              const seen = new Set(chosen.map((r) => r.id))
+              return [...chosen, ...pickForCareerPath(pathId, 4).filter((r) => !seen.has(r.id))].slice(0, 4)
+            })()}
             title="Where to start"
             hint="Free, and enough to find out whether the foundations interest you."
           />

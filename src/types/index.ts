@@ -203,6 +203,43 @@ export interface Roadmap {
 export type ResourceCost = 'free' | 'free_tier' | 'paid'
 
 /**
+ * What credential, if any, a resource actually produces.
+ *
+ * Separate from `cost` because the two are routinely different: CS50's learning
+ * is free and its edX verified certificate is not. Conflating them is how
+ * "free certificate" lists end up being wrong.
+ */
+export type CredentialStatus =
+  | 'free_certificate'
+  | 'free_course_paid_certificate'
+  | 'free_badge'
+  | 'free_completion_record'
+  | 'no_certificate'
+  | 'unverified'
+
+/**
+ * Internal ranking. Never shown as a leaderboard — it only decides what surfaces
+ * first, so a B-tier resource stays available without competing for attention.
+ */
+export type ResourcePriority = 's' | 'a' | 'b' | 'optional'
+
+/**
+ * The job a resource does in a learning sequence. This is what lets the UI show
+ * "start here → practise → go deeper" instead of a wall of twenty links.
+ */
+export type ResourceRole =
+  | 'start' // the one thing to open first
+  | 'practice' // exercises and problem sets
+  | 'deeper' // for after the basics land
+  | 'reference' // look things up, don't read start to finish
+  | 'project' // produces something you can show
+  | 'interview' // specifically interview-shaped
+  | 'credential' // primarily worth it for the certificate
+
+/** 0 = not relevant, 3 = central. Used for ordering, never displayed as a score. */
+export type Relevance = 0 | 1 | 2 | 3
+
+/**
  * Explicit about YouTube rather than a generic "video", because the type badge
  * is shown to the user and "YouTube" tells them what they're about to open.
  */
@@ -213,10 +250,14 @@ export type ResourceKind =
   | 'article'
   | 'youtube_video'
   | 'youtube_playlist'
+  | 'youtube_channel'
   | 'book'
   | 'practice'
   | 'dataset'
   | 'roadmap'
+  | 'github'
+  | 'job_simulation'
+  | 'mock_interview'
 
 export interface Resource {
   id: string
@@ -243,6 +284,24 @@ export interface Resource {
   /** Anything the user should know before clicking — account needed, ads, etc. */
   accessNote?: string
   note?: string
+
+  // ── Curation (resource library expansion) ──────────────────────────────────
+
+  /** What credential this produces, if any. Never inferred from `cost`. */
+  credential: CredentialStatus
+  /** Free text, only when a certificate costs money — e.g. "edX verified, ~$200". */
+  certificateCost?: string
+  /** Internal ranking. Decides ordering; never rendered as a rank. */
+  priority: ResourcePriority
+  /** Where this sits in a learning sequence. Drives start/practise/deeper. */
+  role: ResourceRole
+  /** How much this helps in an interview. Ordering only. */
+  interviewRelevance: Relevance
+  /** How directly this leads to something buildable. Ordering only. */
+  projectRelevance: Relevance
+  /** True for first-party material from the maintainer or a university. */
+  official: boolean
+  tags: string[]
 }
 
 export const resourceKindLabels: Record<ResourceKind, string> = {
@@ -252,10 +311,24 @@ export const resourceKindLabels: Record<ResourceKind, string> = {
   article: 'Article',
   youtube_video: 'YouTube',
   youtube_playlist: 'YouTube playlist',
+  youtube_channel: 'YouTube channel',
   book: 'Book',
   practice: 'Practice',
   dataset: 'Dataset',
   roadmap: 'Roadmap',
+  github: 'GitHub',
+  job_simulation: 'Job simulation',
+  mock_interview: 'Mock interview',
+}
+
+/** What the user is told a resource yields, credential-wise. */
+export const credentialLabels: Record<CredentialStatus, string> = {
+  free_certificate: 'Free certificate',
+  free_course_paid_certificate: 'Certificate costs extra',
+  free_badge: 'Free badge',
+  free_completion_record: 'Free completion record',
+  no_certificate: 'No certificate',
+  unverified: 'Certificate status unconfirmed',
 }
 
 export const difficultyLabels: Record<Difficulty, string> = {

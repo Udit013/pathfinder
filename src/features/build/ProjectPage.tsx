@@ -22,7 +22,7 @@ import { TextInput } from '@/ui/Field'
 import { FreeResources } from '@/ui/ResourceLinks'
 import { ConfettiDoodle } from '@/ui/Doodles'
 import { projectTemplateById, projectTemplates } from '@/data/projects'
-import { resourcesByIds, resourcesForSkills } from '@/data/resources'
+import { pickProjectResources, resourcesByIds } from '@/data/resources'
 import { datasetById } from '@/data/datasets'
 import { skillName } from '@/data/skills'
 import { pathTitle } from '@/data/careerPaths'
@@ -91,7 +91,7 @@ function ProjectView({
     const seen = new Set(chosen.map((resource) => resource.id))
     return [
       ...chosen,
-      ...resourcesForSkills(template.skillIds, 4).filter((resource) => !seen.has(resource.id)),
+      ...pickProjectResources(template.skillIds, 3).filter((resource) => !seen.has(resource.id)),
     ].slice(0, 4)
   })()
 

@@ -5,7 +5,7 @@ import { Badge } from '@/ui/Badge'
 import { Button } from '@/ui/Button'
 import { EmptyState } from '@/ui/States'
 import { FreeResources } from '@/ui/ResourceLinks'
-import { resourcesByIds, resourcesForSkills } from '@/data/resources'
+import { pickForSkills, resourcesByIds } from '@/data/resources'
 import { selectQuest } from '@/domain/planToday'
 import { lighterMode } from '@/domain/energy'
 import { useAppStore } from '@/lib/store/useAppStore'
@@ -58,10 +58,12 @@ export function TodaysQuest() {
   const questResources = (() => {
     const chosen = resourcesByIds(quest.resourceIds)
     const seen = new Set(chosen.map((resource) => resource.id))
-    const filler = resourcesForSkills(quest.skillIds, 4).filter(
-      (resource) => !seen.has(resource.id),
-    )
-    return [...chosen, ...filler].slice(0, 4)
+    const curated = pickForSkills(quest.skillIds, {
+      maxMinutes: minutes,
+      careerPathId: profile?.primaryPathId ?? null,
+      limit: 3,
+    }).filter((resource) => !seen.has(resource.id))
+    return [...chosen, ...curated].slice(0, 3)
   })()
 
   const complete = () =>

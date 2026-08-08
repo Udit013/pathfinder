@@ -9,7 +9,7 @@ import { EmptyState } from '@/ui/States'
 import { FreeResources } from '@/ui/ResourceLinks'
 import { experimentById } from '@/data/experiments'
 import { datasetById } from '@/data/datasets'
-import { resourcesByIds, resourcesForSkills } from '@/data/resources'
+import { pickForSkills, resourcesByIds } from '@/data/resources'
 import { pathTitle } from '@/data/careerPaths'
 import { useAppStore } from '@/lib/store/useAppStore'
 import { useExperimentResponse } from '@/lib/store/selectors'
@@ -55,10 +55,10 @@ export function ExperimentRunner() {
   const resources = (() => {
     const chosen = resourcesByIds(experiment.resourceIds)
     const seen = new Set(chosen.map((resource) => resource.id))
-    const filler = resourcesForSkills(experiment.skillIds, 4).filter(
+    const curated = pickForSkills(experiment.skillIds, { limit: 3 }).filter(
       (resource) => !seen.has(resource.id),
     )
-    return [...chosen, ...filler].slice(0, 4)
+    return [...chosen, ...curated].slice(0, 3)
   })()
 
   const begin = () =>
