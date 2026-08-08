@@ -51,7 +51,9 @@ export interface PersistedState {
 }
 
 export const defaultPreferences: UserPreferences = {
-  theme: 'system',
+  // Light by default and not tied to the OS. PathFinder is designed light-first;
+  // dark stays available for anyone who needs it, but it isn't the default.
+  theme: 'light',
   showShowUpCount: true,
   reducedCelebration: false,
   preferredAiTool: 'claude',

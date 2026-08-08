@@ -3,7 +3,7 @@ import { TodaysQuest } from './TodaysQuest'
 import { JobAction } from './JobAction'
 import { ExplorationNudge } from './ExplorationNudge'
 import { useProfile, useTodayCheckIn, useTodayMode } from '@/lib/store/selectors'
-import { greetingFor } from '@/lib/utils'
+import { friendlyGreeting, subheadingForDay } from '@/lib/utils'
 
 /**
  * §7 — the most important page. Opening it should answer "what do I do now?"
@@ -14,18 +14,19 @@ export function TodayPage() {
   const checkIn = useTodayCheckIn()
   const { shape } = useTodayMode()
 
-  const firstName = profile?.name?.split(' ')[0] ?? 'there'
-
   return (
     <div className="mx-auto w-full max-w-3xl space-y-8 pt-2">
-      <header>
-        <h1 className="font-display text-2xl leading-tight text-ink sm:text-[1.75rem]">
-          {greetingFor()}, {firstName}.
+      <header className="animate-rise">
+        <h1 className="font-display text-2xl leading-tight text-ink sm:text-[1.9rem]">
+          {friendlyGreeting(profile?.name)}{' '}
+          <span className="animate-wave" aria-hidden>
+            👋
+          </span>
         </h1>
         <p className="mt-1.5 text-sm text-ink-soft">
           {checkIn?.roughDay
             ? "Today doesn't need to be productive. Let's just keep the path open."
-            : "You don't have to figure everything out today."}
+            : subheadingForDay()}
         </p>
       </header>
 

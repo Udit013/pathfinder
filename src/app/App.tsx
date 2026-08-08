@@ -1,7 +1,9 @@
 import { useEffect } from 'react'
 import { BrowserRouter, Navigate, Outlet, Route, Routes, useLocation } from 'react-router'
 import { AppShell } from './layouts/AppShell'
-import { BuildPage, JobsPage } from './StubPages'
+import { JobsPage } from './StubPages'
+import { BuildPage } from '@/features/build/BuildPage'
+import { ProjectPage } from '@/features/build/ProjectPage'
 import { RoadmapPage } from '@/features/roadmap/RoadmapPage'
 import { ExplorePage } from '@/features/explore/ExplorePage'
 import { CareerPathPage } from '@/features/explore/CareerPathPage'
@@ -41,6 +43,9 @@ export function App() {
             <Route path="explore/:pathId" element={<CareerPathPage />} />
             <Route path="roadmap" element={<RoadmapPage />} />
             <Route path="build" element={<BuildPage />} />
+            {/* "library" precedes :projectId so it isn't read as an instance id. */}
+            <Route path="build/library/:templateId" element={<ProjectPage />} />
+            <Route path="build/:projectId" element={<ProjectPage />} />
             <Route path="jobs" element={<JobsPage />} />
             <Route path="progress" element={<ProgressPage />} />
             <Route path="settings" element={<SettingsPage />} />

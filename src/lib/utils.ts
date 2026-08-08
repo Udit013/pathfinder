@@ -34,6 +34,42 @@ export function greetingFor(now: Date = new Date()): string {
   return 'Good evening'
 }
 
+/**
+ * The Today greeting. Uses the name sparingly — a warm "Hey Sam 👋" once at the
+ * top of the day, not sprinkled through the interface where it would start to
+ * feel like a mail merge.
+ */
+export function friendlyGreeting(name: string | undefined, now: Date = new Date()): string {
+  const first = name?.trim().split(' ')[0]
+  const hour = now.getHours()
+  if (!first) return hour < 5 ? 'Still up?' : 'Hey there'
+  if (hour < 5) return `Still up, ${first}?`
+  if (hour < 12) return `Morning, ${first}`
+  return `Hey ${first}`
+}
+
+/**
+ * Rotating subheadings, so the second line under the greeting stays fresh
+ * without ever nagging. Chosen by day so it's stable within a session.
+ *
+ * Every one of these has to pass the same test: would this still feel kind on a
+ * day when nothing went right?
+ */
+const daySubheadings = [
+  "Ready for today's little adventure?",
+  'No pressure. Just one small step.',
+  "Let's see what today has for you.",
+  "Small things count. That's the whole idea.",
+  "You don't have to figure everything out today.",
+  'One step is a perfectly good day.',
+  'Whatever you manage today is enough.',
+]
+
+export function subheadingForDay(now: Date = new Date()): string {
+  const index = Math.floor(now.getTime() / 86_400_000) % daySubheadings.length
+  return daySubheadings[index] ?? daySubheadings[0]!
+}
+
 export function formatMinutes(minutes: number): string {
   if (minutes < 60) return `${minutes} min`
   const hours = Math.floor(minutes / 60)

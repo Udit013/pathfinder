@@ -9,12 +9,15 @@ import { cn } from '@/lib/utils'
  */
 export function EmptyState({
   icon,
+  illustration,
   title,
   body,
   action,
   className,
 }: {
   icon?: ReactNode
+  /** A doodle. Preferred over `icon` — an empty page is where warmth matters most. */
+  illustration?: ReactNode
   title: string
   body?: string
   action?: ReactNode
@@ -23,17 +26,19 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        'flex flex-col items-center rounded-card border border-dashed border-line px-6 py-10 text-center',
+        'animate-rise flex flex-col items-center rounded-card border border-dashed border-line bg-surface/50 px-6 py-10 text-center',
         className,
       )}
     >
-      {icon ? (
-        <div className="mb-3 flex size-10 items-center justify-center rounded-full bg-accent-soft text-accent-ink">
+      {illustration ? (
+        <div className="mb-3">{illustration}</div>
+      ) : icon ? (
+        <div className="mb-3 flex size-11 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink">
           {icon}
         </div>
       ) : null}
       <p className="font-display text-lg text-ink">{title}</p>
-      {body ? <p className="mt-1.5 max-w-sm text-sm text-ink-soft">{body}</p> : null}
+      {body ? <p className="mt-1.5 max-w-sm text-sm leading-relaxed text-ink-soft">{body}</p> : null}
       {action ? <div className="mt-4">{action}</div> : null}
     </div>
   )

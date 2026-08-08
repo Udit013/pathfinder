@@ -29,12 +29,17 @@ export function Celebrations() {
       {celebrations.slice(-3).map((item) => (
         <div
           key={item.id}
-          className="animate-pop flex items-center gap-2.5 rounded-full border border-line bg-surface py-2 pr-4 pl-2.5 shadow-md"
+          className="animate-pop relative flex items-center gap-2.5 rounded-full border border-line bg-surface py-2 pr-4 pl-2.5 shadow-md"
         >
-          <span className="rounded-full bg-spark-soft px-2 py-0.5 text-xs font-semibold tabular-nums text-spark-ink">
+          {/* A soft bloom behind the badge — one gentle pulse, then gone. */}
+          <span
+            aria-hidden
+            className="animate-bloom pointer-events-none absolute left-4 size-8 rounded-full bg-spark"
+          />
+          <span className="relative rounded-full bg-spark-soft px-2 py-0.5 text-xs font-semibold tabular-nums text-spark-ink">
             +{item.xp} XP
           </span>
-          <span className="text-sm text-ink">{item.label}</span>
+          <span className="relative text-sm text-ink">{item.label}</span>
         </div>
       ))}
     </div>

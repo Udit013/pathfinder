@@ -9,106 +9,128 @@
 /* ─────────────────────────────────────────────────────────────────────────────
    PathFinder design tokens.
 
-   Direction: warm, modern, intelligent, calm, slightly playful, premium.
-   - Warm neutral canvas (hue ~70, very low chroma) instead of cold grey.
-   - ONE restrained accent: a deep, calm teal. Used for actions and progress.
-   - Support hues are reserved for meaning only (positive / caution / signal),
-     never for decoration.
+   Direction: warm, soft, quietly playful, hopeful — and still grown-up.
+   The test for any change here: does it bring a small smile, without looking
+   like a children's app or another productivity dashboard?
+
+   Decisions:
+   - Light by default, always. Dark remains available in Settings for people who
+     need it, but nothing is designed dark-first.
+   - Canvas is a warm cream, not white and never grey.
+   - The primary accent is a soft plum. It's friendly and distinctly not
+     corporate-SaaS blue, and it leaves red and green free to mean error and
+     success rather than competing with the brand.
+   - Apricot is the celebration colour — warmth for the good moments.
+   - Everything is a little rounder and a little softer than strictly necessary.
    ───────────────────────────────────────────────────────────────────────────── */
 
 :root {
-  /* Surfaces */
-  --canvas: oklch(98.4% 0.006 75);
-  --surface: oklch(100% 0 0);
-  --surface-sunken: oklch(96.5% 0.008 75);
-  --surface-raised: oklch(100% 0 0);
-  --overlay: oklch(24% 0.014 70 / 45%);
+  /* Surfaces — warm cream, never grey */
+  --canvas: oklch(98.6% 0.008 70);
+  --surface: oklch(100% 0.002 70);
+  --surface-sunken: oklch(97% 0.011 68);
+  --surface-raised: oklch(100% 0.002 70);
+  --overlay: oklch(28% 0.02 330 / 35%);
 
-  /* Text */
-  --ink: oklch(26% 0.015 70);
-  --ink-soft: oklch(46% 0.012 70);
-  --ink-faint: oklch(61% 0.01 70);
-  --ink-inverse: oklch(98.5% 0.004 75);
+  /* Text — warm near-black, never pure black */
+  --ink: oklch(29% 0.024 330);
+  --ink-soft: oklch(49% 0.018 330);
+  --ink-faint: oklch(64% 0.014 330);
+  --ink-inverse: oklch(99% 0.004 70);
 
-  /* Lines */
-  --line: oklch(91% 0.008 75);
-  --line-strong: oklch(85% 0.01 75);
+  /* Lines — soft enough to suggest an edge rather than draw one */
+  --line: oklch(92.5% 0.011 340);
+  --line-strong: oklch(87% 0.016 340);
 
-  /* Accent — the single brand action colour */
-  --accent: oklch(52% 0.088 187);
-  --accent-hover: oklch(46% 0.09 187);
-  --accent-soft: oklch(95.5% 0.024 187);
-  --accent-soft-hover: oklch(93% 0.032 187);
-  --accent-ink: oklch(38% 0.075 187);
-  --accent-ring: oklch(62% 0.1 187);
+  /* Accent — soft plum. Friendly, warm-leaning, not a dashboard blue. */
+  --accent: oklch(58% 0.135 325);
+  --accent-hover: oklch(52% 0.145 325);
+  --accent-soft: oklch(96% 0.028 325);
+  --accent-soft-hover: oklch(93.5% 0.04 325);
+  --accent-ink: oklch(43% 0.125 325);
+  --accent-ring: oklch(68% 0.13 325);
 
-  /* Meaning */
-  --positive: oklch(56% 0.11 150);
-  --positive-soft: oklch(95.5% 0.03 150);
-  --positive-ink: oklch(40% 0.09 150);
+  /* Meaning — sage, honey, and a rose-red kept clearly apart from the accent */
+  --positive: oklch(62% 0.105 155);
+  --positive-soft: oklch(96% 0.035 155);
+  --positive-ink: oklch(44% 0.085 155);
 
-  --caution: oklch(66% 0.12 72);
-  --caution-soft: oklch(96% 0.04 78);
-  --caution-ink: oklch(45% 0.09 62);
+  --caution: oklch(74% 0.115 75);
+  --caution-soft: oklch(96.5% 0.045 78);
+  --caution-ink: oklch(48% 0.09 62);
 
-  --critical: oklch(56% 0.15 25);
-  --critical-soft: oklch(96% 0.03 25);
-  --critical-ink: oklch(43% 0.14 25);
+  --critical: oklch(60% 0.155 18);
+  --critical-soft: oklch(96.5% 0.032 18);
+  --critical-ink: oklch(46% 0.145 18);
 
-  /* Warm secondary, for celebration + the constellation metaphor */
-  --spark: oklch(74% 0.13 62);
-  --spark-soft: oklch(96.5% 0.035 68);
-  --spark-ink: oklch(48% 0.1 55);
+  /* Apricot — celebration, warmth, small wins */
+  --spark: oklch(78% 0.125 58);
+  --spark-soft: oklch(96.5% 0.045 62);
+  --spark-ink: oklch(51% 0.115 48);
 
-  /* Elevation — soft and warm, never a hard grey drop shadow */
-  --shadow-xs: 0 1px 2px oklch(26% 0.015 70 / 5%);
-  --shadow-sm: 0 1px 2px oklch(26% 0.015 70 / 5%), 0 2px 6px oklch(26% 0.015 70 / 4%);
-  --shadow-md: 0 2px 4px oklch(26% 0.015 70 / 5%), 0 8px 20px -4px oklch(26% 0.015 70 / 8%);
-  --shadow-lg: 0 4px 8px oklch(26% 0.015 70 / 5%), 0 16px 40px -8px oklch(26% 0.015 70 / 12%);
+  /* A second decorative hue for illustrations, so doodles aren't monochrome */
+  --sky: oklch(72% 0.09 235);
+  --sky-soft: oklch(96.5% 0.03 235);
+  --sky-ink: oklch(47% 0.09 235);
+
+  /* Elevation — soft, warm, tinted toward the accent rather than grey */
+  --shadow-xs: 0 1px 2px oklch(40% 0.05 330 / 5%);
+  --shadow-sm: 0 1px 2px oklch(40% 0.05 330 / 5%), 0 2px 8px oklch(40% 0.05 330 / 5%);
+  --shadow-md: 0 2px 4px oklch(40% 0.05 330 / 5%), 0 10px 24px -6px oklch(40% 0.05 330 / 10%);
+  --shadow-lg: 0 4px 10px oklch(40% 0.05 330 / 6%), 0 20px 48px -10px oklch(40% 0.05 330 / 14%);
 }
 
+/*
+ * Dark is a deliberate opt-in from Settings, not the default and not tied to the
+ * OS. It's kept warm and plum-tinted rather than the usual cold slate, so
+ * choosing it doesn't feel like switching to a different product.
+ */
 .dark {
-  --canvas: oklch(19% 0.012 70);
-  --surface: oklch(23% 0.012 70);
-  --surface-sunken: oklch(16.5% 0.01 70);
-  --surface-raised: oklch(26% 0.013 70);
-  --overlay: oklch(12% 0.01 70 / 65%);
+  --canvas: oklch(21% 0.018 325);
+  --surface: oklch(25% 0.019 325);
+  --surface-sunken: oklch(18.5% 0.016 325);
+  --surface-raised: oklch(28% 0.02 325);
+  --overlay: oklch(13% 0.014 325 / 65%);
 
-  --ink: oklch(95% 0.006 75);
-  --ink-soft: oklch(76% 0.008 75);
-  --ink-faint: oklch(60% 0.008 75);
-  --ink-inverse: oklch(20% 0.012 70);
+  --ink: oklch(95% 0.01 330);
+  --ink-soft: oklch(77% 0.014 330);
+  --ink-faint: oklch(62% 0.014 330);
+  --ink-inverse: oklch(22% 0.018 325);
 
-  --line: oklch(30% 0.012 70);
-  --line-strong: oklch(38% 0.013 70);
+  --line: oklch(32% 0.022 330);
+  --line-strong: oklch(40% 0.026 330);
 
-  --accent: oklch(72% 0.098 187);
-  --accent-hover: oklch(79% 0.09 187);
-  --accent-soft: oklch(30% 0.038 187);
-  --accent-soft-hover: oklch(34% 0.045 187);
-  --accent-ink: oklch(85% 0.07 187);
-  --accent-ring: oklch(68% 0.1 187);
+  --accent: oklch(76% 0.115 325);
+  --accent-hover: oklch(82% 0.1 325);
+  --accent-soft: oklch(32% 0.055 325);
+  --accent-soft-hover: oklch(36% 0.065 325);
+  --accent-ink: oklch(88% 0.075 325);
+  --accent-ring: oklch(72% 0.12 325);
 
-  --positive: oklch(72% 0.12 150);
-  --positive-soft: oklch(28% 0.045 150);
-  --positive-ink: oklch(85% 0.09 150);
+  --positive: oklch(75% 0.115 155);
+  --positive-soft: oklch(30% 0.05 155);
+  --positive-ink: oklch(87% 0.085 155);
 
-  --caution: oklch(78% 0.11 75);
-  --caution-soft: oklch(30% 0.045 72);
-  --caution-ink: oklch(88% 0.08 78);
+  --caution: oklch(82% 0.105 75);
+  --caution-soft: oklch(32% 0.05 72);
+  --caution-ink: oklch(89% 0.08 78);
 
-  --critical: oklch(70% 0.14 25);
-  --critical-soft: oklch(28% 0.05 25);
-  --critical-ink: oklch(87% 0.09 25);
+  --critical: oklch(73% 0.14 18);
+  --critical-soft: oklch(30% 0.055 18);
+  --critical-ink: oklch(88% 0.09 18);
 
-  --spark: oklch(82% 0.12 68);
-  --spark-soft: oklch(30% 0.05 62);
-  --spark-ink: oklch(88% 0.08 68);
+  --spark: oklch(84% 0.115 60);
+  --spark-soft: oklch(32% 0.055 58);
+  --spark-ink: oklch(90% 0.08 62);
+
+  --sky: oklch(78% 0.085 235);
+  --sky-soft: oklch(30% 0.05 235);
+  --sky-ink: oklch(88% 0.07 235);
 
   --shadow-xs: 0 1px 2px oklch(0% 0 0 / 24%);
-  --shadow-sm: 0 1px 2px oklch(0% 0 0 / 26%), 0 2px 6px oklch(0% 0 0 / 20%);
-  --shadow-md: 0 2px 4px oklch(0% 0 0 / 26%), 0 8px 20px -4px oklch(0% 0 0 / 32%);
-  --shadow-lg: 0 4px 8px oklch(0% 0 0 / 28%), 0 16px 40px -8px oklch(0% 0 0 / 40%);
+  --shadow-sm: 0 1px 2px oklch(0% 0 0 / 26%), 0 2px 8px oklch(0% 0 0 / 20%);
+  --shadow-md: 0 2px 4px oklch(0% 0 0 / 26%), 0 10px 24px -6px oklch(0% 0 0 / 32%);
+  --shadow-lg: 0 4px 10px oklch(0% 0 0 / 28%), 0 20px 48px -10px oklch(0% 0 0 / 40%);
 }
 
 @theme inline {
@@ -149,6 +171,10 @@
   --color-spark-soft: var(--spark-soft);
   --color-spark-ink: var(--spark-ink);
 
+  --color-sky: var(--sky);
+  --color-sky-soft: var(--sky-soft);
+  --color-sky-ink: var(--sky-ink);
+
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-display: 'Fraunces Variable', ui-serif, Georgia, serif;
 
@@ -157,10 +183,12 @@
   --shadow-md: var(--shadow-md);
   --shadow-lg: var(--shadow-lg);
 
-  --radius-card: 1rem;
-  --radius-panel: 1.25rem;
+  /* Rounder than strictly necessary — this is most of the softness. */
+  --radius-card: 1.25rem;
+  --radius-panel: 1.5rem;
 
   --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* ── Base ──────────────────────────────────────────────────────────────────── */
@@ -182,11 +210,13 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* Display type: Fraunces, kept soft-optical and low-contrast so it reads
-     warm rather than editorial. */
+  /* Display type: Fraunces with its soft and "wonky" axes turned up. WONK
+     swaps in the friendlier, slightly off-kilter letterforms — it's the single
+     biggest lever between "editorial serif" and "this app likes me". */
   .font-display {
-    font-variation-settings: 'SOFT' 40, 'WONK' 0, 'opsz' 32;
-    letter-spacing: -0.015em;
+    font-variation-settings: 'SOFT' 85, 'WONK' 1, 'opsz' 30;
+    letter-spacing: -0.012em;
+    font-weight: 550;
   }
 
   h1,
@@ -247,7 +277,87 @@
     animation: pf-fade 0.24s var(--ease-out-soft) both;
   }
   .animate-pop {
-    animation: pf-pop 0.32s var(--ease-out-soft) both;
+    animation: pf-pop 0.42s var(--ease-bounce) both;
+  }
+  /* For the greeting emoji. Runs twice and stops — a wave, not a fidget. */
+  .animate-wave {
+    animation: pf-wave 1.1s ease-in-out 0.3s 2;
+    transform-origin: 70% 80%;
+    display: inline-block;
+  }
+  /* Celebration bloom behind a just-completed thing. */
+  .animate-bloom {
+    animation: pf-bloom 0.7s var(--ease-out-soft) both;
+  }
+  .animate-check {
+    animation: pf-check 0.45s var(--ease-bounce) both;
+  }
+
+  /* Cards that lift very slightly on hover. Enough to feel alive, not enough
+     to be distracting on a page full of them. */
+  .lift {
+    transition:
+      transform 0.2s var(--ease-out-soft),
+      box-shadow 0.2s var(--ease-out-soft),
+      border-color 0.15s ease;
+  }
+  .lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .lift:active {
+    transform: translateY(0);
+  }
+
+  /* Stagger helper: children fade up in sequence. */
+  .stagger > * {
+    animation: pf-rise 0.4s var(--ease-out-soft) both;
+  }
+  .stagger > *:nth-child(1) { animation-delay: 0.02s; }
+  .stagger > *:nth-child(2) { animation-delay: 0.06s; }
+  .stagger > *:nth-child(3) { animation-delay: 0.1s; }
+  .stagger > *:nth-child(4) { animation-delay: 0.14s; }
+  .stagger > *:nth-child(5) { animation-delay: 0.18s; }
+  .stagger > *:nth-child(6) { animation-delay: 0.22s; }
+  .stagger > *:nth-child(n + 7) { animation-delay: 0.26s; }
+}
+
+@keyframes pf-wave {
+  0%,
+  60%,
+  100% {
+    transform: rotate(0deg);
+  }
+  15% {
+    transform: rotate(14deg);
+  }
+  30% {
+    transform: rotate(-8deg);
+  }
+  45% {
+    transform: rotate(14deg);
+  }
+}
+
+@keyframes pf-bloom {
+  0% {
+    opacity: 0.55;
+    transform: scale(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+
+@keyframes pf-check {
+  0% {
+    transform: scale(0.3) rotate(-25deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
   }
 }
 

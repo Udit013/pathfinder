@@ -3,6 +3,7 @@ import type {
   CareerExperimentResponse,
   CareerSignal,
   CheckIn,
+  ProjectInstance,
   Roadmap,
   SkillProgress,
   WorkloadMode,
@@ -10,6 +11,7 @@ import type {
 import { computeSignals, suggestedNextExperiment } from '@/domain/signals'
 import { currentSkillIds, resolveRoadmap, type RoadmapProgress } from '@/domain/roadmap'
 import { roadmapForPath } from '@/data/roadmaps'
+import { recommendProjects } from '@/domain/projects'
 import { todayIso } from '@/lib/utils'
 import { milestoneProgress, showUpDaysThisWeek, totalXp } from '@/domain/xp'
 import { modeForEnergy, minuteBudget, modeShapes } from '@/domain/energy'
@@ -162,6 +164,36 @@ export function useSkillProgress(skillId: string): SkillProgress | null {
 export function useCurrentSkillIds(): string[] {
   const skillProgress = useAppStore((state) => state.skillProgress)
   return useMemo(() => currentSkillIds(skillProgress), [skillProgress])
+}
+
+// ─── Build ───────────────────────────────────────────────────────────────────
+
+export function useProjectRecommendations() {
+  const profile = useAppStore((state) => state.profile)
+  const skillProgress = useAppStore((state) => state.skillProgress)
+  const projects = useAppStore((state) => state.projects)
+
+  return useMemo(
+    () => recommendProjects({ profile, skillProgress, projects }),
+    [profile, skillProgress, projects],
+  )
+}
+
+export function useProject(projectId: string): ProjectInstance | null {
+  const projects = useAppStore((state) => state.projects)
+  return useMemo(
+    () => projects.find((project) => project.id === projectId) ?? null,
+    [projects, projectId],
+  )
+}
+
+/** The user's project for a template, if one exists (in progress or finished). */
+export function useProjectForTemplate(templateId: string): ProjectInstance | null {
+  const projects = useAppStore((state) => state.projects)
+  return useMemo(
+    () => projects.find((project) => project.templateId === templateId) ?? null,
+    [projects, templateId],
+  )
 }
 
 /** The single most useful next experiment, with the reason it was chosen. */

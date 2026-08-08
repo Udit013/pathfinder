@@ -322,6 +322,8 @@ export interface ProjectMilestoneTemplate {
   title: string
   detail: string
   estimatedHours: number
+  /** What exists at the end of this milestone. Keeps progress concrete. */
+  youWillHave: string
 }
 
 export interface ProjectTemplate {
@@ -330,14 +332,23 @@ export interface ProjectTemplate {
   careerPathIds: string[]
   difficulty: Difficulty
   estimatedHours: number
+  /** One line: what you'll actually build. Shown on the card. */
+  whatYouWillBuild: string
   /** The real problem, not a tutorial premise. */
   problem: string
   whyItMatters: string
   skillIds: string[]
   skillsDemonstrated: string[]
+  /** Where the data comes from. Empty when the project needs none. */
   datasetSuggestion: string
+  /** In-app dataset id, when one of ours fits — so there's nothing to download. */
+  datasetId?: string
+  /** Free resources that specifically help with this build. */
+  resourceIds: string[]
   architecture: string[]
   milestones: ProjectMilestoneTemplate[]
+  /** The single sentence describing what exists when you're done. */
+  outcome: string
   deliverables: string[]
   readmeChecklist: string[]
   /** Guidance on how to phrase this — never a pre-written lie. */

@@ -8,6 +8,7 @@ import type {
   NetworkingKind,
   ProgressEvent,
   ProgressEventKind,
+  ProjectInstance,
   QuestCompletion,
   SkillProgress,
   SkillState,
@@ -99,6 +100,30 @@ interface Actions {
   /** Marks a resource read/watched, so returning to a skill shows where you got to. */
   toggleSkillResource(input: { skillId: string; resourceId: string }): void
   setSkillNote(input: { skillId: string; note: string }): void
+
+  // ── Build (Phase 4) ────────────────────────────────────────────────────────
+
+  /** Starts a project from a template. Returns the instance id. */
+  startProject(input: {
+    templateId: string
+    title: string
+    milestoneIds: string[]
+    careerPathIds: string[]
+    skillIds: string[]
+  }): string
+  /** Toggles a milestone. Completing the last one completes the project. */
+  toggleMilestone(input: {
+    projectId: string
+    milestoneId: string
+    milestoneTitle: string
+    projectTitle: string
+    totalMilestones: number
+    careerPathIds: string[]
+    skillIds: string[]
+  }): void
+  updateProject(input: { projectId: string; patch: Partial<ProjectInstance> }): void
+  /** Abandoning is allowed and costs nothing already earned. */
+  removeProject(projectId: string): void
 
   /** Logs a networking action against an optional networking quest. */
   logNetworking(input: {
@@ -523,6 +548,125 @@ export const useAppStore = create<AppStore>((set, get) => {
           ? entries.map((entry) => (entry.skillId === skillId ? updated : entry))
           : [...entries, updated],
       })
+    },
+
+    // ── Build ────────────────────────────────────────────────────────────────
+
+    startProject({ templateId, title, milestoneIds, careerPathIds, skillIds }) {
+      const existing = get().projects.find(
+        (project) => project.templateId === templateId && !project.completedAt,
+      )
+      if (existing) return existing.id
+
+      const instance: ProjectInstance = {
+        id: newId('proj'),
+        templateId,
+        startedAt: new Date().toISOString(),
+        completedAt: null,
+        milestones: milestoneIds.map((milestoneId) => ({
+          milestoneId,
+          state: 'todo' as const,
+          completedAt: null,
+        })),
+      }
+
+      mutate({ projects: [...get().projects, instance] })
+      get().recordEvent({
+        kind: 'project_started',
+        label: `Started building ${title}`,
+        subjectId: instance.id,
+        careerPathIds,
+        skillIds,
+      })
+      return instance.id
+    },
+
+    toggleMilestone({
+      projectId,
+      milestoneId,
+      milestoneTitle,
+      projectTitle,
+      totalMilestones,
+      careerPathIds,
+      skillIds,
+    }) {
+      const project = get().projects.find((entry) => entry.id === projectId)
+      if (!project) return
+
+      const current = project.milestones.find((entry) => entry.milestoneId === milestoneId)
+      const wasDone = current?.state === 'done'
+      const now = new Date().toISOString()
+
+      const milestones = project.milestones.map((entry) =>
+        entry.milestoneId === milestoneId
+          ? {
+              ...entry,
+              state: wasDone ? ('todo' as const) : ('done' as const),
+              completedAt: wasDone ? null : now,
+            }
+          : entry,
+      )
+
+      const doneCount = milestones.filter((entry) => entry.state === 'done').length
+      const nowComplete = doneCount === totalMilestones && totalMilestones > 0
+
+      mutate({
+        projects: get().projects.map((entry) =>
+          entry.id === projectId
+            ? {
+                ...entry,
+                milestones,
+                // Un-ticking the last milestone reopens the project rather than
+                // leaving it falsely finished.
+                completedAt: nowComplete ? (entry.completedAt ?? now) : null,
+              }
+            : entry,
+        ),
+      })
+
+      // XP only on the way forward, and only once per milestone.
+      if (!wasDone) {
+        const alreadyAwarded = get().events.some(
+          (event) => event.kind === 'project_milestone' && event.subjectId === milestoneId,
+        )
+        if (!alreadyAwarded) {
+          get().recordEvent({
+            kind: 'project_milestone',
+            label: milestoneTitle,
+            subjectId: milestoneId,
+            careerPathIds,
+            skillIds,
+          })
+        }
+
+        if (nowComplete) {
+          const alreadyCompleted = get().events.some(
+            (event) => event.kind === 'project_completed' && event.subjectId === projectId,
+          )
+          if (!alreadyCompleted) {
+            get().recordEvent({
+              kind: 'project_completed',
+              label: projectTitle,
+              subjectId: projectId,
+              careerPathIds,
+              skillIds,
+            })
+          }
+        }
+      }
+    },
+
+    updateProject({ projectId, patch }) {
+      mutate({
+        projects: get().projects.map((project) =>
+          project.id === projectId ? { ...project, ...patch } : project,
+        ),
+      })
+    },
+
+    removeProject(projectId) {
+      // The progress ledger is append-only, so XP and wins already earned stay.
+      mutate({ projects: get().projects.filter((project) => project.id !== projectId) })
     },
 
     logNetworking({ kind, personOrGroup, questId, label, notes }) {

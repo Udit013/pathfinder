@@ -7,6 +7,7 @@ import { datasetById } from './datasets'
 import { marketData } from './marketData'
 import { skills } from './skills'
 import { roadmaps } from './roadmaps'
+import { projectTemplates } from './projects'
 
 /**
  * Dev-only referential integrity check.
@@ -185,6 +186,59 @@ export function validateContent(): string[] {
 
     if (!roadmap.nodes.some((node) => node.importance === 'core')) {
       problems.push(`Roadmap "${roadmap.id}" has no core nodes, so progress can never move`)
+    }
+  }
+
+  // ── Phase 4: projects ──────────────────────────────────────────────────────
+
+  for (const project of projectTemplates) {
+    for (const id of project.careerPathIds) {
+      if (!pathIds.has(id)) {
+        problems.push(`Project "${project.id}" references unknown career path "${id}"`)
+      }
+    }
+    for (const id of project.skillIds) {
+      if (!skillIds.has(id)) {
+        problems.push(`Project "${project.id}" references unknown skill "${id}"`)
+      }
+    }
+    for (const id of project.resourceIds) {
+      if (!resourceIds.has(id)) {
+        problems.push(`Project "${project.id}" references unknown resource "${id}"`)
+      }
+    }
+    if (project.datasetId && !datasetById(project.datasetId)) {
+      problems.push(`Project "${project.id}" references unknown dataset "${project.datasetId}"`)
+    }
+
+    const milestoneIds = new Set<string>()
+    for (const milestone of project.milestones) {
+      if (milestoneIds.has(milestone.id)) {
+        problems.push(`Project "${project.id}" has duplicate milestone id "${milestone.id}"`)
+      }
+      milestoneIds.add(milestone.id)
+    }
+
+    if (project.milestones.length === 0) {
+      problems.push(`Project "${project.id}" has no milestones, so it can never be completed`)
+    }
+
+    // Milestone 1 is where projects get abandoned. If it isn't small, the
+    // project is mis-scoped regardless of how good the rest is.
+    const first = project.milestones[0]
+    if (first && first.estimatedHours > 3) {
+      problems.push(
+        `Project "${project.id}" opens with a ${first.estimatedHours}h milestone — the first step should be finishable in one sitting`,
+      )
+    }
+
+    // The stated total should roughly match the sum of the parts, or the time
+    // filter silently lies to the user.
+    const summed = project.milestones.reduce((sum, m) => sum + m.estimatedHours, 0)
+    if (Math.abs(summed - project.estimatedHours) > project.estimatedHours * 0.25) {
+      problems.push(
+        `Project "${project.id}" claims ~${project.estimatedHours}h but its milestones sum to ${summed}h`,
+      )
     }
   }
 

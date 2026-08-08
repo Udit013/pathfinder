@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Check, Clock, Info, Lock, Target, X } from 'lucide-react'
+import { Link } from 'react-router'
+import { ArrowRight, Check, Clock, Hammer, Info, Lock, Target, X } from 'lucide-react'
 import type { ResolvedNode } from '@/domain/roadmap'
 import { importanceExplanations, importanceLabels } from '@/domain/roadmap'
 import { Badge } from '@/ui/Badge'
@@ -8,6 +9,7 @@ import { TextArea } from '@/ui/Field'
 import { FreeResources } from '@/ui/ResourceLinks'
 import { resourcesByIds, resourcesForSkill } from '@/data/resources'
 import { skillName } from '@/data/skills'
+import { projectTemplates } from '@/data/projects'
 import { useAppStore } from '@/lib/store/useAppStore'
 import { useSkillProgress } from '@/lib/store/selectors'
 import { cn } from '@/lib/utils'
@@ -49,6 +51,11 @@ export function SkillDetail({
   ].slice(0, 4)
 
   const done = progress?.completedResourceIds ?? []
+
+  // Projects that practise this skill — at most two, so it stays a nudge.
+  const relatedProjects = projectTemplates
+    .filter((project) => project.skillIds.includes(skill.id))
+    .slice(0, 2)
 
   return (
     <div className="animate-rise">
@@ -215,6 +222,32 @@ export function SkillDetail({
           </div>
         )}
       </div>
+
+      {/* Skill → Project. Where a skill turns into evidence someone can look at. */}
+      {relatedProjects.length > 0 ? (
+        <div className="mt-5 rounded-card border border-line bg-spark-soft p-4">
+          <p className="flex items-center gap-2 text-sm font-medium text-spark-ink">
+            <Hammer className="size-4" aria-hidden />
+            Turn this into something you can show
+          </p>
+          <p className="mt-1 text-xs leading-relaxed text-spark-ink/80">
+            Practising is good. A finished project is what someone else can actually look at.
+          </p>
+          <div className="mt-2.5 space-y-1.5">
+            {relatedProjects.map((project) => (
+              <Link
+                key={project.id}
+                to={`/build/library/${project.id}`}
+                className="flex items-center gap-2 rounded-lg bg-surface px-3 py-2 text-sm text-ink transition-colors hover:text-accent-ink"
+              >
+                <span className="min-w-0 flex-1 truncate">{project.title}</span>
+                <span className="shrink-0 text-xs text-ink-faint">~{project.estimatedHours}h</span>
+                <ArrowRight className="size-3.5 shrink-0 text-ink-faint" aria-hidden />
+              </Link>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       {/* Personal note */}
       <div className="mt-5">

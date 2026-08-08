@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { ArrowLeft, ArrowRight, Check, Compass, Sparkles } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check } from 'lucide-react'
 import { brand } from '@/config/brand'
 import { Button } from '@/ui/Button'
 import { Badge } from '@/ui/Badge'
+import { PathDoodle, SparkDoodle } from '@/ui/Doodles'
 import { ChoiceCard, TextInput } from '@/ui/Field'
 import { careerCategories, pathsByCategory } from '@/data/careerPaths'
 import { useAppStore } from '@/lib/store/useAppStore'
@@ -149,9 +150,7 @@ export function OnboardingFlow() {
         >
           {step === 'welcome' ? (
             <div className="text-center">
-              <div className="mx-auto mb-6 flex size-12 items-center justify-center rounded-2xl bg-accent-soft">
-                <Compass className="size-6 text-accent" aria-hidden />
-              </div>
+              <PathDoodle className="mx-auto mb-4 h-20 w-32 text-ink-faint" />
               <h1 className="font-display text-3xl leading-tight text-ink sm:text-4xl">
                 {brand.name}
               </h1>
@@ -160,25 +159,36 @@ export function OnboardingFlow() {
                 next step.
               </p>
               <p className="mx-auto mt-5 max-w-md text-sm text-ink-soft">
-                This takes about two minutes. It sets up what you&rsquo;ll see — nothing here is a
-                test, and you can change all of it later.
+                A couple of minutes, seven small questions, no wrong answers. Everything you pick
+                can be changed later.
               </p>
             </div>
           ) : null}
 
           {step === 'name' ? (
             <StepFrame
-              title="First — what should I call you?"
-              subtitle="Only used to say hello. It never leaves your browser."
+              title="First — what should we call you?"
+              subtitle="Just so we can say hello properly. It never leaves your browser."
             >
               <TextInput
                 label="Your name or nickname"
+                hint="Whatever you'd like to be greeted with."
                 value={draft.name}
                 autoFocus
                 autoComplete="given-name"
                 onChange={(event) => patch({ name: event.target.value })}
                 placeholder="e.g. Sam"
               />
+
+              {draft.name.trim() ? (
+                <p className="animate-rise mt-3 rounded-xl bg-accent-soft px-3.5 py-2.5 text-sm text-accent-ink">
+                  <span className="font-display text-base">
+                    Hey {draft.name.trim().split(' ')[0]}{' '}
+                    <span aria-hidden>👋</span>
+                  </span>{' '}
+                  Nice to meet you.
+                </p>
+              ) : null}
               <div className="mt-6 space-y-2">
                 <p className="text-sm font-medium text-ink">
                   And where are you right now? <span className="text-ink-faint">(optional)</span>
@@ -374,11 +384,9 @@ export function OnboardingFlow() {
 
           {step === 'ready' ? (
             <div>
-              <div className="mb-5 flex size-11 items-center justify-center rounded-2xl bg-spark-soft">
-                <Sparkles className="size-5 text-spark-ink" aria-hidden />
-              </div>
+              <SparkDoodle className="mb-4 size-14" />
               <h1 className="font-display text-2xl leading-tight text-ink sm:text-3xl">
-                That&rsquo;s enough to start, {draft.name.trim() || 'friend'}.
+                That&rsquo;s everything, {draft.name.trim().split(' ')[0] || 'friend'}.
               </h1>
               <p className="mt-3 text-sm leading-relaxed text-ink-soft">
                 Here&rsquo;s what happens next, and what it&rsquo;s for:
