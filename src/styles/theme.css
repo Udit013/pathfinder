@@ -1,0 +1,286 @@
+@import 'tailwindcss';
+
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/fraunces';
+
+/* ── Dark mode is driven by a `dark` class on <html> (set from Settings). ────── */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   PathFinder design tokens.
+
+   Direction: warm, modern, intelligent, calm, slightly playful, premium.
+   - Warm neutral canvas (hue ~70, very low chroma) instead of cold grey.
+   - ONE restrained accent: a deep, calm teal. Used for actions and progress.
+   - Support hues are reserved for meaning only (positive / caution / signal),
+     never for decoration.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Surfaces */
+  --canvas: oklch(98.4% 0.006 75);
+  --surface: oklch(100% 0 0);
+  --surface-sunken: oklch(96.5% 0.008 75);
+  --surface-raised: oklch(100% 0 0);
+  --overlay: oklch(24% 0.014 70 / 45%);
+
+  /* Text */
+  --ink: oklch(26% 0.015 70);
+  --ink-soft: oklch(46% 0.012 70);
+  --ink-faint: oklch(61% 0.01 70);
+  --ink-inverse: oklch(98.5% 0.004 75);
+
+  /* Lines */
+  --line: oklch(91% 0.008 75);
+  --line-strong: oklch(85% 0.01 75);
+
+  /* Accent — the single brand action colour */
+  --accent: oklch(52% 0.088 187);
+  --accent-hover: oklch(46% 0.09 187);
+  --accent-soft: oklch(95.5% 0.024 187);
+  --accent-soft-hover: oklch(93% 0.032 187);
+  --accent-ink: oklch(38% 0.075 187);
+  --accent-ring: oklch(62% 0.1 187);
+
+  /* Meaning */
+  --positive: oklch(56% 0.11 150);
+  --positive-soft: oklch(95.5% 0.03 150);
+  --positive-ink: oklch(40% 0.09 150);
+
+  --caution: oklch(66% 0.12 72);
+  --caution-soft: oklch(96% 0.04 78);
+  --caution-ink: oklch(45% 0.09 62);
+
+  --critical: oklch(56% 0.15 25);
+  --critical-soft: oklch(96% 0.03 25);
+  --critical-ink: oklch(43% 0.14 25);
+
+  /* Warm secondary, for celebration + the constellation metaphor */
+  --spark: oklch(74% 0.13 62);
+  --spark-soft: oklch(96.5% 0.035 68);
+  --spark-ink: oklch(48% 0.1 55);
+
+  /* Elevation — soft and warm, never a hard grey drop shadow */
+  --shadow-xs: 0 1px 2px oklch(26% 0.015 70 / 5%);
+  --shadow-sm: 0 1px 2px oklch(26% 0.015 70 / 5%), 0 2px 6px oklch(26% 0.015 70 / 4%);
+  --shadow-md: 0 2px 4px oklch(26% 0.015 70 / 5%), 0 8px 20px -4px oklch(26% 0.015 70 / 8%);
+  --shadow-lg: 0 4px 8px oklch(26% 0.015 70 / 5%), 0 16px 40px -8px oklch(26% 0.015 70 / 12%);
+}
+
+.dark {
+  --canvas: oklch(19% 0.012 70);
+  --surface: oklch(23% 0.012 70);
+  --surface-sunken: oklch(16.5% 0.01 70);
+  --surface-raised: oklch(26% 0.013 70);
+  --overlay: oklch(12% 0.01 70 / 65%);
+
+  --ink: oklch(95% 0.006 75);
+  --ink-soft: oklch(76% 0.008 75);
+  --ink-faint: oklch(60% 0.008 75);
+  --ink-inverse: oklch(20% 0.012 70);
+
+  --line: oklch(30% 0.012 70);
+  --line-strong: oklch(38% 0.013 70);
+
+  --accent: oklch(72% 0.098 187);
+  --accent-hover: oklch(79% 0.09 187);
+  --accent-soft: oklch(30% 0.038 187);
+  --accent-soft-hover: oklch(34% 0.045 187);
+  --accent-ink: oklch(85% 0.07 187);
+  --accent-ring: oklch(68% 0.1 187);
+
+  --positive: oklch(72% 0.12 150);
+  --positive-soft: oklch(28% 0.045 150);
+  --positive-ink: oklch(85% 0.09 150);
+
+  --caution: oklch(78% 0.11 75);
+  --caution-soft: oklch(30% 0.045 72);
+  --caution-ink: oklch(88% 0.08 78);
+
+  --critical: oklch(70% 0.14 25);
+  --critical-soft: oklch(28% 0.05 25);
+  --critical-ink: oklch(87% 0.09 25);
+
+  --spark: oklch(82% 0.12 68);
+  --spark-soft: oklch(30% 0.05 62);
+  --spark-ink: oklch(88% 0.08 68);
+
+  --shadow-xs: 0 1px 2px oklch(0% 0 0 / 24%);
+  --shadow-sm: 0 1px 2px oklch(0% 0 0 / 26%), 0 2px 6px oklch(0% 0 0 / 20%);
+  --shadow-md: 0 2px 4px oklch(0% 0 0 / 26%), 0 8px 20px -4px oklch(0% 0 0 / 32%);
+  --shadow-lg: 0 4px 8px oklch(0% 0 0 / 28%), 0 16px 40px -8px oklch(0% 0 0 / 40%);
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-sunken: var(--surface-sunken);
+  --color-raised: var(--surface-raised);
+  --color-overlay: var(--overlay);
+
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-ink-inverse: var(--ink-inverse);
+
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-soft-hover: var(--accent-soft-hover);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-ring: var(--accent-ring);
+
+  --color-positive: var(--positive);
+  --color-positive-soft: var(--positive-soft);
+  --color-positive-ink: var(--positive-ink);
+
+  --color-caution: var(--caution);
+  --color-caution-soft: var(--caution-soft);
+  --color-caution-ink: var(--caution-ink);
+
+  --color-critical: var(--critical);
+  --color-critical-soft: var(--critical-soft);
+  --color-critical-ink: var(--critical-ink);
+
+  --color-spark: var(--spark);
+  --color-spark-soft: var(--spark-soft);
+  --color-spark-ink: var(--spark-ink);
+
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'Fraunces Variable', ui-serif, Georgia, serif;
+
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+
+  --radius-card: 1rem;
+  --radius-panel: 1.25rem;
+
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Base ──────────────────────────────────────────────────────────────────── */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    font-feature-settings: 'cv05' 1, 'ss03' 1;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Display type: Fraunces, kept soft-optical and low-contrast so it reads
+     warm rather than editorial. */
+  .font-display {
+    font-variation-settings: 'SOFT' 40, 'WONK' 0, 'opsz' 32;
+    letter-spacing: -0.015em;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* One consistent, always-visible focus treatment. */
+  :focus-visible {
+    outline: 2px solid var(--accent-ring);
+    outline-offset: 2px;
+    border-radius: 0.375rem;
+  }
+
+  ::selection {
+    background-color: var(--accent-soft);
+    color: var(--accent-ink);
+  }
+
+  /* Respect the OS reduced-motion setting everywhere, once. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  /* Visible only to assistive tech. */
+  .sr-only-focusable:not(:focus):not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .animate-rise {
+    animation: pf-rise 0.36s var(--ease-out-soft) both;
+  }
+  .animate-fade {
+    animation: pf-fade 0.24s var(--ease-out-soft) both;
+  }
+  .animate-pop {
+    animation: pf-pop 0.32s var(--ease-out-soft) both;
+  }
+}
+
+@keyframes pf-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pf-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pf-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  60% {
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
