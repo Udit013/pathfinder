@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { ArrowUpRight, Check, Copy, Sparkles, X } from 'lucide-react'
 import type { PromptKind } from '@/domain/aiContext'
 import { aiTools, availableActions, buildPrompt } from '@/domain/aiContext'
@@ -74,7 +75,11 @@ export function AiCompanion({
     }
   }
 
-  return (
+  // Rendered into <body>, not where the trigger sits. `backdrop-filter` on an
+  // ancestor makes that ancestor the containing block for `position: fixed`, so
+  // opening this from the header sized the overlay to the 56px header strip and
+  // centred the panel on it — pushing the title off the top of the screen.
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-4">
       <button
         type="button"
@@ -259,6 +264,7 @@ export function AiCompanion({
           </div>
         ) : null}
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
