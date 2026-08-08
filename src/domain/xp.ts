@@ -94,14 +94,3 @@ export function showUpDaysThisWeek(events: ProgressEvent[], now: Date = new Date
   return days.size
 }
 
-/** Micro-interaction copy (§31). Quick, subtle, never a lecture. */
-export const celebrationCopy: Partial<Record<ProgressEventKind, string>> = {
-  quest_completed: 'Quest complete.',
-  skill_completed: 'New skill unlocked.',
-  experiment_completed: 'Another piece of the puzzle.',
-  project_milestone: "You're building evidence.",
-  project_completed: 'That exists now because of you.',
-  interview_practised: 'You said it out loud. That is the hard part.',
-  interview_topic_completed: 'That topic is yours now.',
-  concept_understood: 'That one clicked.',
-}

@@ -135,7 +135,7 @@ export function RoadmapPage() {
                       className={cn(
                         'absolute top-1 left-0 flex size-8 items-center justify-center rounded-full border text-xs font-semibold sm:size-12 sm:text-sm',
                         allDone
-                          ? 'border-positive bg-positive text-white'
+                          ? 'border-positive-strong bg-positive-strong text-white'
                           : 'border-line bg-surface text-ink-faint',
                       )}
                     >

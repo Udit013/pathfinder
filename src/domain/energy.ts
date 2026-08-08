@@ -84,10 +84,6 @@ export function lighterMode(mode: WorkloadMode): WorkloadMode {
   return order[Math.max(0, index - 1)] ?? 'light'
 }
 
-export function heavierMode(mode: WorkloadMode): WorkloadMode {
-  const index = order.indexOf(mode)
-  return order[Math.min(order.length - 1, index + 1)] ?? 'deep'
-}
 
 /**
  * The minute budget today's plan is allowed to fill, clamped by what the user

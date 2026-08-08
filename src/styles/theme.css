@@ -56,6 +56,10 @@
   --positive: oklch(62% 0.105 155);
   --positive-soft: oklch(96% 0.035 155);
   --positive-ink: oklch(44% 0.085 155);
+  /* Darker green, used only where white TEXT sits on it. --positive is tuned
+     for icons and progress bars (3:1 is the bar for graphics); text needs 4.5:1
+     and measured only 3.46:1 against it. */
+  --positive-strong: oklch(50% 0.11 155);
 
   --caution: oklch(74% 0.115 75);
   --caution-soft: oklch(96.5% 0.045 78);
@@ -112,6 +116,7 @@
   --positive: oklch(75% 0.115 155);
   --positive-soft: oklch(30% 0.05 155);
   --positive-ink: oklch(87% 0.085 155);
+  --positive-strong: oklch(45% 0.1 155);
 
   --caution: oklch(82% 0.105 75);
   --caution-soft: oklch(32% 0.05 72);
@@ -160,6 +165,7 @@
   --color-positive: var(--positive);
   --color-positive-soft: var(--positive-soft);
   --color-positive-ink: var(--positive-ink);
+  --color-positive-strong: var(--positive-strong);
 
   --color-caution: var(--caution);
   --color-caution-soft: var(--caution-soft);

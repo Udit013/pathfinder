@@ -182,30 +182,3 @@ export function pickProjectResources(skillIds: string[], limit = 3): Resource[] 
     .slice(0, limit)
 }
 
-// ─── Library statistics, used by Settings and the validator ──────────────────
-
-export function libraryStats() {
-  const freeCertificates = resources.filter(
-    (resource) => resource.credential === 'free_certificate',
-  ).length
-  const badges = resources.filter(
-    (resource) =>
-      resource.credential === 'free_badge' || resource.credential === 'free_completion_record',
-  ).length
-  const noCertificate = resources.filter(
-    (resource) => resource.credential === 'no_certificate',
-  ).length
-  const verified = resources.filter((resource) => resource.verified).length
-  const tracks = new Set(resources.flatMap((resource) => resource.careerPathIds))
-
-  return {
-    total: resources.length,
-    verified,
-    freeCertificates,
-    badges,
-    noCertificate,
-    fullyFree: resources.filter((resource) => resource.cost === 'free').length,
-    freeTier: resources.filter((resource) => resource.cost === 'free_tier').length,
-    tracks: tracks.size,
-  }
-}
