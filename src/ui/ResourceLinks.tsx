@@ -40,9 +40,30 @@ const kindIcons: Record<ResourceKind, LucideIcon> = {
  * needed to decide whether to open it (what it is, who made it, how long, what
  * level, what it costs) is on the row before they click.
  */
-export function ResourceRow({ resource }: { resource: Resource }) {
+/**
+ * "The course is free" and "the certificate is free" are different claims, and
+ * conflating them is the defining error of free-certificate lists. `cost` and
+ * `credential` are separate fields for that reason, and this renders the second
+ * one only where a certificate genuinely exists.
+ */
+const credentialLabels: Partial<Record<Resource['credential'], string>> = {
+  free_certificate: 'Free certificate',
+  free_badge: 'Free badge',
+  free_completion_record: 'Free completion record',
+  free_course_paid_certificate: 'Certificate costs extra',
+}
+
+export function ResourceRow({
+  resource,
+  showCredential,
+}: {
+  resource: Resource
+  /** Used by the library page, where "does this give me a certificate?" is the question. */
+  showCredential?: boolean
+}) {
   const Icon = kindIcons[resource.kind]
   const isYouTube = resource.kind === 'youtube_video' || resource.kind === 'youtube_playlist'
+  const credential = showCredential ? credentialLabels[resource.credential] : undefined
 
   return (
     <li>
@@ -93,6 +114,26 @@ export function ResourceRow({ resource }: { resource: Resource }) {
               </>
             ) : null}
           </span>
+
+          {credential ? (
+            <span className="mt-1.5 flex flex-wrap gap-1.5">
+              <span
+                className={cn(
+                  'inline-flex items-center rounded-full px-2 py-0.5 text-[0.6875rem] font-medium',
+                  resource.credential === 'free_course_paid_certificate'
+                    ? 'bg-sunken text-ink-soft'
+                    : 'bg-positive-soft text-positive-ink',
+                )}
+              >
+                {credential}
+              </span>
+              {resource.certificateCost ? (
+                <span className="inline-flex items-center text-[0.6875rem] text-ink-faint">
+                  {resource.certificateCost}
+                </span>
+              ) : null}
+            </span>
+          ) : null}
 
           {resource.durationNote ? (
             <span className="mt-1 block text-xs text-ink-faint">{resource.durationNote}</span>

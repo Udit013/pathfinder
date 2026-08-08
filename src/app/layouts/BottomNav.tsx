@@ -3,9 +3,9 @@ import { navItems } from '@/app/navigation'
 import { cn } from '@/lib/utils'
 
 /**
- * The mobile bar. All six areas, because a nav that hides things is a nav you
- * have to learn — and the whole point of this pass is that you never have to
- * wonder where something lives.
+ * The mobile bar. Every area, because a nav that hides things is a nav you have
+ * to learn — and the whole point of this pass is that you never have to wonder
+ * where something lives.
  */
 export function BottomNav() {
   return (
@@ -16,7 +16,10 @@ export function BottomNav() {
         'pb-[env(safe-area-inset-bottom)]',
       )}
     >
-      <ul className="mx-auto grid max-w-lg grid-cols-6">
+      <ul
+        className="mx-auto grid max-w-lg"
+        style={{ gridTemplateColumns: `repeat(${navItems.length}, minmax(0, 1fr))` }}
+      >
         {navItems.map((item) => (
           <li key={item.to}>
             <NavLink
@@ -24,7 +27,11 @@ export function BottomNav() {
               end={item.to === '/'}
               className={({ isActive }) =>
                 cn(
-                  'flex flex-col items-center gap-0.5 py-2 text-[0.625rem] transition-colors',
+                  'flex min-w-0 flex-col items-center gap-0.5 px-0.5 py-2 transition-colors',
+                  // Seven labels have to share the width. This holds the normal
+                  // size on a 375px phone and steps down on narrower ones,
+                  // rather than letting "Resources" collide with its neighbour.
+                  'text-[clamp(0.5625rem,2.55vw,0.625rem)]',
                   isActive ? 'text-accent-ink' : 'text-ink-faint',
                 )
               }
@@ -39,7 +46,12 @@ export function BottomNav() {
                   >
                     <item.icon className="size-[1.05rem]" aria-hidden />
                   </span>
-                  <span className={cn('leading-tight', isActive && 'font-semibold')}>
+                  <span
+                    className={cn(
+                      'w-full truncate text-center leading-tight',
+                      isActive && 'font-semibold',
+                    )}
+                  >
                     {item.shortLabel ?? item.label}
                   </span>
                 </>

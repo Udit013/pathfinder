@@ -1,6 +1,7 @@
 import {
   Compass,
   Hammer,
+  Library,
   Map as MapIcon,
   MessagesSquare,
   Sparkles,
@@ -9,13 +10,18 @@ import {
 } from 'lucide-react'
 
 /**
- * The whole of the main navigation. Six items, identical on desktop and mobile.
+ * The whole of the main navigation. Identical on desktop and mobile.
  *
- * They read as a journey rather than a menu:
+ * The first six read as a journey rather than a menu:
  *   Today → Explore → Roadmap → Build → Interview → Progress
  *
- * Settings deliberately isn't here. It's housekeeping, not a destination, so it
- * lives as a single quiet icon in the header instead of taking a seventh slot.
+ * Resources sits last, slightly apart from that arc, because it is a shelf
+ * rather than a step — somewhere to go when you already know what you want.
+ * Keeping it out of the journey is deliberate: the flow should keep handing you
+ * one thing at a time, and this is the escape hatch from that, not the default.
+ *
+ * Settings still isn't here. It's housekeeping, not a destination, so it lives
+ * as a single quiet icon in the header.
  */
 export interface NavItem {
   to: string
@@ -64,6 +70,12 @@ export const navItems: NavItem[] = [
     label: 'Progress',
     icon: Sparkles,
     purpose: 'Everything you have learned, tried, and made',
+  },
+  {
+    to: '/resources',
+    label: 'Resources',
+    icon: Library,
+    purpose: 'The whole free library, for when you want to browse it yourself',
   },
 ]
 

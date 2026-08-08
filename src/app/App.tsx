@@ -14,8 +14,10 @@ import { useThemeEffect } from '@/lib/useTheme'
  * everyone sees, and making them wait on a second request would be a downgrade.
  *
  * Everything else is split out. Measured on the production build rather than
- * estimated: first load went from 202KB to 169KB transferred (index + shared
+ * estimated: first load went from 202KB to 171KB transferred (index + shared
  * chunk + CSS), with the remaining routes arriving as 1–5KB chunks on demand.
+ * Resources is one of them — the whole library page is a 4KB chunk, because the
+ * data it renders already lives in the shared chunk.
  *
  * The shared chunk stays large because Today itself needs the resource library
  * to pick the day's quest resources. Deferring that would trade a smaller
@@ -56,6 +58,9 @@ const MockInterviewPage = lazy(() =>
 )
 const ProgressPage = lazy(() =>
   import('@/features/progress/ProgressPage').then((m) => ({ default: m.ProgressPage })),
+)
+const ResourcesPage = lazy(() =>
+  import('@/features/resources/ResourcesPage').then((m) => ({ default: m.ResourcesPage })),
 )
 const SettingsPage = lazy(() =>
   import('@/features/settings/SettingsPage').then((m) => ({ default: m.SettingsPage })),
@@ -98,6 +103,7 @@ export function App() {
               element={<Lazy><QuestionPage /></Lazy>}
             />
             <Route path="progress" element={<Lazy><ProgressPage /></Lazy>} />
+            <Route path="resources" element={<Lazy><ResourcesPage /></Lazy>} />
             <Route path="settings" element={<Lazy><SettingsPage /></Lazy>} />
             {/* Unknown routes land here inside the shell, so the nav stays. */}
             <Route path="*" element={<NotFoundPage />} />

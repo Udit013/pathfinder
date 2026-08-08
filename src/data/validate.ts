@@ -10,6 +10,7 @@ import { roadmaps } from './roadmaps'
 import { projectTemplates } from './projects'
 import { interviewTracks } from './interviewTracks'
 import { interviewQuestions } from './interviewQuestions'
+import { topicForSkill } from '@/domain/library'
 
 /**
  * Dev-only referential integrity check.
@@ -346,6 +347,14 @@ export function validateContent(): string[] {
     }
     if (point.salaryMin === null || point.salaryMax === null) {
       problems.push(`Market data "${point.id}" is marked verified but has no figures`)
+    }
+  }
+
+  // The library page groups by topic, and topics are derived from skills. A
+  // skill with no topic would quietly vanish from that page rather than error.
+  for (const skill of skills) {
+    if (!topicForSkill(skill.id)) {
+      problems.push(`Skill "${skill.id}" has no library topic — add it to topicOfSkill in domain/library.ts`)
     }
   }
 
