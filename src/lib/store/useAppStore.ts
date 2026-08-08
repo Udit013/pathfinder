@@ -215,6 +215,24 @@ export const useAppStore = create<AppStore>((set, get) => {
     persist()
   }
 
+  /**
+   * Writes immediately instead of on the debounce.
+   *
+   * Needed anywhere a delayed write could be lost. Importing is the case that
+   * matters: someone restores a backup and closes the tab, and a 400ms debounce
+   * would silently discard the whole thing.
+   */
+  const persistNow = () => {
+    const state = get()
+    if (state.status !== 'ready') return
+    void storage.save(extractPersisted(state)).catch(() => {
+      set({
+        storageError:
+          "Your data was loaded, but PathFinder couldn't save it to this browser. Keep the backup file — closing the tab may lose the import.",
+      })
+    })
+  }
+
   return {
     ...createEmptyState(),
     ...ephemeralDefaults,
@@ -795,7 +813,10 @@ export const useAppStore = create<AppStore>((set, get) => {
       const result = parseImport(raw)
       if (!result.ok) return result
       set({ ...result.state, status: 'ready', storageWarning: result.warning ?? null })
-      persist.flush()
+      // Write straight through. persist.flush() looked like it did this, but a
+      // debounce with nothing pending flushes nothing — so the import only ever
+      // reached memory and was lost on the next reload.
+      persistNow()
       return { ok: true, warning: result.warning }
     },
 

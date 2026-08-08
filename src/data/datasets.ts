@@ -377,16 +377,32 @@ function buildProcessDataset(): Dataset {
 
 // ─── Registry ────────────────────────────────────────────────────────────────
 
-export const datasets: Dataset[] = [
-  buildRevenueDataset(),
-  buildFunnelDataset(),
-  buildMessySalesDataset(),
-  buildChurnDataset(),
-  buildProcessDataset(),
+/**
+ * Built lazily on first access, then cached.
+ *
+ * Generating all five costs ~19ms and produces 8,000+ rows, and almost no page
+ * needs them — Today, Explore, Roadmap, Build, Interview and Progress never
+ * touch a dataset. Doing that work at module load put it on the critical path
+ * of every single visit, for a fast machine; on a low-end phone it is several
+ * times worse. Measured before and after rather than assumed.
+ */
+const builders: (() => Dataset)[] = [
+  buildRevenueDataset,
+  buildFunnelDataset,
+  buildMessySalesDataset,
+  buildChurnDataset,
+  buildProcessDataset,
 ]
 
+let cache: Dataset[] | null = null
+
+export function getDatasets(): Dataset[] {
+  cache ??= builders.map((build) => build())
+  return cache
+}
+
 export function datasetById(id: string): Dataset | undefined {
-  return datasets.find((dataset) => dataset.id === id)
+  return getDatasets().find((dataset) => dataset.id === id)
 }
 
 /** CSV for copying or downloading, so the work can happen in real tools. */

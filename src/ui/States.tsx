@@ -79,6 +79,30 @@ export function ErrorNotice({
   )
 }
 
+/**
+ * Shown while a lazily-loaded route arrives.
+ *
+ * Delayed on purpose: on a fast connection the chunk lands in tens of
+ * milliseconds, and a spinner that appears and vanishes in that window reads as
+ * a glitch. This stays invisible until the wait is long enough to be worth
+ * acknowledging.
+ */
+export function RouteFallback() {
+  return (
+    <div
+      className="flex min-h-[40vh] items-center justify-center opacity-0 [animation-delay:400ms] [animation-duration:0.3s] [animation-fill-mode:forwards] [animation-name:pf-fade]"
+      role="status"
+      aria-live="polite"
+    >
+      <span className="sr-only">Loading</span>
+      <span
+        className="size-5 animate-spin rounded-full border-2 border-line border-t-accent"
+        aria-hidden
+      />
+    </div>
+  )
+}
+
 export function LoadingScreen({ label = 'Getting your things together…' }: { label?: string }) {
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center gap-3 bg-canvas">

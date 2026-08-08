@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router'
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react'
 import { brand } from '@/config/brand'
 import { Button } from '@/ui/Button'
+import { ErrorNotice } from '@/ui/States'
 import { Badge } from '@/ui/Badge'
 import { PathDoodle, SparkDoodle } from '@/ui/Doodles'
 import { ChoiceCard, TextInput } from '@/ui/Field'
@@ -71,6 +72,12 @@ export function OnboardingFlow() {
   const [draft, setDraft] = useState<Draft>(emptyDraft)
 
   const step = stepOrder[index] ?? 'welcome'
+
+  // Corrupt or unreadable saved data drops the user here, at the welcome
+  // screen. Without this they would just see a fresh start with no explanation
+  // — which is precisely the silent data loss the quarantine exists to avoid.
+  const storageError = useAppStore((state) => state.storageError)
+  const clearStorageMessages = useAppStore((state) => state.clearStorageMessages)
   const patch = (values: Partial<Draft>) => setDraft((current) => ({ ...current, ...values }))
 
   const selectedPaths = useMemo(
@@ -132,6 +139,12 @@ export function OnboardingFlow() {
           (step === 'welcome' || step === 'ready') && 'justify-center',
         )}
       >
+        {storageError ? (
+          <div className="mb-6">
+            <ErrorNotice message={storageError} onDismiss={clearStorageMessages} />
+          </div>
+        ) : null}
+
         {/* Progress: dots, not a percentage. Nothing here is a race. */}
         {step !== 'welcome' ? (
           <div className="mb-8 flex items-center gap-1.5" aria-hidden>
