@@ -9,7 +9,35 @@ type Migration = (state: PersistedState) => PersistedState
  * Example:
  *   2: (state) => ({ ...state, someNewField: [] }),
  */
-const migrations: Record<number, Migration> = {}
+const migrations: Record<number, Migration> = {
+  /**
+   * v1 → v2: job-application tracking was removed from the product.
+   *
+   * Drops `applications` and `networking`, and rewrites the progress events
+   * they produced so XP and history stay intact — the ledger is append-only and
+   * a feature being removed must never take someone's earned progress with it.
+   */
+  1: (state) => {
+    const legacy = state as unknown as Record<string, unknown>
+    delete legacy.applications
+    delete legacy.networking
+
+    return {
+      ...state,
+      schemaVersion: 2,
+      events: state.events.map((event) => {
+        const kind = event.kind as string
+        if (kind === 'networking_activity' || kind === 'application_submitted') {
+          return { ...event, kind: 'concept_understood' as const, label: event.label }
+        }
+        if (kind === 'application_advanced' || kind === 'interview_completed') {
+          return { ...event, kind: 'interview_practised' as const, label: event.label }
+        }
+        return event
+      }),
+    }
+  },
+}
 
 export interface MigrationResult {
   state: PersistedState

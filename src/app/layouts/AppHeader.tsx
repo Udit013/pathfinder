@@ -1,22 +1,40 @@
-import { Link, NavLink } from 'react-router'
-import { Hammer, Settings } from 'lucide-react'
+import { Link, NavLink, useLocation } from 'react-router'
+import { Settings } from 'lucide-react'
 import { brand } from '@/config/brand'
+import { navItems, purposeFor } from '@/app/navigation'
 import { useTodayMode } from '@/lib/store/selectors'
 import { cn, formatMinutes } from '@/lib/utils'
 
 /**
- * Deliberately thin. On mobile it carries the brand plus the two areas that
- * don't fit in the five-tab bottom bar; on desktop it only shows today's shape.
- * The global "Copy PathFinder Context" action lands here in Phase 7.
+ * A thin, quiet header whose job is answering "where am I?".
+ *
+ * On desktop the sidebar already answers it, so this only carries the day's
+ * shape and Settings. On mobile it names the current area, because the bottom
+ * bar's icons alone are not enough when you have just arrived.
  */
 export function AppHeader() {
+  const location = useLocation()
   const { shape, budgetMinutes, fromCheckIn } = useTodayMode()
+
+  const current = navItems.find((item) =>
+    item.to === '/' ? location.pathname === '/' : location.pathname.startsWith(item.to),
+  )
+  const purpose = purposeFor(location.pathname)
 
   return (
     <header className="sticky top-0 z-20 flex h-14 items-center gap-3 border-b border-line bg-canvas/85 px-4 backdrop-blur-md lg:px-8">
-      <Link to="/" className="font-display text-base tracking-tight text-ink lg:hidden">
-        {brand.name}
-      </Link>
+      {/* Mobile: where you are. Desktop: the sidebar says it already. */}
+      <div className="min-w-0 lg:hidden">
+        {location.pathname === '/' ? (
+          <Link to="/" className="font-display text-base tracking-tight text-ink">
+            {brand.name}
+          </Link>
+        ) : (
+          <p className="font-display truncate text-base text-ink">{current?.label ?? brand.name}</p>
+        )}
+      </div>
+
+      <p className="hidden min-w-0 truncate text-sm text-ink-soft lg:block">{purpose}</p>
 
       <div className="flex-1" />
 
@@ -27,26 +45,18 @@ export function AppHeader() {
         </span>
       ) : null}
 
-      <div className="flex items-center gap-0.5 lg:hidden">
-        {[
-          { to: '/build', label: 'Build', icon: Hammer },
-          { to: '/settings', label: 'Settings', icon: Settings },
-        ].map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            aria-label={item.label}
-            className={({ isActive }) =>
-              cn(
-                'flex size-9 items-center justify-center rounded-full transition-colors',
-                isActive ? 'bg-accent-soft text-accent-ink' : 'text-ink-faint hover:bg-sunken',
-              )
-            }
-          >
-            <item.icon className="size-4" aria-hidden />
-          </NavLink>
-        ))}
-      </div>
+      <NavLink
+        to="/settings"
+        aria-label="Settings"
+        className={({ isActive }) =>
+          cn(
+            'flex size-9 shrink-0 items-center justify-center rounded-full transition-colors',
+            isActive ? 'bg-accent-soft text-accent-ink' : 'text-ink-faint hover:bg-sunken hover:text-ink',
+          )
+        }
+      >
+        <Settings className="size-4" aria-hidden />
+      </NavLink>
     </header>
   )
 }

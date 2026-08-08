@@ -28,7 +28,7 @@ export function Sidebar() {
               <NavLink
                 to={item.to}
                 end={item.to === '/'}
-                title={item.description}
+                title={item.purpose}
                 className={({ isActive }) =>
                   cn(
                     'group flex items-center gap-2.5 rounded-xl px-2.5 py-2 text-sm transition-colors duration-150',

@@ -16,10 +16,8 @@ export const xpTable: Record<ProgressEventKind, number> = {
   project_started: 15,
   project_milestone: 35,
   project_completed: 120,
-  application_submitted: 20,
-  application_advanced: 30,
-  networking_activity: 20,
-  interview_completed: 50,
+  interview_practised: 20,
+  interview_topic_completed: 70,
   reflection_added: 10,
   path_chosen: 15,
   concept_understood: 15,
@@ -44,7 +42,7 @@ export const milestones: Milestone[] = [
   { xp: 100, title: 'Finding your footing', note: 'You have a few real data points about yourself now.' },
   { xp: 300, title: 'Building momentum', note: 'Skills are stacking up and the path is getting clearer.' },
   { xp: 700, title: 'Gathering evidence', note: 'You have things to show, not just things you have read.' },
-  { xp: 1200, title: 'In the market', note: 'You are learning, building, and putting yourself forward.' },
+  { xp: 1200, title: 'Ready to be asked', note: 'You can learn it, build it, and talk about it out loud.' },
   { xp: 2000, title: 'Well underway', note: 'This is what sustained effort looks like from the inside.' },
 ]
 
@@ -103,7 +101,7 @@ export const celebrationCopy: Partial<Record<ProgressEventKind, string>> = {
   experiment_completed: 'Another piece of the puzzle.',
   project_milestone: "You're building evidence.",
   project_completed: 'That exists now because of you.',
-  application_submitted: 'Opportunity created.',
-  networking_activity: 'You reached out. That takes something.',
+  interview_practised: 'You said it out loud. That is the hard part.',
+  interview_topic_completed: 'That topic is yours now.',
   concept_understood: 'That one clicked.',
 }

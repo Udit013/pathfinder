@@ -2,8 +2,6 @@ import type {
   CareerExperimentResponse,
   CheckIn,
   InterviewPrepProgress,
-  JobApplication,
-  NetworkingActivity,
   ProgressEvent,
   ProjectInstance,
   QuestCompletion,
@@ -17,7 +15,7 @@ import type {
  * Bump when the shape of PersistedState changes, and add a migration in
  * `migrate.ts`. Never reuse a version number.
  */
-export const SCHEMA_VERSION = 1
+export const SCHEMA_VERSION = 2
 
 export const STORAGE_KEY = 'pathfinder:state:v1'
 
@@ -38,8 +36,6 @@ export interface PersistedState {
   questCompletions: QuestCompletion[]
   projects: ProjectInstance[]
 
-  applications: JobApplication[]
-  networking: NetworkingActivity[]
   interviewPrep: InterviewPrepProgress[]
 
   checkIns: CheckIn[]
@@ -69,8 +65,6 @@ export function createEmptyState(): PersistedState {
     skillProgress: [],
     questCompletions: [],
     projects: [],
-    applications: [],
-    networking: [],
     interviewPrep: [],
     checkIns: [],
     reflections: [],

@@ -43,11 +43,19 @@ const emptyDraft: Draft = {
   locations: '',
 }
 
-type StepId = 'welcome' | 'name' | 'goals' | 'time' | 'interests' | 'first' | 'constraints' | 'ready'
+type StepId =
+  | 'welcome'
+  | 'situation'
+  | 'goals'
+  | 'time'
+  | 'interests'
+  | 'first'
+  | 'constraints'
+  | 'ready'
 
 const stepOrder: StepId[] = [
   'welcome',
-  'name',
+  'situation',
   'goals',
   'time',
   'interests',
@@ -75,8 +83,6 @@ export function OnboardingFlow() {
 
   const canAdvance = (() => {
     switch (step) {
-      case 'name':
-        return draft.name.trim().length > 0
       case 'goals':
         return draft.goals.length > 0
       case 'interests':
@@ -148,63 +154,72 @@ export function OnboardingFlow() {
             step !== 'welcome' && step !== 'ready' && 'flex-1',
           )}
         >
+          {/* The very first thing anyone sees. A greeting and one question —
+              never a dashboard, and never a form. */}
           {step === 'welcome' ? (
             <div className="text-center">
-              <PathDoodle className="mx-auto mb-4 h-20 w-32 text-ink-faint" />
-              <h1 className="font-display text-3xl leading-tight text-ink sm:text-4xl">
-                {brand.name}
+              <PathDoodle className="mx-auto mb-5 h-20 w-32 text-ink-faint" />
+
+              <h1 className="font-display text-3xl leading-tight text-ink sm:text-[2.5rem]">
+                Welcome to {brand.name} <span aria-hidden>🌱</span>
               </h1>
-              <p className="font-display mx-auto mt-4 max-w-md text-lg leading-snug text-ink-soft">
-                You don&rsquo;t need to figure out your whole life. You only need to figure out your
-                next step.
+
+              <p className="font-display mx-auto mt-4 max-w-sm text-lg leading-snug text-ink-soft">
+                You don&rsquo;t need to have everything figured out.
+                <br />
+                Let&rsquo;s find your next step together.
               </p>
-              <p className="mx-auto mt-5 max-w-md text-sm text-ink-soft">
-                A couple of minutes, seven small questions, no wrong answers. Everything you pick
-                can be changed later.
+
+              <form
+                className="mx-auto mt-8 max-w-xs text-left"
+                onSubmit={(event) => {
+                  event.preventDefault()
+                  if (draft.name.trim()) setIndex(index + 1)
+                }}
+              >
+                <TextInput
+                  label="What should we call you?"
+                  value={draft.name}
+                  autoFocus
+                  autoComplete="given-name"
+                  onChange={(event) => patch({ name: event.target.value })}
+                  placeholder="Your name"
+                />
+                <Button
+                  type="submit"
+                  size="lg"
+                  fullWidth
+                  className="mt-3"
+                  disabled={!draft.name.trim()}
+                >
+                  Let&rsquo;s begin
+                  <ArrowRight className="size-4" aria-hidden />
+                </Button>
+              </form>
+
+              <p className="mx-auto mt-5 max-w-xs text-xs leading-relaxed text-ink-faint">
+                Six short questions after this, no wrong answers, and everything stays on this
+                device.
               </p>
             </div>
           ) : null}
 
-          {step === 'name' ? (
+          {step === 'situation' ? (
             <StepFrame
-              title="First — what should we call you?"
-              subtitle="Just so we can say hello properly. It never leaves your browser."
+              title={`Nice to meet you, ${draft.name.trim().split(' ')[0]}.`}
+              subtitle="Where are you right now? Optional — it only changes the tone of a few things."
             >
-              <TextInput
-                label="Your name or nickname"
-                hint="Whatever you'd like to be greeted with."
-                value={draft.name}
-                autoFocus
-                autoComplete="given-name"
-                onChange={(event) => patch({ name: event.target.value })}
-                placeholder="e.g. Sam"
-              />
-
-              {draft.name.trim() ? (
-                <p className="animate-rise mt-3 rounded-xl bg-accent-soft px-3.5 py-2.5 text-sm text-accent-ink">
-                  <span className="font-display text-base">
-                    Hey {draft.name.trim().split(' ')[0]}{' '}
-                    <span aria-hidden>👋</span>
-                  </span>{' '}
-                  Nice to meet you.
-                </p>
-              ) : null}
-              <div className="mt-6 space-y-2">
-                <p className="text-sm font-medium text-ink">
-                  And where are you right now? <span className="text-ink-faint">(optional)</span>
-                </p>
-                <div role="radiogroup" aria-label="Your situation" className="space-y-2">
-                  {situationOptions.map((option) => (
-                    <ChoiceCard
-                      key={option.value}
-                      selected={draft.situation === option.value}
-                      onToggle={() =>
-                        patch({ situation: draft.situation === option.value ? '' : option.value })
-                      }
-                      title={option.label}
-                    />
-                  ))}
-                </div>
+              <div role="radiogroup" aria-label="Your situation" className="space-y-2">
+                {situationOptions.map((option) => (
+                  <ChoiceCard
+                    key={option.value}
+                    selected={draft.situation === option.value}
+                    onToggle={() =>
+                      patch({ situation: draft.situation === option.value ? '' : option.value })
+                    }
+                    title={option.label}
+                  />
+                ))}
               </div>
             </StepFrame>
           ) : null}
@@ -456,18 +471,14 @@ export function OnboardingFlow() {
               Skip
             </Button>
           ) : null}
-          {step === 'ready' ? (
+          {step === 'welcome' ? null : step === 'ready' ? (
             <Button size="lg" onClick={finish}>
               Open {brand.name}
               <ArrowRight className="size-4" aria-hidden />
             </Button>
           ) : (
-            <Button
-              size={step === 'welcome' ? 'lg' : 'md'}
-              disabled={!canAdvance}
-              onClick={() => setIndex(index + 1)}
-            >
-              {step === 'welcome' ? 'Get started' : 'Continue'}
+            <Button size="md" disabled={!canAdvance} onClick={() => setIndex(index + 1)}>
+              Continue
               <ArrowRight className="size-4" aria-hidden />
             </Button>
           )}

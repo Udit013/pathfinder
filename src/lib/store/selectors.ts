@@ -3,6 +3,7 @@ import type {
   CareerExperimentResponse,
   CareerSignal,
   CheckIn,
+  InterviewPrepProgress,
   ProjectInstance,
   Roadmap,
   SkillProgress,
@@ -12,6 +13,7 @@ import { computeSignals, suggestedNextExperiment } from '@/domain/signals'
 import { currentSkillIds, resolveRoadmap, type RoadmapProgress } from '@/domain/roadmap'
 import { roadmapForPath } from '@/data/roadmaps'
 import { recommendProjects } from '@/domain/projects'
+import { nextInterviewAction, rankTracks, type RankedTrack } from '@/domain/interview'
 import { todayIso } from '@/lib/utils'
 import { milestoneProgress, showUpDaysThisWeek, totalXp } from '@/domain/xp'
 import { modeForEnergy, minuteBudget, modeShapes } from '@/domain/energy'
@@ -194,6 +196,30 @@ export function useProjectForTemplate(templateId: string): ProjectInstance | nul
     () => projects.find((project) => project.templateId === templateId) ?? null,
     [projects, templateId],
   )
+}
+
+// ─── Interview Prep ──────────────────────────────────────────────────────────
+
+export function useInterviewPrep(): InterviewPrepProgress[] {
+  return useAppStore((state) => state.interviewPrep)
+}
+
+/** Tracks ordered by the user's direction and the skills they've been learning. */
+export function useInterviewTracks(): RankedTrack[] {
+  const profile = useAppStore((state) => state.profile)
+  const skillProgress = useAppStore((state) => state.skillProgress)
+  const prep = useAppStore((state) => state.interviewPrep)
+
+  return useMemo(
+    () => rankTracks({ profile, skillProgress, prep }),
+    [profile, skillProgress, prep],
+  )
+}
+
+export function useNextInterviewAction() {
+  const tracks = useInterviewTracks()
+  const prep = useAppStore((state) => state.interviewPrep)
+  return useMemo(() => nextInterviewAction(tracks, prep), [tracks, prep])
 }
 
 /** The single most useful next experiment, with the reason it was chosen. */

@@ -294,7 +294,7 @@ export interface CareerExperiment {
   doneWhen: string
 }
 
-// ─── CONTENT: quests, projects, interviews, networking ───────────────────────
+// ─── CONTENT: quests, projects, interviews ───────────────────────────────────
 
 export type QuestKind = 'learn' | 'practice' | 'explore' | 'build' | 'job_search' | 'reflect'
 
@@ -382,16 +382,6 @@ export interface InterviewQuestion
   whatGoodLooksLike: string[]
   followUps: string[]
   skillIds: string[]
-}
-
-export interface NetworkingQuest {
-  id: string
-  title: string
-  detail: string
-  estimatedMinutes: number
-  xp: number
-  /** A starting point the user rewrites in their own voice. */
-  templateHint?: string
 }
 
 // ─── USER: profile & constraints ─────────────────────────────────────────────
@@ -508,57 +498,7 @@ export interface ProjectInstance {
   notes?: string
 }
 
-// ─── USER: job search ────────────────────────────────────────────────────────
-
-export type ApplicationStage =
-  | 'saved'
-  | 'applied'
-  | 'screen'
-  | 'interview'
-  | 'final'
-  | 'offer'
-
-/** Outcome is tracked separately from stage, so a rejection isn't a "column". */
-export type ApplicationOutcome = 'open' | 'rejected' | 'withdrawn' | 'accepted'
-
-export interface JobApplication {
-  id: string
-  company: string
-  role: string
-  location: string
-  /** The date the user applied, or saved it. */
-  dateApplied: IsoDate | null
-  savedAt: IsoDateTime
-  url?: string
-  source?: string
-  resumeVersion?: string
-  referral?: string
-  stage: ApplicationStage
-  outcome: ApplicationOutcome
-  nextAction?: string
-  followUpOn?: IsoDate
-  notes?: string
-  /** Whether the posting mentions sponsorship — as recorded by the user. */
-  sponsorshipNote?: string
-}
-
-export type NetworkingKind =
-  | 'message_sent'
-  | 'reply_received'
-  | 'call_held'
-  | 'referral_asked'
-  | 'event_attended'
-  | 'follow_up'
-
-export interface NetworkingActivity {
-  id: string
-  kind: NetworkingKind
-  personOrGroup: string
-  company?: string
-  occurredOn: IsoDate
-  questId?: string
-  notes?: string
-}
+// ─── USER: interview preparation ────────────────────────────────────────────
 
 export interface InterviewPrepProgress {
   questionId: string
@@ -604,10 +544,8 @@ export type ProgressEventKind =
   | 'project_started'
   | 'project_milestone'
   | 'project_completed'
-  | 'application_submitted'
-  | 'application_advanced'
-  | 'networking_activity'
-  | 'interview_completed'
+  | 'interview_practised'
+  | 'interview_topic_completed'
   | 'reflection_added'
   | 'path_chosen'
   | 'concept_understood'
@@ -634,7 +572,7 @@ export interface WinsLogEntry {
   id: string
   occurredAt: IsoDateTime
   label: string
-  category: 'learning' | 'building' | 'opportunity' | 'insight'
+  category: 'learning' | 'building' | 'practice' | 'insight'
   sourceEventId: string
 }
 
@@ -672,6 +610,5 @@ export interface TodayPlan
   totalMinutes: number
   questId: string | null
   explorationExperimentId: string | null
-  jobActionId: string | null
-  jobActionKind: 'networking' | 'follow_up' | 'apply' | null
+  interviewTrackId: string | null
 }

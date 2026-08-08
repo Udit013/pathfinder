@@ -1,12 +1,5 @@
-import type {
-  DailyQuestTemplate,
-  NetworkingQuest,
-  QuestCompletion,
-  UserProfile,
-  WorkloadMode,
-} from '@/types'
+import type { DailyQuestTemplate, QuestCompletion, UserProfile, WorkloadMode } from '@/types'
 import { dailyQuests } from '@/data/quests'
-import { networkingQuests } from '@/data/networking'
 
 /**
  * Choosing what to put in front of the user today (§7, §8).
@@ -127,29 +120,3 @@ export function selectQuest(input: {
   return null
 }
 
-export interface JobActionPick {
-  quest: NetworkingQuest
-  reason: string
-}
-
-export function selectJobAction(input: {
-  date: string
-  /** Ids of networking quests already logged, so we don't repeat one. */
-  completedQuestIds: string[]
-  /** Whether there is anything waiting on a follow-up. */
-  hasStaleApplications: boolean
-}): JobActionPick | null {
-  const done = new Set(input.completedQuestIds)
-  const available = networkingQuests.filter((quest) => !done.has(quest.id))
-  if (available.length === 0) return null
-
-  if (input.hasStaleApplications) {
-    const followUp = available.find((quest) => quest.id === 'n-follow-up')
-    if (followUp) {
-      return { quest: followUp, reason: 'Something has gone quiet — worth one nudge' }
-    }
-  }
-
-  const quest = pickStable(available, `${input.date}:job`)
-  return quest ? { quest, reason: 'One small move on the search' } : null
-}

@@ -4,12 +4,13 @@ import type {
   CheckIn,
   EnergyLevel,
   ExperimentRatings,
-  NetworkingActivity,
-  NetworkingKind,
+  InterviewPrepProgress,
+  PrepStage,
   ProgressEvent,
   ProgressEventKind,
   ProjectInstance,
   QuestCompletion,
+  Rating1to5,
   SkillProgress,
   SkillState,
   UserPreferences,
@@ -125,14 +126,19 @@ interface Actions {
   /** Abandoning is allowed and costs nothing already earned. */
   removeProject(projectId: string): void
 
-  /** Logs a networking action against an optional networking quest. */
-  logNetworking(input: {
-    kind: NetworkingKind
-    personOrGroup: string
-    questId?: string
-    label: string
-    notes?: string
+  // ── Interview Prep (Phase 5) ───────────────────────────────────────────────
+
+  /** Moves a question up the ladder. Never moves it down without being asked. */
+  setQuestionStage(input: {
+    questionId: string
+    stage: PrepStage
+    trackId: string
+    trackTitle: string
+    prompt: string
+    skillIds: string[]
   }): void
+  setQuestionConfidence(input: { questionId: string; confidence: Rating1to5 | null }): void
+  setQuestionNote(input: { questionId: string; note: string }): void
 
   /** Appends to the progress ledger and queues a celebration. */
   recordEvent(input: {
@@ -191,8 +197,6 @@ function extractPersisted(state: AppStore): PersistedState {
     skillProgress: state.skillProgress,
     questCompletions: state.questCompletions,
     projects: state.projects,
-    applications: state.applications,
-    networking: state.networking,
     interviewPrep: state.interviewPrep,
     checkIns: state.checkIns,
     reflections: state.reflections,
@@ -669,20 +673,88 @@ export const useAppStore = create<AppStore>((set, get) => {
       mutate({ projects: get().projects.filter((project) => project.id !== projectId) })
     },
 
-    logNetworking({ kind, personOrGroup, questId, label, notes }) {
-      const activity: NetworkingActivity = {
-        id: newId('net'),
-        kind,
-        personOrGroup,
-        occurredOn: todayIso(),
-        questId,
-        notes,
+    // ── Interview Prep ───────────────────────────────────────────────────────
+
+    setQuestionStage({ questionId, stage, trackId, trackTitle, prompt, skillIds }) {
+      const entries = get().interviewPrep
+      const existing = entries.find((entry) => entry.questionId === questionId)
+      if (existing?.stage === stage) return
+
+      const updated: InterviewPrepProgress = {
+        questionId,
+        stage,
+        confidence: existing?.confidence ?? null,
+        lastPractisedAt: new Date().toISOString(),
+        note: existing?.note,
       }
-      mutate({ networking: [...get().networking, activity] })
-      get().recordEvent({
-        kind: 'networking_activity',
-        label,
-        subjectId: questId ?? activity.id,
+
+      mutate({
+        interviewPrep: existing
+          ? entries.map((entry) => (entry.questionId === questionId ? updated : entry))
+          : [...entries, updated],
+      })
+
+      // XP once per question reaching the top of the ladder, and once per
+      // question ever being practised. Revisiting is free.
+      const awarded = (kind: 'interview_practised' | 'interview_topic_completed', id: string) =>
+        get().events.some((event) => event.kind === kind && event.subjectId === id)
+
+      if (!awarded('interview_practised', questionId)) {
+        get().recordEvent({
+          kind: 'interview_practised',
+          label: prompt.length > 60 ? `${prompt.slice(0, 57)}…` : prompt,
+          subjectId: questionId,
+          skillIds,
+        })
+      }
+
+      if (stage === 'interview' && !awarded('interview_topic_completed', trackId)) {
+        // Only celebrate the track once most of it is genuinely interview-ready.
+        const trackQuestionIds = get()
+          .interviewPrep.filter((entry) => entry.stage === 'interview')
+          .map((entry) => entry.questionId)
+        if (trackQuestionIds.length >= 3) {
+          get().recordEvent({
+            kind: 'interview_topic_completed',
+            label: `${trackTitle} — interview-ready`,
+            subjectId: trackId,
+            skillIds,
+          })
+        }
+      }
+    },
+
+    setQuestionConfidence({ questionId, confidence }) {
+      const entries = get().interviewPrep
+      const existing = entries.find((entry) => entry.questionId === questionId)
+      const updated: InterviewPrepProgress = {
+        questionId,
+        stage: existing?.stage ?? 'understand',
+        confidence,
+        lastPractisedAt: new Date().toISOString(),
+        note: existing?.note,
+      }
+      mutate({
+        interviewPrep: existing
+          ? entries.map((entry) => (entry.questionId === questionId ? updated : entry))
+          : [...entries, updated],
+      })
+    },
+
+    setQuestionNote({ questionId, note }) {
+      const entries = get().interviewPrep
+      const existing = entries.find((entry) => entry.questionId === questionId)
+      const updated: InterviewPrepProgress = {
+        questionId,
+        stage: existing?.stage ?? 'understand',
+        confidence: existing?.confidence ?? null,
+        lastPractisedAt: new Date().toISOString(),
+        note: note.trim() || undefined,
+      }
+      mutate({
+        interviewPrep: existing
+          ? entries.map((entry) => (entry.questionId === questionId ? updated : entry))
+          : [...entries, updated],
       })
     },
 

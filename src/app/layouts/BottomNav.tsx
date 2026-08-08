@@ -1,7 +1,12 @@
 import { NavLink } from 'react-router'
-import { mobileNavItems } from '@/app/navigation'
+import { navItems } from '@/app/navigation'
 import { cn } from '@/lib/utils'
 
+/**
+ * The mobile bar. All six areas, because a nav that hides things is a nav you
+ * have to learn — and the whole point of this pass is that you never have to
+ * wonder where something lives.
+ */
 export function BottomNav() {
   return (
     <nav
@@ -11,15 +16,15 @@ export function BottomNav() {
         'pb-[env(safe-area-inset-bottom)]',
       )}
     >
-      <ul className="mx-auto grid max-w-lg grid-cols-5">
-        {mobileNavItems.map((item) => (
+      <ul className="mx-auto grid max-w-lg grid-cols-6">
+        {navItems.map((item) => (
           <li key={item.to}>
             <NavLink
               to={item.to}
               end={item.to === '/'}
               className={({ isActive }) =>
                 cn(
-                  'flex flex-col items-center gap-1 py-2.5 text-[0.6875rem] transition-colors',
+                  'flex flex-col items-center gap-0.5 py-2 text-[0.625rem] transition-colors',
                   isActive ? 'text-accent-ink' : 'text-ink-faint',
                 )
               }
@@ -28,13 +33,15 @@ export function BottomNav() {
                 <>
                   <span
                     className={cn(
-                      'flex size-7 items-center justify-center rounded-full transition-colors',
+                      'flex size-7 items-center justify-center rounded-full transition-all duration-200',
                       isActive && 'bg-accent-soft',
                     )}
                   >
-                    <item.icon className="size-4" aria-hidden />
+                    <item.icon className="size-[1.05rem]" aria-hidden />
                   </span>
-                  <span className={isActive ? 'font-medium' : undefined}>{item.label}</span>
+                  <span className={cn('leading-tight', isActive && 'font-semibold')}>
+                    {item.shortLabel ?? item.label}
+                  </span>
                 </>
               )}
             </NavLink>

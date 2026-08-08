@@ -8,6 +8,8 @@ import { marketData } from './marketData'
 import { skills } from './skills'
 import { roadmaps } from './roadmaps'
 import { projectTemplates } from './projects'
+import { interviewTracks } from './interviewTracks'
+import { interviewQuestions } from './interviewQuestions'
 
 /**
  * Dev-only referential integrity check.
@@ -239,6 +241,57 @@ export function validateContent(): string[] {
       problems.push(
         `Project "${project.id}" claims ~${project.estimatedHours}h but its milestones sum to ${summed}h`,
       )
+    }
+  }
+
+  // ── Phase 5: interview preparation ─────────────────────────────────────────
+
+  const trackIds = new Set(interviewTracks.map((track) => track.id))
+
+  for (const track of interviewTracks) {
+    for (const id of track.skillIds) {
+      if (!skillIds.has(id)) {
+        problems.push(`Interview track "${track.id}" references unknown skill "${id}"`)
+      }
+    }
+    for (const id of track.careerPathIds) {
+      if (!pathIds.has(id)) {
+        problems.push(`Interview track "${track.id}" references unknown career path "${id}"`)
+      }
+    }
+    for (const id of track.resourceIds) {
+      if (!resourceIds.has(id)) {
+        problems.push(`Interview track "${track.id}" references unknown resource "${id}"`)
+      }
+    }
+
+    // A track with no questions renders as an empty topic the user can open and
+    // find nothing in — worse than not listing it at all.
+    const count = interviewQuestions.filter((question) => question.track === track.id).length
+    if (count === 0) {
+      problems.push(`Interview track "${track.id}" has no questions`)
+    }
+  }
+
+  const questionIds = new Set<string>()
+  for (const question of interviewQuestions) {
+    if (questionIds.has(question.id)) {
+      problems.push(`Duplicate interview question id "${question.id}"`)
+    }
+    questionIds.add(question.id)
+
+    if (!trackIds.has(question.track)) {
+      problems.push(`Interview question "${question.id}" belongs to unknown track "${question.track}"`)
+    }
+    for (const id of question.skillIds) {
+      if (!skillIds.has(id)) {
+        problems.push(`Interview question "${question.id}" references unknown skill "${id}"`)
+      }
+    }
+    // Guidance is the whole value of a question here. Without it the page is
+    // just a prompt with nowhere to go.
+    if (question.whatGoodLooksLike.length === 0) {
+      problems.push(`Interview question "${question.id}" has no guidance on what a good answer covers`)
     }
   }
 

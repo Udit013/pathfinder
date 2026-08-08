@@ -1,7 +1,7 @@
 import { EnergyCheckIn } from './EnergyCheckIn'
 import { TodaysQuest } from './TodaysQuest'
-import { JobAction } from './JobAction'
 import { ExplorationNudge } from './ExplorationNudge'
+import { InterviewNudge } from './InterviewNudge'
 import { useProfile, useTodayCheckIn, useTodayMode } from '@/lib/store/selectors'
 import { friendlyGreeting, subheadingForDay } from '@/lib/utils'
 
@@ -36,7 +36,7 @@ export function TodayPage() {
 
       <ExplorationNudge />
 
-      <JobAction />
+      <InterviewNudge />
 
       <p className="pt-2 text-center text-xs text-ink-faint">
         {shape.label} day — {shape.contains.length} things, and none of them are mandatory.

@@ -4,7 +4,6 @@ import { Badge } from '@/ui/Badge'
 import { ProgressBar } from '@/ui/Progress'
 import { EmptyState } from '@/ui/States'
 import { ButtonLink } from '@/ui/Button'
-import { PhasePage } from '@/ui/PhasePage'
 import { SignalBars } from '@/features/explore/SignalBars'
 import { useAppStore } from '@/lib/store/useAppStore'
 import { useExperimentTally, useShowUpDays, useSignals, useXp } from '@/lib/store/selectors'
@@ -14,9 +13,9 @@ import { formatDate, pluralize } from '@/lib/utils'
 /**
  * Progress (§12, §18, §21).
  *
- * Phase 2 delivers the signals and the evidence trail behind them. The wins log
- * and reflection history land with Phase 5 and 6 — until then this page shows
- * what it genuinely has rather than padding.
+ * Shows the signals and the evidence trail behind them. Everything here is
+ * derived from the append-only ledger, so it can never claim more than the user
+ * actually did.
  */
 export function ProgressPage() {
   const signals = useSignals()
@@ -151,24 +150,6 @@ export function ProgressPage() {
         </Card>
       </section>
 
-      <PhasePage
-        title="Still coming"
-        intro="The rest of this page arrives with the later phases."
-        building={[
-          {
-            title: 'A wins log',
-            body: 'Applications, replies, conversations, and interviews — because offers are not the only measure of progress.',
-          },
-          {
-            title: 'Skills and projects over time',
-            body: 'A growing map of what you can demonstrate, not just what you have read.',
-          },
-          {
-            title: 'Weekly reflections',
-            body: 'Short answers you gave weeks ago, surfaced when they turn out to matter.',
-          },
-        ]}
-      />
     </div>
   )
 }
