@@ -9,7 +9,7 @@ import { resourcesByIds, resourcesForSkills } from '@/data/resources'
 import { selectQuest } from '@/domain/planToday'
 import { lighterMode } from '@/domain/energy'
 import { useAppStore } from '@/lib/store/useAppStore'
-import { useProfile, useTodayMode } from '@/lib/store/selectors'
+import { useCurrentSkillIds, useProfile, useTodayMode } from '@/lib/store/selectors'
 import { formatMinutes, todayIso } from '@/lib/utils'
 
 export function TodaysQuest() {
@@ -18,13 +18,14 @@ export function TodaysQuest() {
   const completions = useAppStore((state) => state.questCompletions)
   const setModeOverride = useAppStore((state) => state.setModeOverride)
   const completeQuest = useAppStore((state) => state.completeQuest)
+  const currentSkillIds = useCurrentSkillIds()
   const date = todayIso()
 
   const [started, setStarted] = useState(false)
 
   const pick = useMemo(
-    () => selectQuest({ date, mode, budgetMinutes, profile, completions }),
-    [date, mode, budgetMinutes, profile, completions],
+    () => selectQuest({ date, mode, budgetMinutes, profile, completions, currentSkillIds }),
+    [date, mode, budgetMinutes, profile, completions, currentSkillIds],
   )
 
   const alreadyDone = useMemo(

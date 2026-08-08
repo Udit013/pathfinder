@@ -52,8 +52,10 @@ export function selectQuest(input: {
   budgetMinutes: number
   profile: UserProfile | null
   completions: QuestCompletion[]
+  /** Skills currently in progress on the roadmap, newest first (Phase 3). */
+  currentSkillIds?: string[]
 }): QuestPick | null {
-  const { date, mode, budgetMinutes, profile, completions } = input
+  const { date, mode, budgetMinutes, profile, completions, currentSkillIds = [] } = input
 
   const doneQuestIds = new Set(
     completions.filter((entry) => entry.completedAt).map((entry) => entry.questId),
@@ -73,6 +75,15 @@ export function selectQuest(input: {
   }
 
   const tiers: { quests: DailyQuestTemplate[]; reason: string }[] = [
+    {
+      // Highest priority: practice for a skill the user has actually started on
+      // their roadmap. Following what someone chose beats following our order.
+      quests: available.filter(
+        (quest) =>
+          quest.skillIds.some((skillId) => currentSkillIds.includes(skillId)) && fits(quest),
+      ),
+      reason: 'Practice for the skill you’re working on',
+    },
     {
       quests: available.filter(
         (quest) => primaryPathId && quest.careerPathIds.includes(primaryPathId) && fits(quest),

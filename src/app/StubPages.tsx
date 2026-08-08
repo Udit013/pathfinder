@@ -1,41 +1,9 @@
 import { PhasePage } from '@/ui/PhasePage'
-import { useProfile } from '@/lib/store/selectors'
-import { pathById } from '@/data/careerPaths'
 
 /**
  * Areas whose real implementations land in later phases. Each one states what
  * is coming, so the shell can be navigated end to end without any fake UI.
  */
-
-export function RoadmapPage() {
-  const profile = useProfile()
-  const primary = profile?.primaryPathId ? pathById(profile.primaryPathId) : null
-
-  return (
-    <PhasePage
-      title="Roadmap"
-      intro={
-        primary
-          ? `The skills behind ${primary.title}, in an order that makes each one easier than it would have been alone.`
-          : "Once you're leaning toward a direction, its skills appear here as a map rather than a reading list."
-      }
-      building={[
-        {
-          title: 'A visual skill tree',
-          body: 'Nodes with states — locked, available, in progress, done — and honest labels for what is core, what is merely useful, and what is optional. You never have to complete all of it.',
-        },
-        {
-          title: 'Skill detail',
-          body: 'Why each skill matters, how long it tends to take, what it depends on, free resources, and one practice task that tells you whether it stuck.',
-        },
-        {
-          title: 'Quests generated from the map',
-          body: 'Each node becomes small daily quests, which is what Today draws from.',
-        },
-      ]}
-    />
-  )
-}
 
 export function BuildPage() {
   return (

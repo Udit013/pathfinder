@@ -1,6 +1,15 @@
 import { useMemo } from 'react'
-import type { CareerExperimentResponse, CareerSignal, CheckIn, WorkloadMode } from '@/types'
+import type {
+  CareerExperimentResponse,
+  CareerSignal,
+  CheckIn,
+  Roadmap,
+  SkillProgress,
+  WorkloadMode,
+} from '@/types'
 import { computeSignals, suggestedNextExperiment } from '@/domain/signals'
+import { currentSkillIds, resolveRoadmap, type RoadmapProgress } from '@/domain/roadmap'
+import { roadmapForPath } from '@/data/roadmaps'
 import { todayIso } from '@/lib/utils'
 import { milestoneProgress, showUpDaysThisWeek, totalXp } from '@/domain/xp'
 import { modeForEnergy, minuteBudget, modeShapes } from '@/domain/energy'
@@ -121,6 +130,38 @@ export function useExperimentTally(): ExperimentTally {
       .map((response) => response.experimentId)
     return { completedIds, startedIds, completedCount: completedIds.length }
   }, [responses])
+}
+
+// ─── Roadmap ─────────────────────────────────────────────────────────────────
+
+/**
+ * The roadmap the user is following, resolved against their skill progress.
+ * Null when they haven't chosen a direction or the path has no roadmap yet.
+ */
+export function useActiveRoadmap(): { roadmap: Roadmap; progress: RoadmapProgress } | null {
+  const primaryPathId = useAppStore((state) => state.profile?.primaryPathId)
+  const skillProgress = useAppStore((state) => state.skillProgress)
+
+  return useMemo(() => {
+    if (!primaryPathId) return null
+    const roadmap = roadmapForPath(primaryPathId)
+    if (!roadmap) return null
+    return { roadmap, progress: resolveRoadmap(roadmap, skillProgress) }
+  }, [primaryPathId, skillProgress])
+}
+
+export function useSkillProgress(skillId: string): SkillProgress | null {
+  const entries = useAppStore((state) => state.skillProgress)
+  return useMemo(
+    () => entries.find((entry) => entry.skillId === skillId) ?? null,
+    [entries, skillId],
+  )
+}
+
+/** Skills currently underway, newest first. Drives Today's quest selection. */
+export function useCurrentSkillIds(): string[] {
+  const skillProgress = useAppStore((state) => state.skillProgress)
+  return useMemo(() => currentSkillIds(skillProgress), [skillProgress])
 }
 
 /** The single most useful next experiment, with the reason it was chosen. */

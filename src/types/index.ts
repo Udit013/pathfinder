@@ -174,6 +174,13 @@ export interface Skill {
 /** How much a node actually matters — users need not complete everything (§13). */
 export type NodeImportance = 'core' | 'useful' | 'optional'
 
+/**
+ * A node's state on the roadmap, derived from SkillProgress plus dependencies.
+ * "locked" means "easier after its prerequisites" — the UI must never present
+ * it as a prohibition, and a locked node is always still openable (§13).
+ */
+export type NodeState = 'locked' | 'available' | 'in_progress' | 'completed'
+
 export interface RoadmapNode {
   id: string
   skillId: string

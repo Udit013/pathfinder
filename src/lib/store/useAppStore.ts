@@ -9,6 +9,8 @@ import type {
   ProgressEvent,
   ProgressEventKind,
   QuestCompletion,
+  SkillProgress,
+  SkillState,
   UserPreferences,
   UserProfile,
   WorkloadMode,
@@ -84,6 +86,19 @@ interface Actions {
     ratings: ExperimentRatings
     reflection?: string
   }): void
+
+  // ── Roadmap (Phase 3) ──────────────────────────────────────────────────────
+
+  /** Moves a skill between states. Un-completing is allowed and costs nothing. */
+  setSkillState(input: {
+    skillId: string
+    name: string
+    state: SkillState
+    careerPathIds?: string[]
+  }): void
+  /** Marks a resource read/watched, so returning to a skill shows where you got to. */
+  toggleSkillResource(input: { skillId: string; resourceId: string }): void
+  setSkillNote(input: { skillId: string; note: string }): void
 
   /** Logs a networking action against an optional networking quest. */
   logNetworking(input: {
@@ -412,6 +427,102 @@ export const useAppStore = create<AppStore>((set, get) => {
           careerPathIds,
         })
       }
+    },
+
+    // ── Roadmap ──────────────────────────────────────────────────────────────
+
+    setSkillState({ skillId, name, state, careerPathIds }) {
+      const entries = get().skillProgress
+      const existing = entries.find((entry) => entry.skillId === skillId)
+      if (existing?.state === state) return
+
+      const now = new Date().toISOString()
+      const updated: SkillProgress = {
+        skillId,
+        state,
+        startedAt: existing?.startedAt ?? (state === 'not_started' ? null : now),
+        completedAt: state === 'completed' ? now : null,
+        note: existing?.note,
+        completedResourceIds: existing?.completedResourceIds ?? [],
+      }
+
+      mutate({
+        skillProgress: existing
+          ? entries.map((entry) => (entry.skillId === skillId ? updated : entry))
+          : [...entries, updated],
+      })
+
+      // XP is awarded once per transition into a state, and never taken back —
+      // going back to "in progress" to revise something must not feel like a
+      // penalty (§21).
+      const alreadyAwarded = (kind: 'skill_started' | 'skill_completed') =>
+        get().events.some((event) => event.kind === kind && event.subjectId === skillId)
+
+      if (state === 'in_progress' && !alreadyAwarded('skill_started')) {
+        get().recordEvent({
+          kind: 'skill_started',
+          label: `Started learning ${name}`,
+          subjectId: skillId,
+          skillIds: [skillId],
+          careerPathIds: careerPathIds ?? [],
+        })
+      }
+      if (state === 'completed' && !alreadyAwarded('skill_completed')) {
+        get().recordEvent({
+          kind: 'skill_completed',
+          label: name,
+          subjectId: skillId,
+          skillIds: [skillId],
+          careerPathIds: careerPathIds ?? [],
+        })
+      }
+    },
+
+    toggleSkillResource({ skillId, resourceId }) {
+      const entries = get().skillProgress
+      const existing = entries.find((entry) => entry.skillId === skillId)
+
+      const base: SkillProgress = existing ?? {
+        skillId,
+        state: 'in_progress',
+        startedAt: new Date().toISOString(),
+        completedAt: null,
+        completedResourceIds: [],
+      }
+
+      const done = base.completedResourceIds.includes(resourceId)
+      const updated: SkillProgress = {
+        ...base,
+        completedResourceIds: done
+          ? base.completedResourceIds.filter((id) => id !== resourceId)
+          : [...base.completedResourceIds, resourceId],
+      }
+
+      mutate({
+        skillProgress: existing
+          ? entries.map((entry) => (entry.skillId === skillId ? updated : entry))
+          : [...entries, updated],
+      })
+    },
+
+    setSkillNote({ skillId, note }) {
+      const entries = get().skillProgress
+      const existing = entries.find((entry) => entry.skillId === skillId)
+      const updated: SkillProgress = {
+        ...(existing ?? {
+          skillId,
+          state: 'in_progress',
+          startedAt: new Date().toISOString(),
+          completedAt: null,
+          completedResourceIds: [],
+        }),
+        note: note.trim() || undefined,
+      }
+      mutate({
+        skillProgress: existing
+          ? entries.map((entry) => (entry.skillId === skillId ? updated : entry))
+          : [...entries, updated],
+      })
     },
 
     logNetworking({ kind, personOrGroup, questId, label, notes }) {
