@@ -566,4 +566,26 @@ export const dataResources: Resource[] = [
     tags: ['statistics', 'ml', 'visual'],
     note: 'The one to open when a statistics or ML concept refuses to click. Look up the single idea you are stuck on rather than watching in order.',
   }),
+
+  // ── User-submitted playlist (verified 2026-08-29) ──────────────────────────
+  res({
+    id: 'res-yt-fcc-data-analyst-bootcamp',
+    title: 'Data Analyst Bootcamp for Beginners (SQL, Tableau, Power BI, Python, Excel)',
+    provider: 'freeCodeCamp.org (YouTube)',
+    url: 'https://youtu.be/PSNXoAs2FtQ',
+    kind: 'youtube_video',
+    lastVerified: '2026-08-29',
+    priority: 'a',
+    role: 'start',
+    official: true,
+    difficulty: 'beginner',
+    estimatedMinutes: 1163,
+    durationNote: 'nearly 20 hours in one video — a full bootcamp, not one sitting',
+    skillIds: ['sql-basics', 'bi-tools', 'python-basics', 'spreadsheets'],
+    careerPathIds: ['data-analyst', 'bi-analyst'],
+    projectRelevance: 3,
+    accessNote: 'Free on YouTube; may show ads.',
+    tags: ['bootcamp', 'sql', 'analytics'],
+    note: 'Covers the whole analyst stack plus portfolio projects and job prep — the long way round, but a genuinely complete one.',
+  }),
 ]
