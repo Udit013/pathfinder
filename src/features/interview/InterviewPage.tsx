@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import { ArrowRight, Check, MessagesSquare, Mic } from 'lucide-react'
+import { ArrowRight, Check, MessagesSquare, Mic, Route } from 'lucide-react'
 import { Card, SectionHeading } from '@/ui/Card'
 import { Badge } from '@/ui/Badge'
 import { ButtonLink } from '@/ui/Button'
@@ -97,6 +97,23 @@ export function InterviewPage() {
       <div className="flex justify-center">
         <AskAiButton kind="interview" label="Have ChatGPT or Claude interview me" />
       </div>
+
+      {/* Reference reading — no tracker, no state, just the guide. */}
+      <Card className="lift p-4">
+        <Link to="/interview/job-search-sprint" className="flex items-center gap-3.5">
+          <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-sunken text-ink-soft">
+            <Route className="size-5" aria-hidden />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="font-display block text-base text-ink">The 30-day job search sprint</span>
+            <span className="mt-0.5 block text-sm leading-snug text-ink-soft">
+              A strategy guide for targeting, resume, LinkedIn, outreach and follow-up. Reading only
+              — PathFinder doesn&rsquo;t track any of it for you.
+            </span>
+          </span>
+          <ArrowRight className="size-4 shrink-0 text-ink-faint" aria-hidden />
+        </Link>
+      </Card>
 
       {/* How the ladder works — explained once, not repeated on every card */}
       <section>

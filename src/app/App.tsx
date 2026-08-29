@@ -56,6 +56,9 @@ const QuestionPage = lazy(() =>
 const MockInterviewPage = lazy(() =>
   import('@/features/interview/MockInterviewPage').then((m) => ({ default: m.MockInterviewPage })),
 )
+const JobSearchSprintPage = lazy(() =>
+  import('@/features/interview/JobSearchSprintPage').then((m) => ({ default: m.JobSearchSprintPage })),
+)
 const ProgressPage = lazy(() =>
   import('@/features/progress/ProgressPage').then((m) => ({ default: m.ProgressPage })),
 )
@@ -97,6 +100,7 @@ export function App() {
             {/* "mock" precedes :trackId so it isn't read as a track id. */}
             <Route path="interview" element={<Lazy><InterviewPage /></Lazy>} />
             <Route path="interview/mock" element={<Lazy><MockInterviewPage /></Lazy>} />
+            <Route path="interview/job-search-sprint" element={<Lazy><JobSearchSprintPage /></Lazy>} />
             <Route path="interview/:trackId" element={<Lazy><TrackPage /></Lazy>} />
             <Route
               path="interview/:trackId/:questionId"
