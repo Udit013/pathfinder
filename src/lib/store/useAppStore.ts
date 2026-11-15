@@ -76,6 +76,11 @@ interface Actions {
   dismissPath(pathId: string): void
   restorePath(pathId: string): void
 
+  // ── Engineer's Roadmap ─────────────────────────────────────────────────────
+
+  /** Ticks or unticks a roadmap checklist item. Self-assessment only; no XP. */
+  toggleEngineeringItem(id: string): void
+
   /** Creates the response record when an experiment is opened. Idempotent. */
   startExperiment(input: { experimentId: string; careerPathIds: string[] }): void
   toggleExperimentStep(input: { experimentId: string; stepId: string }): void
@@ -203,6 +208,7 @@ function extractPersisted(state: AppStore): PersistedState {
     reflections: state.reflections,
     events: state.events,
     dismissedPathIds: state.dismissedPathIds,
+    engineeringChecklist: state.engineeringChecklist,
   }
 }
 
@@ -392,6 +398,15 @@ export const useAppStore = create<AppStore>((set, get) => {
 
     restorePath(pathId) {
       mutate({ dismissedPathIds: get().dismissedPathIds.filter((id) => id !== pathId) })
+    },
+
+    toggleEngineeringItem(id) {
+      const current = get().engineeringChecklist
+      mutate({
+        engineeringChecklist: current.includes(id)
+          ? current.filter((existing) => existing !== id)
+          : [...current, id],
+      })
     },
 
     startExperiment({ experimentId, careerPathIds }) {

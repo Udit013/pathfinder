@@ -12,6 +12,7 @@ import { importanceExplanations } from '@/domain/roadmap'
 import { useActiveRoadmap, useProfile } from '@/lib/store/selectors'
 import { SkillNode } from './SkillNode'
 import { SkillDetail } from './SkillDetail'
+import { EngineerRoadmapCard } from './engineer/EngineerRoadmapCard'
 import { cn } from '@/lib/utils'
 
 /**
@@ -31,6 +32,7 @@ export function RoadmapPage() {
     return (
       <div className="mx-auto w-full max-w-3xl space-y-6 pt-2">
         <Header />
+        <EngineerRoadmapCard />
         <EmptyState
           icon={<Compass className="size-5" />}
           title="Pick a direction and its map appears here."
@@ -47,6 +49,7 @@ export function RoadmapPage() {
     return (
       <div className="mx-auto w-full max-w-3xl space-y-6 pt-2">
         <Header />
+        <EngineerRoadmapCard />
         <EmptyState
           icon={<MapIcon className="size-5" />}
           title={`We haven’t built the map for ${path?.title ?? 'this path'} yet.`}
@@ -63,6 +66,7 @@ export function RoadmapPage() {
   return (
     <div className="mx-auto w-full max-w-3xl space-y-7 pt-2">
       <Header />
+      <EngineerRoadmapCard compact />
 
       <Card className="p-5">
         <div className="flex flex-wrap items-baseline justify-between gap-2">

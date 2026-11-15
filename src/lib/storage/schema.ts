@@ -15,7 +15,7 @@ import type {
  * Bump when the shape of PersistedState changes, and add a migration in
  * `migrate.ts`. Never reuse a version number.
  */
-export const SCHEMA_VERSION = 2
+export const SCHEMA_VERSION = 3
 
 export const STORAGE_KEY = 'pathfinder:state:v1'
 
@@ -44,6 +44,13 @@ export interface PersistedState {
 
   /** Ids of experiments/paths the user explicitly set aside. Not a failure. */
   dismissedPathIds: string[]
+
+  /**
+   * Ticked items on the Engineer's Roadmap (topics, projects, exit criteria,
+   * job readiness), as namespaced ids. Unticking is free and costs nothing —
+   * this is a self-assessment, not a ledger, so it never touches XP.
+   */
+  engineeringChecklist: string[]
 }
 
 export const defaultPreferences: UserPreferences = {
@@ -70,6 +77,7 @@ export function createEmptyState(): PersistedState {
     reflections: [],
     events: [],
     dismissedPathIds: [],
+    engineeringChecklist: [],
   }
 }
 

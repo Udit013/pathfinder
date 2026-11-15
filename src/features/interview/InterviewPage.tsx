@@ -11,6 +11,7 @@ import { skillName } from '@/data/skills'
 import { pathById } from '@/data/careerPaths'
 import { useInterviewTracks, useNextInterviewAction, useProfile } from '@/lib/store/selectors'
 import { cn } from '@/lib/utils'
+import { EngineerRoadmapCard } from '@/features/roadmap/engineer/EngineerRoadmapCard'
 
 /**
  * Interview Prep (§19).
@@ -97,6 +98,8 @@ export function InterviewPage() {
       <div className="flex justify-center">
         <AskAiButton kind="interview" label="Have ChatGPT or Claude interview me" />
       </div>
+
+      <EngineerRoadmapCard tab="interviews" compact />
 
       {/* Reference reading — no tracker, no state, just the guide. */}
       <Card className="lift p-4">

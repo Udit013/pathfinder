@@ -11,6 +11,7 @@ import { projectTemplates } from './projects'
 import { interviewTracks } from './interviewTracks'
 import { interviewQuestions } from './interviewQuestions'
 import { topicForSkill } from '@/domain/library'
+import { allChecklistIds, allTopics, referencedResourceIds } from './engineeringRoadmap'
 
 /**
  * Dev-only referential integrity check.
@@ -356,6 +357,27 @@ export function validateContent(): string[] {
     if (!topicForSkill(skill.id)) {
       problems.push(`Skill "${skill.id}" has no library topic — add it to topicOfSkill in domain/library.ts`)
     }
+  }
+
+  // The Engineer's Roadmap cites library resources by id. A rename in the
+  // library would otherwise silently drop a link from the roadmap page.
+  for (const id of new Set(referencedResourceIds())) {
+    if (!resourceIds.has(id)) {
+      problems.push(`Engineer's Roadmap references unknown resource "${id}"`)
+    }
+  }
+  // Checklist ids are persisted. A duplicate would tick two items at once.
+  const checklistIds = allChecklistIds()
+  const seenChecklist = new Set<string>()
+  for (const id of checklistIds) {
+    if (seenChecklist.has(id)) problems.push(`Engineer's Roadmap has duplicate checklist id "${id}"`)
+    seenChecklist.add(id)
+  }
+  const seenTopics = new Set<string>()
+  for (const topic of allTopics) {
+    if (seenTopics.has(topic.id)) problems.push(`Engineer's Roadmap has duplicate topic id "${topic.id}"`)
+    seenTopics.add(topic.id)
+    if (topic.resourceIds.length === 0) problems.push(`Roadmap topic "${topic.id}" has no resources`)
   }
 
   return problems

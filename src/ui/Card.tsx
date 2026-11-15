@@ -1,13 +1,14 @@
 import type { HTMLAttributes, ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
-type Tone = 'default' | 'accent' | 'sunken' | 'spark'
+type Tone = 'default' | 'accent' | 'sunken' | 'spark' | 'sky'
 
 const tones: Record<Tone, string> = {
   default: 'bg-surface border-line',
   accent: 'bg-accent-soft border-transparent',
   sunken: 'bg-sunken border-line',
   spark: 'bg-spark-soft border-transparent',
+  sky: 'bg-sky-soft border-transparent',
 }
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {

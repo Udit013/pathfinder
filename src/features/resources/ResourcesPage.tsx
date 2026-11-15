@@ -16,6 +16,7 @@ import {
   type LibraryFilters,
 } from '@/domain/library'
 import { cn } from '@/lib/utils'
+import { EngineerRoadmapCard } from '@/features/roadmap/engineer/EngineerRoadmapCard'
 
 /**
  * The library (§14, resource library expansion).
@@ -66,6 +67,8 @@ export function ResourcesPage() {
           that in one or two links at a time — that is what it&rsquo;s for.
         </p>
       </Card>
+
+      <EngineerRoadmapCard tab="resources" compact />
 
       {/* Search and filters */}
       <Card className="p-4">

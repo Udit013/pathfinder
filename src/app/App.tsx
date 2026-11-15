@@ -14,10 +14,11 @@ import { useThemeEffect } from '@/lib/useTheme'
  * everyone sees, and making them wait on a second request would be a downgrade.
  *
  * Everything else is split out. Measured on the production build rather than
- * estimated: first load went from 202KB to 171KB transferred (index + shared
- * chunk + CSS), with the remaining routes arriving as 1–5KB chunks on demand.
- * Resources is one of them — the whole library page is a 4KB chunk, because the
- * data it renders already lives in the shared chunk.
+ * estimated: splitting took first load from 202KB to 171KB transferred (index +
+ * shared chunk + CSS). It has since grown to 186KB as the resource library grew
+ * to 262 entries — that data is the bulk of the increase, for the reason below.
+ * The remaining routes arrive as small chunks on demand. The Engineer's Roadmap
+ * is the largest (~53KB gzipped of content) and only loads when opened.
  *
  * The shared chunk stays large because Today itself needs the resource library
  * to pick the day's quest resources. Deferring that would trade a smaller
@@ -37,6 +38,11 @@ const ExperimentRunner = lazy(() =>
 )
 const RoadmapPage = lazy(() =>
   import('@/features/roadmap/RoadmapPage').then((m) => ({ default: m.RoadmapPage })),
+)
+const EngineerRoadmapPage = lazy(() =>
+  import('@/features/roadmap/engineer/EngineerRoadmapPage').then((m) => ({
+    default: m.EngineerRoadmapPage,
+  })),
 )
 const BuildPage = lazy(() =>
   import('@/features/build/BuildPage').then((m) => ({ default: m.BuildPage })),
@@ -93,6 +99,7 @@ export function App() {
             <Route path="explore/lab/:experimentId" element={<Lazy><ExperimentRunner /></Lazy>} />
             <Route path="explore/:pathId" element={<Lazy><CareerPathPage /></Lazy>} />
             <Route path="roadmap" element={<Lazy><RoadmapPage /></Lazy>} />
+            <Route path="roadmap/engineer" element={<Lazy><EngineerRoadmapPage /></Lazy>} />
             <Route path="build" element={<Lazy><BuildPage /></Lazy>} />
             {/* "library" precedes :projectId so it isn't read as an instance id. */}
             <Route path="build/library/:templateId" element={<Lazy><ProjectPage /></Lazy>} />

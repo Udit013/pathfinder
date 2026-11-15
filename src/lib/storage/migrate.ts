@@ -37,6 +37,9 @@ const migrations: Record<number, Migration> = {
       }),
     }
   },
+
+  /** v2 → v3: adds the Engineer's Roadmap checklist, empty. */
+  2: (state) => ({ ...state, schemaVersion: 3, engineeringChecklist: [] }),
 }
 
 export interface MigrationResult {
