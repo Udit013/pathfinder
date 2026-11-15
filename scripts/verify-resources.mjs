@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Re-checks every resource URL in src/data/resources.ts.
+ * Re-checks every resource URL in src/data/resources/*.ts.
  *
  * For each entry it reports:
  *   - the HTTP status after redirects
@@ -14,15 +14,14 @@
  * Usage: node scripts/verify-resources.mjs
  */
 
-import { readFile } from 'node:fs/promises'
+import { readdir, readFile } from 'node:fs/promises'
 
-const SOURCES = [
-  '../src/data/resources/foundations.ts',
-  '../src/data/resources/engineering.ts',
-  '../src/data/resources/data.ts',
-  '../src/data/resources/ai.ts',
-  '../src/data/resources/careers.ts',
-].map((path) => new URL(path, import.meta.url))
+// Every data file in the folder, discovered rather than listed. A hard-coded
+// list here once silently skipped a whole file of 77 resources.
+const RESOURCE_DIR = new URL('../src/data/resources/', import.meta.url)
+const SOURCES = (await readdir(RESOURCE_DIR))
+  .filter((name) => name.endsWith('.ts') && name !== 'index.ts' && name !== 'shared.ts')
+  .map((name) => new URL(name, RESOURCE_DIR))
 const UA =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36'
 
@@ -40,6 +39,12 @@ const BOT_BLOCKED = [
   'tryhackme.com',
   'interaction-design.org',
   'glassdoor.com',
+  'cloudflare.com',
+  'labex.io',
+  'blog.palantir.com',
+  'medium.com',
+  'mckinsey.com',
+  'levels.fyi',
 ]
 const TIMEOUT_MS = 20_000
 
