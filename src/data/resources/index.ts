@@ -5,6 +5,7 @@ import { dataResources } from './data'
 import { aiResources } from './ai'
 import { careerResources } from './careers'
 import { systemsResources } from './systems'
+import { learningResources } from './learning'
 
 export { VERIFIED } from './shared'
 
@@ -22,6 +23,7 @@ export const resources: Resource[] = [
   ...aiResources,
   ...careerResources,
   ...systemsResources,
+  ...learningResources,
 ]
 
 const byId = new Map(resources.map((resource) => [resource.id, resource]))
