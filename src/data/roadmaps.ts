@@ -316,10 +316,3 @@ export function roadmapForPath(pathId: string): Roadmap | undefined {
   return roadmapByPath.get(pathId)
 }
 
-export function roadmapById(id: string): Roadmap | undefined {
-  return roadmaps.find((roadmap) => roadmap.id === id)
-}
-
-export function hasRoadmap(pathId: string): boolean {
-  return roadmapByPath.has(pathId)
-}

@@ -22,18 +22,6 @@ export function todayIso(now: Date = new Date()): IsoDate {
   return new Date(now.getTime() - offsetMs).toISOString().slice(0, 10)
 }
 
-export function daysAgoIso(days: number, now: Date = new Date()): IsoDate {
-  return todayIso(new Date(now.getTime() - days * 86_400_000))
-}
-
-export function greetingFor(now: Date = new Date()): string {
-  const hour = now.getHours()
-  if (hour < 5) return 'Still up'
-  if (hour < 12) return 'Good morning'
-  if (hour < 17) return 'Good afternoon'
-  return 'Good evening'
-}
-
 /**
  * The Today greeting. Uses the name sparingly — a warm "Hey Sam 👋" once at the
  * top of the day, not sprinkled through the interface where it would start to

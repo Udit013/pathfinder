@@ -42,9 +42,11 @@ PathFinder takes a different approach:
 | **Today** | One quest, one exploration, one interview question — sized to the energy you actually have |
 | **Explore** | 23 career paths, 10 in-depth write-ups, and a Career Lab of hands-on experiments |
 | **Roadmap** | Skill trees for 8 directions, with honest core / useful / optional labels |
+| **Engineer’s Roadmap** | A phased, project-first path for SWE, full-stack, FDE and AI Engineer roles — 9 phases, 7 projects plus role capstones, interview prep, and a progress checklist |
 | **Build** | 8 real projects with milestones, README checklists, and honest resume guidance |
-| **Interview Prep** | 10 topics, 27 questions on a five-rung ladder, plus a cold mock interview |
+| **Interview Prep** | 10 topics, 27 questions on a five-rung ladder, a cold mock interview, and a 30-day job-search guide |
 | **Progress** | XP, milestones, and Career Signals — all traceable to a specific thing you did |
+| **Resources** | The whole free library, searchable and filterable by direction, type, free certificate and interview relevance |
 | **AI Companion** | Generates context-rich prompts to paste into ChatGPT or Claude |
 
 ### Design decisions worth knowing
@@ -53,8 +55,9 @@ PathFinder takes a different approach:
   shrinking it. One thing, and permission to stop.
 - **No invented data.** Salary and market figures are structured but deliberately
   unsourced — the app shows an honest gap rather than a plausible number.
-- **Curated, not catalogued.** The library holds ~150 verified free resources;
-  a skill page shows three, with the rest behind "see more".
+- **Curated, not catalogued.** The library holds ~260 verified free resources;
+  a skill page shows three, with the rest behind "see more". The Resources page
+  is the one deliberate exception, for when you want to browse.
 - **Streaks can't be lost.** Progress only ever counts up.
 
 ---
@@ -74,7 +77,8 @@ No backend. No database. No authentication. No AI API.
 
 ## Running locally
 
-Requires Node 20+.
+Requires Node 22.12 or newer (Vite 8’s minimum). Deployments pin Node 24 via
+`engines` in `package.json`.
 
 ```bash
 npm install
@@ -112,7 +116,9 @@ the included `vercel.json`.
 `vercel.json` provides:
 
 - **SPA rewrites** so `/roadmap`, `/explore/data-analyst` and friends work on
-  direct navigation and refresh
+  direct navigation and refresh. `/assets/*` is excluded, so a missing
+  fingerprinted file returns a real 404 instead of HTML — a tab left open across
+  a deploy then reloads cleanly onto the new version
 - **Immutable caching** for fingerprinted assets
 - **Security headers**, including a Content Security Policy with
   `connect-src 'self'` — the browser itself will block any outbound request,
@@ -194,5 +200,6 @@ Nothing here is legal, immigration, financial, or mental-health advice.
 
 ## Licence
 
-Not yet licensed. Add a `LICENSE` file before making the repository public if
-you want others to be able to reuse it.
+No licence has been chosen yet. The repository is public, but without a
+`LICENSE` file the code is "all rights reserved" by default — others can read
+it, not reuse it. Add one if you want to allow reuse.

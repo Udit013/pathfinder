@@ -26,10 +26,6 @@ export const resources: Resource[] = [
 
 const byId = new Map(resources.map((resource) => [resource.id, resource]))
 
-export function resourceById(id: string): Resource | undefined {
-  return byId.get(id)
-}
-
 export function resourcesByIds(ids: string[]): Resource[] {
   return ids.map((id) => byId.get(id)).filter((resource): resource is Resource => Boolean(resource))
 }

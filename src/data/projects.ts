@@ -848,10 +848,3 @@ export function projectTemplateById(id: string): ProjectTemplate | undefined {
   return byId.get(id)
 }
 
-export function projectsForPath(pathId: string): ProjectTemplate[] {
-  return projectTemplates.filter((project) => project.careerPathIds.includes(pathId))
-}
-
-export function totalMilestoneHours(project: ProjectTemplate): number {
-  return project.milestones.reduce((sum, milestone) => sum + milestone.estimatedHours, 0)
-}

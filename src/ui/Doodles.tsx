@@ -64,24 +64,6 @@ export function SproutDoodle({ className }: DoodleProps) {
   )
 }
 
-/** A compass — exploration and direction. */
-export function CompassDoodle({ className }: DoodleProps) {
-  return (
-    <svg viewBox="0 0 64 64" className={className} role="img" aria-label="A compass">
-      <circle cx="32" cy="32" r="21" fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={1.5} />
-      <path
-        d="M40 24 27.5 29.5 24 42l12.5-5.5L40 24Z"
-        fill="var(--surface)"
-        stroke="var(--accent-ink)"
-        strokeWidth={1.5}
-        strokeLinejoin="round"
-      />
-      <circle cx="32" cy="32.5" r="1.6" fill="var(--accent-ink)" />
-      <path d="M32 6.5v4M32 53.5v4M6.5 32h4M53.5 32h4" stroke="currentColor" {...stroke} opacity={0.35} />
-    </svg>
-  )
-}
-
 /** A little toolbox / hammer — building and making. */
 export function BuildDoodle({ className }: DoodleProps) {
   return (
@@ -110,25 +92,6 @@ export function BuildDoodle({ className }: DoodleProps) {
   )
 }
 
-/** A flask — the Career Lab. */
-export function FlaskDoodle({ className }: DoodleProps) {
-  return (
-    <svg viewBox="0 0 64 64" className={className} role="img" aria-label="A flask">
-      <path
-        d="M26 10v16L14 46a5 5 0 0 0 4.4 7.5h27.2A5 5 0 0 0 50 46L38 26V10"
-        fill="var(--accent-soft)"
-        stroke="var(--accent)"
-        strokeWidth={1.5}
-        strokeLinejoin="round"
-      />
-      <path d="M23 10h18" stroke="var(--accent)" {...stroke} />
-      <path d="M19 40h26" stroke="var(--accent-ink)" {...stroke} opacity={0.45} />
-      <circle cx="27" cy="46" r="2.2" fill="var(--spark)" />
-      <circle cx="36" cy="48" r="1.6" fill="var(--spark)" opacity={0.75} />
-    </svg>
-  )
-}
-
 /** A star with a small sparkle — wins and milestones. */
 export function SparkDoodle({ className }: DoodleProps) {
   return (
@@ -147,22 +110,6 @@ export function SparkDoodle({ className }: DoodleProps) {
         strokeWidth={1.5}
         strokeLinejoin="round"
       />
-    </svg>
-  )
-}
-
-/** An open envelope / paper plane — outreach and applications. */
-export function SendDoodle({ className }: DoodleProps) {
-  return (
-    <svg viewBox="0 0 64 64" className={className} role="img" aria-label="A paper plane">
-      <path
-        d="M54 10 8 30l18 6 6 18 22-44Z"
-        fill="var(--sky-soft)"
-        stroke="var(--sky-ink)"
-        strokeWidth={1.5}
-        strokeLinejoin="round"
-      />
-      <path d="M54 10 26 36" stroke="var(--sky-ink)" {...stroke} opacity={0.6} />
     </svg>
   )
 }

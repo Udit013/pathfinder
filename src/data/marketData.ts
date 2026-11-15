@@ -83,13 +83,6 @@ export function demandForPath(pathId: string): DemandContext | undefined {
   return demandContext.find((entry) => entry.careerPathId === pathId)
 }
 
-/** Only verified points with actual figures may ever be rendered as numbers. */
-export function displayableMarketData(pathId: string): MarketDataPoint[] {
-  return marketDataForPath(pathId).filter(
-    (point) => point.status === 'verified' && point.salaryMin !== null && point.salaryMax !== null,
-  )
-}
-
 export function formatSalaryRange(point: MarketDataPoint): string | null {
   if (point.salaryMin === null || point.salaryMax === null) return null
   const format = (value: number) =>

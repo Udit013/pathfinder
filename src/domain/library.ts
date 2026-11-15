@@ -128,8 +128,6 @@ export const topics: Topic[] = [
   },
 ]
 
-export const topicById = new Map(topics.map((topic) => [topic.id, topic]))
-
 /**
  * Every skill belongs to exactly one topic. `validateContent` checks that this
  * covers the whole skill list, so adding a skill without placing it here fails

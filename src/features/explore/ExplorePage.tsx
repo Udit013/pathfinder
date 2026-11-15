@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import { ArrowRight, Check, FlaskConical, Plus, RotateCcw, Star } from 'lucide-react'
+import { Check, FlaskConical, Plus, RotateCcw, Star } from 'lucide-react'
 import type { CareerPathSummary } from '@/types'
 import { Card, SectionHeading } from '@/ui/Card'
 import { Badge } from '@/ui/Badge'
@@ -208,15 +208,3 @@ function PathCard({ path }: { path: CareerPathSummary }) {
   )
 }
 
-/** Small inline link used by Today and the path page. */
-export function ExploreMoreLink() {
-  return (
-    <Link
-      to="/explore"
-      className="inline-flex items-center gap-1.5 text-sm font-medium text-accent-ink hover:underline"
-    >
-      Explore other directions
-      <ArrowRight className="size-3.5" aria-hidden />
-    </Link>
-  )
-}

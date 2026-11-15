@@ -147,6 +147,3 @@ export const dailyQuests: DailyQuestTemplate[] = [
   },
 ]
 
-export function questById(id: string): DailyQuestTemplate | undefined {
-  return dailyQuests.find((quest) => quest.id === id)
-}

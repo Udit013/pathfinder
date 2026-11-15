@@ -833,6 +833,3 @@ export function skillName(id: string): string {
   return skillsById.get(id)?.name ?? id
 }
 
-export function skillsByIds(ids: string[]): Skill[] {
-  return ids.map((id) => skillsById.get(id)).filter((skill): skill is Skill => Boolean(skill))
-}

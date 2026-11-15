@@ -78,11 +78,6 @@ export function useShowUpDays(): number {
   return useMemo(() => showUpDaysThisWeek(events), [events])
 }
 
-/** Whether the user has generated any activity at all — drives empty states. */
-export function useHasActivity(): boolean {
-  return useAppStore((state) => state.events.length > 0)
-}
-
 // ─── Career exploration ──────────────────────────────────────────────────────
 
 /**

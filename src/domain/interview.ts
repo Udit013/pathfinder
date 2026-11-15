@@ -1,7 +1,6 @@
 import type {
   InterviewPrepProgress,
   InterviewQuestion,
-  InterviewTrack,
   PrepStage,
   SkillProgress,
   UserProfile,
@@ -167,13 +166,6 @@ export function nextInterviewAction(
   return null
 }
 
-export function stageFor(
-  questionId: string,
-  prep: InterviewPrepProgress[],
-): PrepStage | null {
-  return prep.find((entry) => entry.questionId === questionId)?.stage ?? null
-}
-
 /** Advancing one rung. Returns null when already at the top. */
 export function nextStage(stage: PrepStage): PrepStage | null {
   const index = stageIndex(stage)
@@ -225,7 +217,3 @@ export function buildMockInterview(input: {
   return picked.slice(0, count)
 }
 
-export function trackForSkill(skillId: string): InterviewTrack | null {
-  const match = interviewTracks.find((track) => track.skillIds.includes(skillId))
-  return match?.id ?? null
-}

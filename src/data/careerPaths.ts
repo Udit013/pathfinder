@@ -42,12 +42,6 @@ export const careerCategories: CareerCategory[] = [
   },
 ]
 
-export function categoryById(id: CareerCategoryId): CareerCategory {
-  const found = careerCategories.find((category) => category.id === id)
-  if (!found) throw new Error(`Unknown career category: ${id}`)
-  return found
-}
-
 export const careerPathSummaries: CareerPathSummary[] = [
   // ── Data ───────────────────────────────────────────────────────────────────
   {

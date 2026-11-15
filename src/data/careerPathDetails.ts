@@ -651,10 +651,6 @@ export const careerPathDetails: CareerPathDetail[] = [
 
 const detailsById = new Map(careerPathDetails.map((detail) => [detail.id, detail]))
 
-export function pathDetailById(id: string): CareerPathDetail | undefined {
-  return detailsById.get(id)
-}
-
 /** The full path, when a write-up exists. Undefined means "not written yet". */
 export function fullPathById(id: string): CareerPath | undefined {
   const summary = pathById(id)
