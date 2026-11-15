@@ -40,6 +40,7 @@ export function ExperimentRunner() {
     return (
       <div className="mx-auto w-full max-w-3xl pt-2">
         <EmptyState
+          as="h1"
           title="We don’t have an experiment with that name."
           action={<ButtonLink to="/explore/lab">Back to the Career Lab</ButtonLink>}
         />

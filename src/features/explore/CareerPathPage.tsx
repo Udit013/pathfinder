@@ -47,6 +47,7 @@ export function CareerPathPage() {
     return (
       <div className="mx-auto w-full max-w-3xl pt-2">
         <EmptyState
+          as="h1"
           title="We don’t have a path with that name."
           body="It may have been renamed."
           action={<ButtonLink to="/explore">Back to Explore</ButtonLink>}

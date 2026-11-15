@@ -14,6 +14,7 @@ export function EmptyState({
   body,
   action,
   className,
+  as: Title = 'p',
 }: {
   icon?: ReactNode
   /** A doodle. Preferred over `icon` — an empty page is where warmth matters most. */
@@ -22,6 +23,11 @@ export function EmptyState({
   body?: string
   action?: ReactNode
   className?: string
+  /**
+   * The title's element. A paragraph inside a page section; "h1" when the
+   * empty state IS the page (a not-found route), so it still has a heading.
+   */
+  as?: 'p' | 'h1' | 'h2'
 }) {
   return (
     <div
@@ -37,7 +43,7 @@ export function EmptyState({
           {icon}
         </div>
       ) : null}
-      <p className="font-display text-lg text-ink">{title}</p>
+      <Title className="font-display text-lg text-ink">{title}</Title>
       {body ? <p className="mt-1.5 max-w-sm text-sm leading-relaxed text-ink-soft">{body}</p> : null}
       {action ? <div className="mt-4">{action}</div> : null}
     </div>

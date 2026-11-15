@@ -12,6 +12,7 @@ import {
   type RoleId,
 } from '@/data/engineeringRoadmap'
 import { roleLabels, useChecklist } from './shared'
+import { credentialLabels } from '@/types'
 import { cn } from '@/lib/utils'
 
 const masteryTone: Record<Mastery, 'accent' | 'positive' | 'neutral' | 'spark'> = {
@@ -105,13 +106,7 @@ export function ResourceLinks({ ids, className }: { ids: string[]; className?: s
         const costLabel =
           resource.cost === 'free' ? 'Free' : resource.cost === 'free_tier' ? 'Free tier' : 'Paid'
         const credential =
-          resource.credential === 'free_certificate'
-            ? 'Free certificate'
-            : resource.credential === 'free_badge'
-              ? 'Free badge'
-              : resource.credential === 'free_course_paid_certificate'
-                ? 'Certificate is paid'
-                : null
+          resource.credential === 'no_certificate' ? null : credentialLabels[resource.credential]
         return (
           <li key={resource.id}>
             <a

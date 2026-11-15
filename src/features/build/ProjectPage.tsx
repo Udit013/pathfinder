@@ -54,6 +54,7 @@ export function ProjectPage() {
     return (
       <div className="mx-auto w-full max-w-3xl pt-2">
         <EmptyState
+          as="h1"
           title="We don’t have a project with that name."
           action={<ButtonLink to="/build">Back to Build</ButtonLink>}
         />

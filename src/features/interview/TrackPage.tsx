@@ -27,6 +27,7 @@ export function TrackPage() {
     return (
       <div className="mx-auto w-full max-w-3xl pt-2">
         <EmptyState
+          as="h1"
           title="We don’t have a topic with that name."
           action={<ButtonLink to="/interview">Back to Interview prep</ButtonLink>}
         />

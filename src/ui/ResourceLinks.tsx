@@ -11,7 +11,13 @@ import {
   Play,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
-import { difficultyLabels, resourceKindLabels, type Resource, type ResourceKind } from '@/types'
+import {
+  credentialLabels,
+  difficultyLabels,
+  resourceKindLabels,
+  type Resource,
+  type ResourceKind,
+} from '@/types'
 import { Card, SectionHeading } from './Card'
 import { cn, formatMinutes } from '@/lib/utils'
 
@@ -33,6 +39,15 @@ const kindIcons: Record<ResourceKind, LucideIcon> = {
 }
 
 /**
+ * "The course is free" and "the certificate is free" are different claims, and
+ * conflating them is the defining error of free-certificate lists. `cost` and
+ * `credential` are separate fields for that reason; this shows the second one
+ * whenever there is anything to say about it.
+ */
+const isFreeCredential = (credential: Resource['credential']) =>
+  credential === 'free_certificate' || credential === 'free_badge' || credential === 'free_completion_record'
+
+/**
  * One resource, one click away.
  *
  * PathFinder's job is to be the navigation layer — so the user should never
@@ -40,19 +55,6 @@ const kindIcons: Record<ResourceKind, LucideIcon> = {
  * needed to decide whether to open it (what it is, who made it, how long, what
  * level, what it costs) is on the row before they click.
  */
-/**
- * "The course is free" and "the certificate is free" are different claims, and
- * conflating them is the defining error of free-certificate lists. `cost` and
- * `credential` are separate fields for that reason, and this renders the second
- * one only where a certificate genuinely exists.
- */
-const credentialLabels: Partial<Record<Resource['credential'], string>> = {
-  free_certificate: 'Free certificate',
-  free_badge: 'Free badge',
-  free_completion_record: 'Free completion record',
-  free_course_paid_certificate: 'Certificate costs extra',
-}
-
 export function ResourceRow({
   resource,
   showCredential,
@@ -62,8 +64,11 @@ export function ResourceRow({
   showCredential?: boolean
 }) {
   const Icon = kindIcons[resource.kind]
-  const isYouTube = resource.kind === 'youtube_video' || resource.kind === 'youtube_playlist'
-  const credential = showCredential ? credentialLabels[resource.credential] : undefined
+  const isYouTube = resource.kind.startsWith('youtube_')
+  const credential =
+    showCredential && resource.credential !== 'no_certificate'
+      ? credentialLabels[resource.credential]
+      : undefined
 
   return (
     <li>
@@ -120,9 +125,9 @@ export function ResourceRow({
               <span
                 className={cn(
                   'inline-flex items-center rounded-full px-2 py-0.5 text-[0.6875rem] font-medium',
-                  resource.credential === 'free_course_paid_certificate'
-                    ? 'bg-sunken text-ink-soft'
-                    : 'bg-positive-soft text-positive-ink',
+                  isFreeCredential(resource.credential)
+                    ? 'bg-positive-soft text-positive-ink'
+                    : 'bg-sunken text-ink-soft',
                 )}
               >
                 {credential}

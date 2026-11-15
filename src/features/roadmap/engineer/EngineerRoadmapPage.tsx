@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
-import { ChevronDown } from 'lucide-react'
+import { Check, ChevronDown } from 'lucide-react'
 import { Card, SectionHeading } from '@/ui/Card'
 import { Badge } from '@/ui/Badge'
 import { ProgressBar } from '@/ui/Progress'
@@ -112,13 +112,12 @@ export function EngineerRoadmapPage() {
         className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0"
         style={{ scrollbarWidth: 'none' }}
       >
-        <div role="tablist" className="flex w-max gap-1 rounded-full border border-line bg-surface p-1">
+        <div className="flex w-max gap-1 rounded-full border border-line bg-surface p-1">
           {tabs.map((t) => (
             <button
               key={t.id}
               type="button"
-              role="tab"
-              aria-selected={tab === t.id}
+              aria-current={tab === t.id ? 'page' : undefined}
               onClick={() => go(t.id)}
               className={cn(
                 'min-h-9 rounded-full px-3.5 text-sm whitespace-nowrap transition-colors',
@@ -131,7 +130,7 @@ export function EngineerRoadmapPage() {
         </div>
       </nav>
 
-      <div role="tabpanel" aria-label={tabs.find((t) => t.id === tab)?.label}>
+      <section aria-label={tabs.find((t) => t.id === tab)?.label}>
         {tab === 'overview' ? <Overview onGo={go} /> : null}
         {tab === 'map' ? <SkillMap onGo={go} /> : null}
         {tab === 'phases' ? <Phases /> : null}
@@ -140,7 +139,7 @@ export function EngineerRoadmapPage() {
         {tab === 'interviews' ? <Interviews /> : null}
         {tab === 'resources' ? <Directory /> : null}
         {tab === 'progress' ? <Progress /> : null}
-      </div>
+      </section>
     </div>
   )
 }
@@ -687,7 +686,7 @@ function TopicRow({ topic }: { topic: RoadmapTopic }) {
               on ? 'border-positive-strong bg-positive-strong text-white' : 'border-line-strong bg-surface',
             )}
           >
-            {on ? '✓' : null}
+            {on ? <Check className="size-3.5" /> : null}
           </span>
         </button>
         <button
@@ -770,13 +769,12 @@ function Roles() {
         Phases 0–7 are shared, and that foundation is most of the work. Specialise in Phase 8: pick one primary role
         and, if you like, one secondary. Trying to prepare equally for all four is how people end up ready for none.
       </p>
-      <div role="tablist" aria-label="Role" className="flex flex-wrap gap-2">
+      <div role="group" aria-label="Role" className="flex flex-wrap gap-2">
         {specializations.map((s) => (
           <button
             key={s.id}
             type="button"
-            role="tab"
-            aria-selected={role === s.id}
+            aria-pressed={role === s.id}
             onClick={() => setRole(s.id)}
             className={cn(
               'min-h-10 rounded-full border px-4 text-sm transition-colors',
@@ -844,13 +842,12 @@ function Interviews() {
       <TrackCard trackId="track-interview" />
       <TrackCard trackId="track-dsa" />
 
-      <div role="tablist" aria-label="Filter by role" className="flex flex-wrap gap-2">
+      <div role="group" aria-label="Filter by role" className="flex flex-wrap gap-2">
         {(['all', 'swe', 'fullstack', 'fde', 'ai'] as const).map((r) => (
           <button
             key={r}
             type="button"
-            role="tab"
-            aria-selected={role === r}
+            aria-pressed={role === r}
             onClick={() => setRole(r)}
             className={cn(
               'min-h-9 rounded-full border px-3.5 text-sm transition-colors',
@@ -1007,15 +1004,14 @@ function Progress() {
           title="Master now, learn later, recognise only"
           hint="The same topics, grouped by how deeply to learn them. Tick them here or in Phases — it’s the same checklist."
         />
-        <div role="tablist" aria-label="Depth" className="mb-3 flex flex-wrap gap-2">
+        <div role="group" aria-label="Depth" className="mb-3 flex flex-wrap gap-2">
           {(Object.keys(masteryLabels) as Mastery[]).map((m) => {
             const count = allTopics.filter((t) => t.mastery === m).length
             return (
               <button
                 key={m}
                 type="button"
-                role="tab"
-                aria-selected={view === m}
+                aria-pressed={view === m}
                 onClick={() => setView(m)}
                 className={cn(
                   'min-h-9 rounded-full border px-3.5 text-sm transition-colors',

@@ -41,6 +41,7 @@ export function QuestionPage() {
     return (
       <div className="mx-auto w-full max-w-3xl pt-2">
         <EmptyState
+          as="h1"
           title="We don’t have that question."
           action={<ButtonLink to="/interview">Back to Interview prep</ButtonLink>}
         />
