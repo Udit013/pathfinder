@@ -231,7 +231,7 @@ export const tracks: ContinuousTrack[] = [
       'Write an Anki card for the pattern, not the problem: "when I see X, try Y because Z".',
       'Every few sessions, solve out loud, by hand or in a plain editor, timed.',
     ],
-    resourceIds: ['res-neetcode', 'res-neetcode-practice', 'res-leetcode-150', 'res-tech-interview-handbook', 'res-visualgo', 'res-coding-interview-university', 'res-the-algorithms', 'res-anki'],
+    resourceIds: ['res-neetcode', 'res-neetcode-practice', 'res-leetcode-150', 'res-tech-interview-handbook', 'res-visualgo', 'res-coding-interview-university', 'res-the-algorithms', 'res-anki', 'res-yt-fcc-data-structures', 'res-yt-neetcode-channel', 'res-grind75', 'res-yt-abdul-bari-algorithms', 'res-yt-fiset-graph-theory', 'res-big-o-cheatsheet', 'res-exercism', 'res-codewars', 'res-advent-of-code', 'res-mit-6006'],
   },
   {
     id: 'track-interview',
@@ -251,7 +251,7 @@ export const tracks: ContinuousTrack[] = [
       'After every mock, write down the single change that would most improve the next one.',
       'Record yourself. Listening back is uncomfortable and works.',
     ],
-    resourceIds: ['res-tih-behavioral', 'res-tih-behavioral-questions', 'res-pramp', 'res-interviewing-io', 'res-hello-interview-sd', 'res-system-design-primer'],
+    resourceIds: ['res-tih-behavioral', 'res-tih-behavioral-questions', 'res-pramp', 'res-interviewing-io', 'res-hello-interview-sd', 'res-system-design-primer', 'res-yt-bytebytego-channel', 'res-yt-gaurav-sen-system-design'],
   },
 ]
 
@@ -292,7 +292,7 @@ export const specializations: RoleSpecialization[] = [
       { round: 'Low-level design (at some companies)', whatTheyTest: 'Classes, interfaces, patterns, extensibility', howToPrepare: 'Refactoring.Guru, plus five classic object-oriented design problems' },
       { round: 'Behavioural', whatTheyTest: 'Ownership, conflict, impact', howToPrepare: 'Your story bank, mapped to the company’s stated values' },
     ],
-    resourceIds: ['res-leetcode-150', 'res-refactoring-guru', 'res-ostep', 'res-hello-interview-sd'],
+    resourceIds: ['res-leetcode-150', 'res-refactoring-guru', 'res-ostep', 'res-hello-interview-sd', 'res-yt-abdul-bari-algorithms', 'res-mit-6006', 'res-build-your-own-x'],
   },
   {
     id: 'fullstack',
@@ -331,7 +331,7 @@ export const specializations: RoleSpecialization[] = [
       { round: 'SQL (at some companies)', whatTheyTest: 'Joins, aggregates, window functions', howToPrepare: 'LeetCode SQL 50' },
       { round: 'Behavioural', whatTheyTest: 'Product sense, ownership', howToPrepare: 'Your story bank' },
     ],
-    resourceIds: ['res-fullstackopen', 'res-google-aip', 'res-frontend-interview-handbook', 'res-leetcode-sql50'],
+    resourceIds: ['res-fullstackopen', 'res-google-aip', 'res-frontend-interview-handbook', 'res-leetcode-sql50', 'res-fcc-v9-full-stack', 'res-roadmap-backend-projects', 'res-public-apis'],
   },
   {
     id: 'fde',
@@ -374,7 +374,7 @@ export const specializations: RoleSpecialization[] = [
       { round: 'SQL / data', whatTheyTest: 'Querying and cleaning real-world data', howToPrepare: 'Phase 4, plus messy public datasets' },
       { round: 'Behavioural', whatTheyTest: 'Customer empathy, ambiguity, pushing back, ownership', howToPrepare: 'Stories about difficult stakeholders and changed requirements' },
     ],
-    resourceIds: ['res-palantir-dev-vs-delta', 'res-yt-av-fde-roadmap', 'res-google-tech-writing', 'res-pg-exercises'],
+    resourceIds: ['res-palantir-dev-vs-delta', 'res-yt-av-fde-roadmap', 'res-google-tech-writing', 'res-pg-exercises', 'res-public-apis', 'res-cs50-sql'],
   },
   {
     id: 'ai',
@@ -412,7 +412,7 @@ export const specializations: RoleSpecialization[] = [
       { round: 'Take-home or live build', whatTheyTest: 'Building an LLM feature with evals', howToPrepare: 'Project 7, run against a timer' },
       { round: 'Behavioural', whatTheyTest: 'Judgement under uncertainty, shipping', howToPrepare: 'Stories about evaluation-driven decisions' },
     ],
-    resourceIds: ['res-hamel-evals', 'res-chip-genai-platform', 'res-ml-interviews-book', 'res-anthropic-effective-agents'],
+    resourceIds: ['res-hamel-evals', 'res-chip-genai-platform', 'res-ml-interviews-book', 'res-anthropic-effective-agents', 'res-yt-karpathy-zero-to-hero', 'res-ms-ai-agents-beginners', 'res-langchain-academy'],
   },
 ]
 
@@ -431,7 +431,7 @@ export const interviewTypes: InterviewType[] = [
       'Code it while narrating, then test with your own examples, including edge cases.',
     ],
     sampleQuestions: ['Two Sum, then Three Sum', 'Longest substring without repeating characters', 'Course schedule (topological sort)', 'LRU cache', 'Merge k sorted lists'],
-    resourceIds: ['res-neetcode', 'res-leetcode-150', 'res-tech-interview-handbook'],
+    resourceIds: ['res-neetcode', 'res-leetcode-150', 'res-tech-interview-handbook', 'res-grind75', 'res-yt-neetcode-channel', 'res-yt-fcc-data-structures'],
   },
   {
     id: 'int-system-design',
@@ -446,7 +446,7 @@ export const interviewTypes: InterviewType[] = [
       'Name trade-offs and failure modes before you’re asked.',
     ],
     sampleQuestions: ['URL shortener', 'Rate limiter', 'Chat application', 'News feed', 'Notification system', 'Ride-hailing'],
-    resourceIds: ['res-hello-interview-sd', 'res-system-design-primer', 'res-bytebytego-101'],
+    resourceIds: ['res-hello-interview-sd', 'res-system-design-primer', 'res-bytebytego-101', 'res-yt-bytebytego-channel', 'res-yt-gaurav-sen-system-design'],
   },
   {
     id: 'int-lld',
@@ -476,7 +476,7 @@ export const interviewTypes: InterviewType[] = [
     whatItTests: 'Joins, aggregates, window functions, and reasoning about the data.',
     method: ['Clarify the schema and the grain of each table.', 'Build the query step by step using CTEs.', 'Check it against nulls, duplicates and ties.'],
     sampleQuestions: ['Each customer’s most recent order', 'Seven-day rolling average', 'Users active on three consecutive days', 'Month-over-month retention'],
-    resourceIds: ['res-leetcode-sql50', 'res-pg-exercises', 'res-datalemur'],
+    resourceIds: ['res-leetcode-sql50', 'res-pg-exercises', 'res-datalemur', 'res-cs50-sql', 'res-sql-murder-mystery'],
   },
   {
     id: 'int-frontend',
@@ -486,7 +486,7 @@ export const interviewTypes: InterviewType[] = [
     whatItTests: 'JavaScript depth, building UI components, accessibility and browser fundamentals.',
     method: ['Build the component with accessible markup first.', 'Manage state deliberately.', 'Discuss performance and edge cases.'],
     sampleQuestions: ['Build an autocomplete', 'Implement debounce and throttle', 'Explain the event loop', 'What happens when you type a URL?'],
-    resourceIds: ['res-frontend-interview-handbook', 'res-javascript-info'],
+    resourceIds: ['res-frontend-interview-handbook', 'res-javascript-info', 'res-javascript30'],
   },
   {
     id: 'int-ai',
@@ -496,7 +496,7 @@ export const interviewTypes: InterviewType[] = [
     whatItTests: 'How LLMs work, RAG and agent design, evals, and cost and latency trade-offs.',
     method: ['Explain concepts simply, then go one level deeper.', 'For design questions, lead with evals and failure modes.', 'Use numbers from your own projects.'],
     sampleQuestions: ['Design a RAG system for internal docs', 'How would you evaluate a summarisation feature?', 'Fine-tune or use RAG?', 'Defend against prompt injection'],
-    resourceIds: ['res-ml-interviews-book', 'res-chip-genai-platform', 'res-hamel-evals'],
+    resourceIds: ['res-ml-interviews-book', 'res-chip-genai-platform', 'res-hamel-evals', 'res-yt-karpathy-zero-to-hero'],
   },
   {
     id: 'int-fde',

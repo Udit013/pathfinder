@@ -378,6 +378,14 @@ export function validateContent(): string[] {
     if (seenTopics.has(topic.id)) problems.push(`Engineer's Roadmap has duplicate topic id "${topic.id}"`)
     seenTopics.add(topic.id)
     if (topic.resourceIds.length === 0) problems.push(`Roadmap topic "${topic.id}" has no resources`)
+    // "Builds on" must point at a real topic that comes EARLIER in the path —
+    // otherwise the step-by-step order would ask you to learn something first
+    // that depends on something later.
+    for (const dep of topic.buildsOn ?? []) {
+      if (!seenTopics.has(dep) || dep === topic.id) {
+        problems.push(`Roadmap topic "${topic.id}" builds on "${dep}", which is unknown or not earlier in the path`)
+      }
+    }
   }
 
   return problems

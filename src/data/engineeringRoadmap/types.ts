@@ -11,6 +11,9 @@ export type Mastery = 'must' | 'working' | 'awareness' | 'optional'
 
 export type RoleId = 'swe' | 'fullstack' | 'fde' | 'ai'
 
+/** The four stages the phases are grouped into, from first code to job-ready. */
+export type Level = 'Beginner' | 'Intermediate' | 'Advanced' | 'Job-ready'
+
 export type Domain =
   | 'Foundations'
   | 'CS fundamentals'
@@ -40,6 +43,12 @@ export interface RoadmapTopic {
   /** A small, concrete thing to build or do to prove you've got it. */
   practice: string
   resourceIds: string[]
+  /**
+   * Earlier topics this one relies on. Shown as "Builds on" so it's clear how
+   * topics connect; the validator checks each id exists and comes earlier in
+   * the path, so the arrows only ever point backwards.
+   */
+  buildsOn?: string[]
 }
 
 export interface WeekStep {
@@ -73,6 +82,11 @@ export interface RoadmapPhase {
   number: number
   title: string
   tagline: string
+  level: Level
+  /** Why this step comes at this point — how it connects to what came before. */
+  whyNow: string
+  /** What this step unlocks next. */
+  leadsTo: string
   /** At ~20 hours a week. Used for the timeline. */
   weekStart: number
   weekEnd: number

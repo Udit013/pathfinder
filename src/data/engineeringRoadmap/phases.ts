@@ -17,6 +17,10 @@ export const phases: RoadmapPhase[] = [
     number: 0,
     title: 'Set up, and agree the rules',
     tagline: 'A working toolchain, a learning system, and a contract with your AI tools.',
+    level: 'Beginner',
+    whyNow:
+      'Everything after this assumes a working setup, Git, and a way to remember what you learn. An afternoon here saves weeks later.',
+    leadsTo: 'Step 1 — you’ll write real programs with these tools.',
     weekStart: 0,
     weekEnd: 1,
     hours: '6–8 hours',
@@ -108,6 +112,10 @@ export const phases: RoadmapPhase[] = [
     number: 1,
     title: 'Programming foundations',
     tagline: 'Two languages, written well, tested, debugged and version-controlled.',
+    level: 'Beginner',
+    whyNow:
+      'You need to write, test and debug code before any of the systems underneath it will make sense. This is the base everything else stands on.',
+    leadsTo: 'Step 2 explains what your code is actually doing on a machine and across a network. The DSA track starts alongside, in week 3.',
     weekStart: 1,
     weekEnd: 7,
     hours: '~20 h/week (DSA track starts in week 3)',
@@ -123,7 +131,7 @@ export const phases: RoadmapPhase[] = [
         why: 'Python is the default language for backend scripting, data and nearly all AI work, and it is accepted in almost every coding interview.',
         tradeoffs: 'Fast to write and slow to run. CPython’s global interpreter lock limits CPU-bound threads — you will see why in Phase 2.',
         practice: 'Explain why a list can’t be a dictionary key but a tuple can. Write a function with a mutable default argument, watch the bug happen, then fix it.',
-        resourceIds: ['res-python-docs', 'res-yt-campusx-100days-python', 'res-cs50x'],
+        resourceIds: ['res-python-docs', 'res-yt-campusx-100days-python', 'res-cs50x', 'res-cs50p', 'res-yt-fcc-python-full', 'res-fcc-v9-python', 'res-mooc-python-helsinki', 'res-automate-boring-stuff', 'res-exercism'],
       },
       {
         id: 'typescript-core',
@@ -134,7 +142,8 @@ export const phases: RoadmapPhase[] = [
         what: 'Closures, scope, `this`, prototypes, promises and async/await, then TypeScript’s structural types: unions, generics and narrowing. TypeScript is erased at compile time — the types protect you while you write, not while the code runs.',
         why: 'The language of the browser and a large share of backends. TypeScript is now the default for professional frontend work.',
         practice: 'Write a function that returns a different type per input shape, and make TypeScript prove each branch is handled using a discriminated union.',
-        resourceIds: ['res-javascript-info', 'res-typescript-handbook'],
+        resourceIds: ['res-javascript-info', 'res-typescript-handbook', 'res-yt-fcc-javascript-full', 'res-fcc-v9-javascript', 'res-eloquent-javascript', 'res-javascript30'],
+        buildsOn: ['python-core'],
       },
       {
         id: 'oop-design',
@@ -146,7 +155,8 @@ export const phases: RoadmapPhase[] = [
         why: 'Low-level design rounds (for example "design a parking lot") test this directly, and it is what makes code easy to change later.',
         tradeoffs: 'Patterns applied too early produce abstraction nobody needed. Prefer a plain function until the duplication actually hurts.',
         practice: 'Refactor a long if/else on payment type into the Strategy pattern, then explain whether it was worth it.',
-        resourceIds: ['res-refactoring-guru'],
+        resourceIds: ['res-refactoring-guru', 'res-exercism'],
+        buildsOn: ['python-core'],
       },
       {
         id: 'complexity',
@@ -158,7 +168,8 @@ export const phases: RoadmapPhase[] = [
         why: 'Every coding interview asks for it, and it is how you predict whether code survives real data volumes.',
         tradeoffs: 'Big-O hides constants. An O(n²) loop over 20 items can beat a clever O(n log n) one.',
         practice: 'For five functions you wrote this week, state their time and space complexity before running them, then time them at n = 10³, 10⁵ and 10⁶.',
-        resourceIds: ['res-cs50x', 'res-tech-interview-handbook'],
+        resourceIds: ['res-cs50x', 'res-tech-interview-handbook', 'res-big-o-cheatsheet', 'res-mit-6006'],
+        buildsOn: ['python-core'],
       },
       {
         id: 'testing-basics',
@@ -169,7 +180,8 @@ export const phases: RoadmapPhase[] = [
         what: 'Arrange, act, assert. Fixtures for setup, parametrised tests for many cases, and test doubles for things you can’t run in a test. A good test fails when the behaviour is wrong and passes otherwise — nothing else.',
         why: 'Tests are what let you refactor, review AI-written code, and ship without fear. Interviewers increasingly ask you to test your own solution.',
         practice: 'For every bug you hit this phase, write the failing test first, then fix it.',
-        resourceIds: ['res-pytest-docs'],
+        resourceIds: ['res-pytest-docs', 'res-exercism'],
+        buildsOn: ['python-core'],
       },
       {
         id: 'debugging',
@@ -181,6 +193,7 @@ export const phases: RoadmapPhase[] = [
         why: 'Most engineering time goes to understanding why something doesn’t work. Some companies run dedicated debugging interviews.',
         practice: 'Introduce a bug ten commits back in a project and find it with git bisect.',
         resourceIds: ['res-vscode-debugging', 'res-missing-semester'],
+        buildsOn: ['dev-environment'],
       },
       {
         id: 'linux-cli',
@@ -191,7 +204,8 @@ export const phases: RoadmapPhase[] = [
         what: 'Files, permissions, processes, pipes, environment variables, grep and find, ssh. Underneath: everything is a file, and programs connect through standard input and output.',
         why: 'Servers, containers and CI all run Linux. You will debug production from a terminal.',
         practice: 'Find the ten most frequent IP addresses in a log file using one pipeline. Then beat the first ten OverTheWire Bandit levels.',
-        resourceIds: ['res-linux-journey', 'res-missing-semester', 'res-overthewire'],
+        resourceIds: ['res-linux-journey', 'res-missing-semester', 'res-overthewire', 'res-the-linux-command-line', 'res-lf-intro-linux'],
+        buildsOn: ['dev-environment'],
       },
       {
         id: 'git-intermediate',
@@ -204,6 +218,7 @@ export const phases: RoadmapPhase[] = [
         tradeoffs: 'Rebase gives a clean history but rewrites it — never rebase a branch others have pulled. Merge preserves history but adds noise.',
         practice: 'Create a conflict deliberately, resolve it via rebase, then undo the whole thing using the reflog.',
         resourceIds: ['res-learn-git-branching', 'res-pro-git'],
+        buildsOn: ['git-basics'],
       },
     ],
     weekPlan: [
@@ -231,7 +246,7 @@ export const phases: RoadmapPhase[] = [
         'Why you separated storage from logic, and how that made testing easier',
         'A bug you found with a test before a user would have',
       ],
-      resourceIds: ['res-python-docs', 'res-pytest-docs', 'res-github-actions'],
+      resourceIds: ['res-python-docs', 'res-pytest-docs', 'res-github-actions', 'res-project-based-learning', 'res-automate-boring-stuff'],
     },
     miniExercises: [
       'Implement a linked list and a hash map from scratch, with tests.',
@@ -285,6 +300,10 @@ export const phases: RoadmapPhase[] = [
     number: 2,
     title: 'How computers and networks actually work',
     tagline: 'Processes, memory, concurrency, and what really happens between a browser and a server.',
+    level: 'Intermediate',
+    whyNow:
+      'Now that you can write programs, learn what they run on: processes, memory, concurrency and the network. Every later step leans on these.',
+    leadsTo: 'Step 3 builds a real web application on top of HTTP, async and TLS.',
     weekStart: 7,
     weekEnd: 11,
     hours: '~20 h/week (DSA continues alongside)',
@@ -300,6 +319,7 @@ export const phases: RoadmapPhase[] = [
         why: 'Explains why servers use pools of workers, why a crashed thread can take down a process, and why containers are cheaper than VMs.',
         practice: 'Use ps and top to watch a CPU-bound Python script, then run it with multiprocessing and watch every core light up.',
         resourceIds: ['res-ostep', 'res-cs50x'],
+        buildsOn: ['linux-cli'],
       },
       {
         id: 'memory-management',
@@ -310,7 +330,8 @@ export const phases: RoadmapPhase[] = [
         what: 'The stack holds function frames and is freed automatically; the heap holds longer-lived objects. C makes you free memory yourself. CPython uses reference counting plus a cycle collector; V8 (JavaScript) uses generational garbage collection.',
         why: 'Memory leaks still happen in garbage-collected languages — via caches that never evict, or listeners that never unsubscribe — and you need to recognise them.',
         practice: 'Write a Python cache that grows without bound, watch memory climb, then fix it with an LRU limit.',
-        resourceIds: ['res-cs50x', 'res-ostep'],
+        resourceIds: ['res-cs50x', 'res-ostep', 'res-yt-ben-eater'],
+        buildsOn: ['processes-threads'],
       },
       {
         id: 'concurrency',
@@ -323,6 +344,7 @@ export const phases: RoadmapPhase[] = [
         tradeoffs: 'Locks are correct but serialise work. Lock-free designs scale better and are much harder to get right.',
         practice: 'Reproduce a lost update with two threads, fix it with a lock, then cause a deadlock deliberately and fix it with lock ordering.',
         resourceIds: ['res-ostep', 'res-python-asyncio'],
+        buildsOn: ['processes-threads'],
       },
       {
         id: 'async-event-loop',
@@ -335,6 +357,7 @@ export const phases: RoadmapPhase[] = [
         tradeoffs: 'Excellent for I/O-bound concurrency, useless for CPU-bound work, and one blocking call anywhere stalls the whole server.',
         practice: 'Fetch 100 URLs sequentially, then with asyncio.gather, and compare. Then add one time.sleep() inside an async function and watch everything stall.',
         resourceIds: ['res-event-loop-talk', 'res-javascript-info', 'res-python-asyncio'],
+        buildsOn: ['concurrency', 'typescript-core'],
       },
       {
         id: 'networking-stack',
@@ -347,6 +370,7 @@ export const phases: RoadmapPhase[] = [
         tradeoffs: 'TCP guarantees order and delivery at the cost of latency; UDP is chosen for games, video and QUIC, which build their own reliability on top.',
         practice: 'Run dig to trace a DNS lookup, and curl -v to read a TCP connection and TLS handshake as they happen.',
         resourceIds: ['res-kurose-lectures', 'res-hpbn', 'res-cloudflare-learning'],
+        buildsOn: ['linux-cli'],
       },
       {
         id: 'http',
@@ -357,7 +381,8 @@ export const phases: RoadmapPhase[] = [
         what: 'Requests and responses with methods, status codes and headers. GET, PUT and DELETE are idempotent; POST is not. Caching is controlled by Cache-Control and ETag, state by cookies, and cross-origin access by CORS. HTTP/2 multiplexes many requests over one connection; HTTP/3 runs over QUIC.',
         why: 'The language every API speaks. Getting status codes, caching and CORS wrong produces most of the "it works on my machine" web bugs.',
         practice: 'Write a raw HTTP request by hand with netcat and read the raw response.',
-        resourceIds: ['res-mdn-http', 'res-hpbn'],
+        resourceIds: ['res-mdn-http', 'res-hpbn', 'res-yt-hussein-nasser'],
+        buildsOn: ['networking-stack'],
       },
       {
         id: 'tls-crypto-basics',
@@ -369,6 +394,7 @@ export const phases: RoadmapPhase[] = [
         why: 'You will configure TLS, store passwords and sign tokens. Mixing up hashing and encryption is a classic, costly mistake.',
         practice: 'Inspect a real site’s certificate chain with openssl s_client. Hash a password with argon2 or bcrypt and explain why you’d never use plain SHA-256 for passwords.',
         resourceIds: ['res-how-https-works', 'res-hpbn', 'res-owasp-cheatsheets'],
+        buildsOn: ['http'],
       },
       {
         id: 'other-protocols',
@@ -379,7 +405,8 @@ export const phases: RoadmapPhase[] = [
         what: 'SSH (remote shells and tunnels), FTP and SFTP (file transfer — SFTP runs over SSH and is the one to use today), SMTP (email), WebRTC (peer-to-peer media) and QUIC (UDP-based transport under HTTP/3).',
         why: 'You’ll meet them in system design discussions and customer environments, especially as an FDE. Know what each is for, not its byte layout.',
         practice: 'Write one sentence for each describing when you’d use it.',
-        resourceIds: ['res-cloudflare-learning'],
+        resourceIds: ['res-cloudflare-learning', 'res-yt-fireship'],
+        buildsOn: ['networking-stack'],
       },
       {
         id: 'what-happens-url',
@@ -391,6 +418,7 @@ export const phases: RoadmapPhase[] = [
         why: 'The single most common fundamentals question in software interviews, and a test of whether the pieces connect in your head.',
         practice: 'Explain it aloud in three minutes, then in ten, adding detail at each layer.',
         resourceIds: ['res-how-browsers-work', 'res-cloudflare-learning'],
+        buildsOn: ['http', 'tls-crypto-basics'],
       },
     ],
     weekPlan: [
@@ -417,7 +445,7 @@ export const phases: RoadmapPhase[] = [
         'Why thread-per-connection falls over under load, and what async changes',
         'What you learned about HTTP that frameworks had hidden from you',
       ],
-      resourceIds: ['res-mdn-http', 'res-python-asyncio', 'res-k6-docs'],
+      resourceIds: ['res-mdn-http', 'res-python-asyncio', 'res-k6-docs', 'res-build-your-own-x'],
     },
     miniExercises: [
       'Two threads incrementing a shared counter a million times: reproduce the wrong answer, then fix it.',
@@ -464,6 +492,10 @@ export const phases: RoadmapPhase[] = [
     number: 3,
     title: 'Web and backend engineering',
     tagline: 'A real full-stack application: frontend, API, auth, real-time, containers and tests.',
+    level: 'Intermediate',
+    whyNow:
+      'With HTTP and concurrency understood, you can build a full-stack app and know why it works, not just that it does.',
+    leadsTo: 'Step 4 makes that app’s data layer fast and correct; Step 5 scales it.',
     weekStart: 11,
     weekEnd: 19,
     hours: '~20 h/week',
@@ -478,7 +510,8 @@ export const phases: RoadmapPhase[] = [
         what: 'Semantic HTML, CSS layout with flexbox and grid, the DOM as a tree the browser renders, and accessibility built on semantics, labels and keyboard support.',
         why: 'Full-stack roles need it outright. Everyone else needs enough to build an internal tool or a demo that doesn’t embarrass them.',
         practice: 'Build a responsive page that is fully usable with the keyboard alone.',
-        resourceIds: ['res-mdn-learn', 'res-web-dev-learn'],
+        resourceIds: ['res-mdn-learn', 'res-web-dev-learn', 'res-ms-webdev-beginners', 'res-fcc-v9-responsive', 'res-yt-kevin-powell', 'res-roadmap-frontend-projects'],
+        buildsOn: ['what-happens-url'],
       },
       {
         id: 'react',
@@ -490,7 +523,8 @@ export const phases: RoadmapPhase[] = [
         why: 'The dominant frontend library, and the fastest way to put a UI in front of an API or an AI feature.',
         tradeoffs: 'Effects are the most misused part of React — most of them can be derived values or event handlers instead.',
         practice: 'Build a filterable list where the filter state lives in the URL, not in component state.',
-        resourceIds: ['res-react-docs', 'res-fullstackopen'],
+        resourceIds: ['res-react-docs', 'res-fullstackopen', 'res-yt-fcc-react-course', 'res-fcc-v9-frontend-libraries'],
+        buildsOn: ['frontend-fundamentals', 'typescript-core'],
       },
       {
         id: 'state-management',
@@ -502,6 +536,7 @@ export const phases: RoadmapPhase[] = [
         why: 'Most frontend complexity comes from treating server state as if it were local state.',
         practice: 'Replace hand-written fetch-in-useEffect code with TanStack Query, and add optimistic updates to one mutation.',
         resourceIds: ['res-tanstack-query', 'res-react-docs'],
+        buildsOn: ['react'],
       },
       {
         id: 'backend-fundamentals',
@@ -512,7 +547,8 @@ export const phases: RoadmapPhase[] = [
         what: 'The request lifecycle: routing, validation, authentication, business logic, data access, response. Layer the code into handlers, services and repositories so business logic doesn’t depend on the framework. Configuration comes from the environment.',
         why: 'The core of backend, full-stack and FDE work, and the shape every take-home assignment expects.',
         practice: 'Build a CRUD API with validation, consistent error responses and tests, from a blank file, in under two hours.',
-        resourceIds: ['res-fastapi-tutorial', 'res-twelve-factor'],
+        resourceIds: ['res-fastapi-tutorial', 'res-twelve-factor', 'res-fcc-v9-backend', 'res-roadmap-backend-projects', 'res-yt-hussein-nasser', 'res-fcc-v9-full-stack'],
+        buildsOn: ['http', 'python-core'],
       },
       {
         id: 'rest-api-design',
@@ -524,7 +560,8 @@ export const phases: RoadmapPhase[] = [
         why: 'API design shows up in system design interviews, code review and every integration an FDE builds.',
         tradeoffs: 'Offset pagination is simple but skips or repeats items when data changes; cursor pagination is stable but can’t jump to page 50.',
         practice: 'Design the API for a library-loan system on paper — endpoints, request and response bodies, errors — before writing any code.',
-        resourceIds: ['res-google-aip', 'res-mdn-http'],
+        resourceIds: ['res-google-aip', 'res-mdn-http', 'res-public-apis'],
+        buildsOn: ['backend-fundamentals'],
       },
       {
         id: 'graphql',
@@ -536,7 +573,8 @@ export const phases: RoadmapPhase[] = [
         why: 'Common where many different clients need different shapes of the same data.',
         tradeoffs: 'Flexible for clients but harder to cache, rate-limit and secure. Naive resolvers cause N+1 queries — batching (DataLoader) fixes that.',
         practice: 'Explain in two sentences when you would pick GraphQL over REST, and when you wouldn’t.',
-        resourceIds: ['res-graphql-learn'],
+        resourceIds: ['res-graphql-learn', 'res-yt-fireship'],
+        buildsOn: ['rest-api-design'],
       },
       {
         id: 'grpc',
@@ -548,7 +586,8 @@ export const phases: RoadmapPhase[] = [
         why: 'Common between internal microservices for its speed and strict contracts.',
         tradeoffs: 'Efficient and strongly typed, but not natively usable from browsers and harder to debug by hand than JSON.',
         practice: 'Read one .proto file from an open-source project and explain what the generated client lets you call.',
-        resourceIds: ['res-grpc-intro'],
+        resourceIds: ['res-grpc-intro', 'res-yt-fireship'],
+        buildsOn: ['rest-api-design'],
       },
       {
         id: 'realtime',
@@ -560,7 +599,8 @@ export const phases: RoadmapPhase[] = [
         why: 'Chat, notifications, live dashboards and streamed LLM output all need one of these, and choosing correctly is a common design question.',
         tradeoffs: 'WebSockets are the most capable and the hardest to scale — they need sticky sessions or a pub/sub layer behind them. SSE is simpler and enough for one-way streams.',
         practice: 'Build the same live notification feature with SSE and with WebSockets, and write down which you’d ship and why.',
-        resourceIds: ['res-js-info-long-polling', 'res-mdn-sse', 'res-mdn-websockets'],
+        resourceIds: ['res-js-info-long-polling', 'res-mdn-sse', 'res-mdn-websockets', 'res-yt-hussein-nasser'],
+        buildsOn: ['http', 'async-event-loop'],
       },
       {
         id: 'authn-authz',
@@ -573,6 +613,7 @@ export const phases: RoadmapPhase[] = [
         tradeoffs: 'JWTs scale without a session store but are hard to revoke before they expire. Sessions revoke instantly but need shared storage.',
         practice: 'Implement login with hashed passwords and httpOnly session cookies, then add role-based permissions and test that a viewer cannot edit.',
         resourceIds: ['res-owasp-cheatsheets', 'res-oauth-simplified', 'res-jwt-intro'],
+        buildsOn: ['tls-crypto-basics', 'backend-fundamentals'],
       },
       {
         id: 'architecture-basics',
@@ -585,6 +626,7 @@ export const phases: RoadmapPhase[] = [
         tradeoffs: 'More layers make code easier to test and slower to write. Match the architecture to the size of the problem.',
         practice: 'Write three architecture decision records for Project 3.',
         resourceIds: ['res-twelve-factor', 'res-roadmap-software-architecture'],
+        buildsOn: ['oop-design', 'backend-fundamentals'],
       },
       {
         id: 'docker-basics',
@@ -595,7 +637,8 @@ export const phases: RoadmapPhase[] = [
         what: 'An image is a layered, read-only filesystem plus metadata; a container is a running process isolated using Linux namespaces and cgroups, sharing the host’s kernel. Compose starts a whole stack — app, database, cache — with one command.',
         why: 'The standard unit of deployment, and the free way to run Postgres, Redis and queues locally instead of paying for cloud.',
         practice: 'Containerise Project 3 so a fresh clone runs with docker compose up and nothing else.',
-        resourceIds: ['res-docker-get-started', 'res-docker-compose'],
+        resourceIds: ['res-docker-get-started', 'res-docker-compose', 'res-yt-nana-docker', 'res-docker-curriculum'],
+        buildsOn: ['processes-threads', 'linux-cli'],
       },
       {
         id: 'testing-pyramid',
@@ -608,6 +651,7 @@ export const phases: RoadmapPhase[] = [
         tradeoffs: 'End-to-end tests are realistic but slow and flaky. Keep them few and focused.',
         practice: 'Write an integration test that runs against a real database container in CI, and one Playwright test for login.',
         resourceIds: ['res-pytest-docs', 'res-playwright-docs'],
+        buildsOn: ['testing-basics', 'docker-basics'],
       },
       {
         id: 'node-backend',
@@ -618,7 +662,8 @@ export const phases: RoadmapPhase[] = [
         what: 'JavaScript on the server, built on the event loop you studied in Phase 2.',
         why: 'Useful when a full-stack job is all-TypeScript. Learn it after FastAPI, not instead of it.',
         practice: 'Port one endpoint from Project 3 to Node and compare the two.',
-        resourceIds: ['res-nodejs-learn'],
+        resourceIds: ['res-nodejs-learn', 'res-fcc-v9-backend'],
+        buildsOn: ['async-event-loop', 'backend-fundamentals'],
       },
     ],
     weekPlan: [
@@ -653,7 +698,7 @@ export const phases: RoadmapPhase[] = [
         'How you prevented duplicate records under retries',
         'What you would change to support 100 times the users',
       ],
-      resourceIds: ['res-fastapi-tutorial', 'res-react-docs', 'res-owasp-cheatsheets', 'res-docker-compose'],
+      resourceIds: ['res-fastapi-tutorial', 'res-react-docs', 'res-owasp-cheatsheets', 'res-docker-compose', 'res-roadmap-backend-projects', 'res-public-apis'],
     },
     miniExercises: [
       'Implement the same notification feature with SSE and with WebSockets.',
@@ -709,6 +754,10 @@ export const phases: RoadmapPhase[] = [
     number: 4,
     title: 'Databases and data modelling',
     tagline: 'Fluent SQL, honest schemas, indexes you can explain, and transactions that hold up under concurrency.',
+    level: 'Intermediate',
+    whyNow:
+      'Your Step 3 app stores data. Now learn to model it well and keep it fast and correct under real load.',
+    leadsTo: 'Step 5 uses replication, caching and transactions to design systems at scale.',
     weekStart: 17,
     weekEnd: 22,
     hours: '~20 h/week (overlaps the end of Phase 3)',
@@ -723,7 +772,8 @@ export const phases: RoadmapPhase[] = [
         what: 'Joins (and what each kind does with unmatched rows), GROUP BY with HAVING, subqueries, common table expressions, and window functions such as ROW_NUMBER, RANK and running totals.',
         why: 'Asked in backend, FDE, data and AI interviews alike. FDEs live in SQL when integrating customer data.',
         practice: 'Write "top three products by revenue in each category" from memory using a window function.',
-        resourceIds: ['res-sqlbolt', 'res-pg-exercises', 'res-leetcode-sql50'],
+        resourceIds: ['res-sqlbolt', 'res-pg-exercises', 'res-leetcode-sql50', 'res-cs50-sql', 'res-sql-murder-mystery', 'res-fcc-v9-relational-databases'],
+        buildsOn: ['backend-fundamentals'],
       },
       {
         id: 'data-modeling',
@@ -735,7 +785,8 @@ export const phases: RoadmapPhase[] = [
         why: 'Schema mistakes are the most expensive to fix later, because data outlives code.',
         tradeoffs: 'Normalised data is consistent but needs joins; denormalised data reads fast but must be kept in sync.',
         practice: 'Model a multi-tenant app (organisations, users, roles, projects) and enforce the important rules with constraints, not application code.',
-        resourceIds: ['res-postgres-tutorial', 'res-mongodb-university'],
+        resourceIds: ['res-postgres-tutorial', 'res-mongodb-university', 'res-cs50-sql'],
+        buildsOn: ['sql-fluency'],
       },
       {
         id: 'migrations',
@@ -746,7 +797,8 @@ export const phases: RoadmapPhase[] = [
         what: 'Versioned, repeatable schema changes. Zero-downtime changes follow expand and contract: add the new column, backfill, switch reads, then drop the old one in a later deploy.',
         why: 'Renaming a column in a live system is a classic production incident.',
         practice: 'Rename a column in Project 3 using expand-and-contract across three migrations.',
-        resourceIds: ['res-postgres-tutorial'],
+        resourceIds: ['res-postgres-tutorial', 'res-cs50-sql', 'res-fcc-v9-relational-databases'],
+        buildsOn: ['data-modeling'],
       },
       {
         id: 'indexing',
@@ -758,7 +810,8 @@ export const phases: RoadmapPhase[] = [
         why: 'Almost every "the app got slow" problem lands here.',
         tradeoffs: 'Every index speeds up reads and slows down writes, and costs storage. Index the queries you actually run.',
         practice: 'Seed a million rows, find a slow query with EXPLAIN ANALYZE, add the right index, and record the before and after timings.',
-        resourceIds: ['res-use-the-index-luke'],
+        resourceIds: ['res-use-the-index-luke', 'res-cs50-sql', 'res-pg-exercises', 'res-yt-hussein-nasser'],
+        buildsOn: ['sql-fluency', 'complexity'],
       },
       {
         id: 'transactions',
@@ -771,6 +824,7 @@ export const phases: RoadmapPhase[] = [
         tradeoffs: 'Stricter isolation is safer but causes more conflicts and retries.',
         practice: 'Fire 50 concurrent requests that each decrement the same stock count, watch it go negative, then fix it two ways — row locks and optimistic versioning.',
         resourceIds: ['res-postgres-tutorial', 'res-kleppmann-distsys'],
+        buildsOn: ['concurrency', 'sql-fluency'],
       },
       {
         id: 'redis-caching',
@@ -782,7 +836,8 @@ export const phases: RoadmapPhase[] = [
         why: 'Caching is the first answer to read-heavy load. Redis also powers rate limiters, sessions, leaderboards and simple queues.',
         tradeoffs: 'Caches make reads fast and introduce stale data. Invalidation, and stampedes when a hot key expires, are the hard parts.',
         practice: 'Add cache-aside to your slowest endpoint, measure the hit rate, then handle invalidation when the data changes.',
-        resourceIds: ['res-redis-university'],
+        resourceIds: ['res-redis-university', 'res-aws-builders-library', 'res-yt-bytebytego-channel'],
+        buildsOn: ['backend-fundamentals'],
       },
       {
         id: 'nosql-models',
@@ -795,6 +850,7 @@ export const phases: RoadmapPhase[] = [
         tradeoffs: 'NoSQL scales writes horizontally by giving up joins and some consistency. Postgres with JSONB covers more ground than people expect.',
         practice: 'Model the same feature in Postgres and in DynamoDB, listing the access patterns first.',
         resourceIds: ['res-mongodb-university', 'res-dynamodb-guide'],
+        buildsOn: ['data-modeling'],
       },
       {
         id: 'replication-sharding',
@@ -807,6 +863,7 @@ export const phases: RoadmapPhase[] = [
         tradeoffs: 'Sharding makes cross-shard queries and transactions hard, and resharding a live system is painful. Delay it as long as you can.',
         practice: 'Explain how a user would fail to see their own write with read replicas, and two ways to fix it.',
         resourceIds: ['res-system-design-primer', 'res-kleppmann-distsys'],
+        buildsOn: ['transactions'],
       },
       {
         id: 'embedded-databases',
@@ -817,7 +874,8 @@ export const phases: RoadmapPhase[] = [
         what: 'A full SQL database stored in one file and running inside your process — no server at all.',
         why: 'Often the right answer for CLIs, mobile apps, prototypes and edge deployments. Knowing when not to run a database server is good judgement.',
         practice: 'You used it in Project 1. Write down what would make you move to Postgres.',
-        resourceIds: ['res-cs50x'],
+        resourceIds: ['res-cs50x', 'res-cs50-sql'],
+        buildsOn: ['sql-fluency'],
       },
       {
         id: 'vector-databases',
@@ -830,6 +888,7 @@ export const phases: RoadmapPhase[] = [
         tradeoffs: 'pgvector keeps everything in one database and is enough for most projects. Dedicated vector stores win at very large scale or with specialised features.',
         practice: 'Enable pgvector, store a few hundred sentence embeddings, and run a similarity query.',
         resourceIds: ['res-pgvector', 'res-pinecone-learn'],
+        buildsOn: ['indexing'],
       },
     ],
     weekPlan: [
@@ -903,6 +962,10 @@ export const phases: RoadmapPhase[] = [
     number: 5,
     title: 'System design, distributed systems and messaging',
     tagline: 'Scale, failure, consistency and asynchronous systems — and how to reason about them out loud.',
+    level: 'Advanced',
+    whyNow:
+      'You can build and store; now reason about scale, failure and asynchronous work — the heart of system design interviews.',
+    leadsTo: 'Step 6 deploys and operates these systems; Step 7 applies the same patterns to AI.',
     weekStart: 22,
     weekEnd: 28,
     hours: '~20 h/week',
@@ -917,7 +980,8 @@ export const phases: RoadmapPhase[] = [
         what: 'Vertical scaling (a bigger machine) versus horizontal (more machines), which needs stateless services. Latency is how long one request takes; throughput is how many complete per second; QPS is the load. Measure percentiles — p50, p95, p99 — not averages. Back-of-envelope estimation turns users into QPS, storage and bandwidth.',
         why: 'The first ten minutes of every system design interview, and how you avoid both over- and under-building.',
         practice: 'Estimate QPS, storage per year and peak bandwidth for a photo-sharing app with ten million daily users.',
-        resourceIds: ['res-system-design-primer', 'res-hello-interview-sd'],
+        resourceIds: ['res-system-design-primer', 'res-hello-interview-sd', 'res-yt-bytebytego-channel'],
+        buildsOn: ['backend-fundamentals'],
       },
       {
         id: 'load-balancing-proxies',
@@ -929,6 +993,7 @@ export const phases: RoadmapPhase[] = [
         why: 'In nearly every architecture diagram you will draw.',
         practice: 'Put two copies of your API behind a reverse proxy in Docker Compose, kill one, and watch traffic fail over.',
         resourceIds: ['res-cloudflare-learning', 'res-system-design-primer'],
+        buildsOn: ['scalability-fundamentals', 'http'],
       },
       {
         id: 'caching-layers',
@@ -940,6 +1005,7 @@ export const phases: RoadmapPhase[] = [
         why: 'The highest-leverage performance tool, and a reliable source of stale-data bugs.',
         practice: 'Add request coalescing so only one request rebuilds an expired cache key.',
         resourceIds: ['res-cloudflare-learning', 'res-aws-builders-library'],
+        buildsOn: ['redis-caching', 'scalability-fundamentals'],
       },
       {
         id: 'cap-consistency',
@@ -952,6 +1018,7 @@ export const phases: RoadmapPhase[] = [
         tradeoffs: 'Strong consistency costs latency and availability. Eventual consistency is fast and confusing to users unless you design for it.',
         practice: 'For a shopping cart, a bank balance and a like counter, choose a consistency model for each and defend it.',
         resourceIds: ['res-kleppmann-distsys', 'res-bytebytego-101'],
+        buildsOn: ['replication-sharding'],
       },
       {
         id: 'reliability-patterns',
@@ -963,6 +1030,7 @@ export const phases: RoadmapPhase[] = [
         why: 'Naive retries turn small outages into large ones — retry storms. This is how real systems stay up.',
         practice: 'Write a retry helper with exponential backoff and full jitter, and test it against a flaky fake service.',
         resourceIds: ['res-aws-builders-library', 'res-sre-book'],
+        buildsOn: ['rest-api-design'],
       },
       {
         id: 'rate-limiting',
@@ -973,7 +1041,8 @@ export const phases: RoadmapPhase[] = [
         what: 'Token bucket (allows bursts up to a capacity, refilling steadily), leaky bucket (smooth output), and fixed or sliding windows. In a distributed system the counters live in shared storage such as Redis, updated atomically.',
         why: 'Protects services from abuse and from themselves. "Design a rate limiter" is a classic interview question, and LLM APIs make it an everyday concern.',
         practice: 'Implement a token bucket in Redis with an atomic Lua script, and test it under concurrent load.',
-        resourceIds: ['res-stripe-rate-limiters'],
+        resourceIds: ['res-stripe-rate-limiters', 'res-system-design-primer', 'res-yt-bytebytego-channel'],
+        buildsOn: ['redis-caching'],
       },
       {
         id: 'messaging-queues',
@@ -986,6 +1055,7 @@ export const phases: RoadmapPhase[] = [
         tradeoffs: 'Async systems are more resilient and much harder to debug. Ordering is only guaranteed within a partition or a FIFO queue.',
         practice: 'Build a producer, a work queue and two consumers. Kill a consumer mid-message and prove nothing is lost or processed twice.',
         resourceIds: ['res-rabbitmq-tutorials', 'res-confluent-kafka-101', 'res-sqs-guide'],
+        buildsOn: ['concurrency'],
       },
       {
         id: 'event-driven',
@@ -997,6 +1067,7 @@ export const phases: RoadmapPhase[] = [
         why: 'Solves the dual-write problem — saving to the database and publishing an event, where one can fail — which naive designs get wrong.',
         practice: 'Implement the outbox pattern: write the order and its event in one transaction, then publish from a relay process.',
         resourceIds: ['res-confluent-kafka-101', 'res-bytebytego-101'],
+        buildsOn: ['messaging-queues', 'transactions'],
       },
       {
         id: 'background-jobs',
@@ -1008,6 +1079,7 @@ export const phases: RoadmapPhase[] = [
         why: 'Keeps APIs fast, and is where most "the email was sent twice" bugs live.',
         practice: 'Move a slow operation from a request into a background job with retries and a status endpoint the client can poll.',
         resourceIds: ['res-rabbitmq-tutorials', 'res-fastapi-tutorial'],
+        buildsOn: ['messaging-queues'],
       },
       {
         id: 'streaming',
@@ -1019,6 +1091,7 @@ export const phases: RoadmapPhase[] = [
         why: 'Behind real-time analytics, fraud detection and feature pipelines. Know the vocabulary unless a role demands more.',
         practice: 'Explain how you would compute "orders per minute" from a Kafka topic.',
         resourceIds: ['res-confluent-kafka-101'],
+        buildsOn: ['messaging-queues'],
       },
       {
         id: 'microservices-vs-monolith',
@@ -1031,6 +1104,7 @@ export const phases: RoadmapPhase[] = [
         tradeoffs: 'Microservices give independent deploys and scaling, and in exchange add network failures, distributed transactions and operational overhead.',
         practice: 'Write the argument for and against splitting Project 3 into services, and choose.',
         resourceIds: ['res-roadmap-software-architecture', 'res-bytebytego-101'],
+        buildsOn: ['architecture-basics'],
       },
       {
         id: 'consensus',
@@ -1042,6 +1116,7 @@ export const phases: RoadmapPhase[] = [
         why: 'Underpins etcd, ZooKeeper and distributed databases. Deep knowledge is for infrastructure and distributed-systems roles.',
         practice: 'Stretch goal: implement Raft in the MIT 6.5840 labs.',
         resourceIds: ['res-kleppmann-distsys', 'res-mit-6-5840'],
+        buildsOn: ['cap-consistency'],
       },
       {
         id: 'performance',
@@ -1053,6 +1128,7 @@ export const phases: RoadmapPhase[] = [
         why: 'Optimising without measuring wastes time and adds complexity. Interviewers listen for "I measured".',
         practice: 'Load test an endpoint, profile it, make one change, and show the p95 improvement.',
         resourceIds: ['res-k6-docs', 'res-aws-builders-library'],
+        buildsOn: ['indexing', 'caching-layers'],
       },
       {
         id: 'sd-framework',
@@ -1063,7 +1139,8 @@ export const phases: RoadmapPhase[] = [
         what: 'Functional and non-functional requirements, then estimates, core entities, the API, the data model, a high-level design, and deep dives into the hardest parts — naming the trade-offs throughout.',
         why: 'A clear method beats raw knowledge in a 45-minute interview.',
         practice: 'Run the method on one classic problem every week, timed, out loud.',
-        resourceIds: ['res-hello-interview-sd', 'res-system-design-primer'],
+        resourceIds: ['res-hello-interview-sd', 'res-system-design-primer', 'res-yt-bytebytego-channel', 'res-yt-gaurav-sen-system-design'],
+        buildsOn: ['scalability-fundamentals'],
       },
     ],
     weekPlan: [
@@ -1144,6 +1221,10 @@ export const phases: RoadmapPhase[] = [
     number: 6,
     title: 'Cloud, DevOps, security and production',
     tagline: 'Ship it, watch it, secure it, and handle it when it breaks — inside a free budget.',
+    level: 'Advanced',
+    whyNow:
+      'Software you can’t deploy, observe and secure isn’t finished. This is where your projects become production systems.',
+    leadsTo: 'Step 7 builds AI features on this production foundation.',
     weekStart: 26,
     weekEnd: 32,
     hours: '~20 h/week (overlaps Phase 5)',
@@ -1158,7 +1239,8 @@ export const phases: RoadmapPhase[] = [
         what: 'Regions and availability zones; IAM users, roles and least-privilege policies; VPC basics (subnets, security groups); compute options — virtual machines (EC2), containers and serverless functions (Lambda); object storage (S3); managed databases (RDS, DynamoDB).',
         why: 'Most production runs on a cloud provider. AWS has the largest market share; the concepts carry over to GCP and Azure.',
         practice: 'Create an IAM role with only the permissions one Lambda function needs, and prove other actions are denied.',
-        resourceIds: ['res-aws-skill-builder', 'res-yt-av-aws-zero-to-hero', 'res-aws-free-tier'],
+        resourceIds: ['res-aws-skill-builder', 'res-yt-av-aws-zero-to-hero', 'res-aws-free-tier', 'res-ms-az900-course'],
+        buildsOn: ['networking-stack'],
       },
       {
         id: 'cost-safety',
@@ -1170,6 +1252,7 @@ export const phases: RoadmapPhase[] = [
         why: 'An idle database or a forgotten NAT gateway can cost real money. Cost awareness is also an engineering skill employers value.',
         practice: 'Before creating anything else: set a budget alert. Destroy all infrastructure at the end of each session with terraform destroy.',
         resourceIds: ['res-aws-budgets', 'res-aws-free-tier'],
+        buildsOn: ['cloud-fundamentals'],
       },
       {
         id: 'serverless',
@@ -1181,7 +1264,8 @@ export const phases: RoadmapPhase[] = [
         why: 'The cheapest way to deploy small services, and very common for glue code, webhooks and FDE integrations.',
         tradeoffs: 'No servers to manage and no idle cost, but cold starts, execution time limits and harder local debugging.',
         practice: 'Deploy a Lambda behind an HTTP endpoint that writes to DynamoDB, all within always-free limits.',
-        resourceIds: ['res-aws-lambda-guide'],
+        resourceIds: ['res-aws-lambda-guide', 'res-aws-skill-builder'],
+        buildsOn: ['cloud-fundamentals'],
       },
       {
         id: 'containers-deep',
@@ -1192,7 +1276,8 @@ export const phases: RoadmapPhase[] = [
         what: 'Multi-stage builds for small images, non-root users, health checks and pinned base images. A VM virtualises hardware and runs its own kernel; containers share the host kernel, which is why they start in milliseconds and offer weaker isolation.',
         why: '"Containers vs VMs" is a standard question, and bloated, root-running images are a common review finding.',
         practice: 'Shrink your Project 3 image by at least half with a multi-stage build, and run it as a non-root user.',
-        resourceIds: ['res-docker-get-started'],
+        resourceIds: ['res-docker-get-started', 'res-yt-nana-docker', 'res-docker-compose', 'res-docker-curriculum'],
+        buildsOn: ['docker-basics'],
       },
       {
         id: 'kubernetes',
@@ -1204,7 +1289,8 @@ export const phases: RoadmapPhase[] = [
         why: 'Widely used at mid-size and large companies. Know the core objects and how a rollout works; go deeper only if target roles ask.',
         tradeoffs: 'Powerful and operationally heavy. Many teams are better served by managed containers or serverless.',
         practice: 'Deploy Project 3 to a local kind cluster, do a rolling update, then roll it back.',
-        resourceIds: ['res-kubernetes-basics', 'res-kind', 'res-killercoda'],
+        resourceIds: ['res-kubernetes-basics', 'res-kind', 'res-killercoda', 'res-yt-nana-kubernetes'],
+        buildsOn: ['containers-deep'],
       },
       {
         id: 'iac',
@@ -1215,7 +1301,8 @@ export const phases: RoadmapPhase[] = [
         what: 'Declare infrastructure in code; plan shows what will change; apply makes it so; state tracks what exists. Modules make it reusable.',
         why: 'Infrastructure becomes reviewable, repeatable and easy to delete — which also keeps cloud bills at zero.',
         practice: 'Rebuild your entire AWS setup from nothing with terraform apply, then remove it with terraform destroy.',
-        resourceIds: ['res-terraform-tutorials'],
+        resourceIds: ['res-terraform-tutorials', 'res-roadmap-devops-projects'],
+        buildsOn: ['cloud-fundamentals'],
       },
       {
         id: 'cicd',
@@ -1226,7 +1313,8 @@ export const phases: RoadmapPhase[] = [
         what: 'A pipeline runs lint, test, build and deploy on every change. Environments (development, staging, production) separate risk. Deployment strategies — rolling, blue-green, canary — limit how many users see a bad release. Rollbacks and feature flags give you an escape route.',
         why: 'How code actually reaches users. Interviewers ask "how would you deploy this safely?"',
         practice: 'Build a pipeline that deploys to staging on merge and to production after manual approval.',
-        resourceIds: ['res-github-actions', 'res-aws-builders-library'],
+        resourceIds: ['res-github-actions', 'res-aws-builders-library', 'res-roadmap-devops-projects'],
+        buildsOn: ['git-intermediate', 'testing-pyramid'],
       },
       {
         id: 'git-workflows',
@@ -1238,6 +1326,7 @@ export const phases: RoadmapPhase[] = [
         why: 'Day-to-day team practice, and reviewing well is how you get trusted with bigger work.',
         practice: 'Protect your main branch, require CI to pass, and review a classmate’s pull request using Google’s guide.',
         resourceIds: ['res-google-eng-practices', 'res-pro-git'],
+        buildsOn: ['git-intermediate'],
       },
       {
         id: 'observability',
@@ -1249,6 +1338,7 @@ export const phases: RoadmapPhase[] = [
         why: 'You can’t fix what you can’t see. "How would you debug a latency spike?" is a standard question.',
         practice: 'Instrument Project 5 with OpenTelemetry, view a trace that crosses the API and a worker, and alert on error rate.',
         resourceIds: ['res-opentelemetry-docs', 'res-prometheus-docs', 'res-grafana-docs', 'res-sre-book'],
+        buildsOn: ['performance'],
       },
       {
         id: 'incident-handling',
@@ -1259,7 +1349,8 @@ export const phases: RoadmapPhase[] = [
         what: 'Detect, triage, mitigate first (roll back, scale up, fail over), then find the root cause. Write a blameless postmortem with a timeline and action items. Runbooks document known fixes.',
         why: 'Every engineer is on call eventually. Calm, structured incident response is valued in behavioural rounds too.',
         practice: 'Break your own system deliberately, handle it with a runbook, and write the postmortem.',
-        resourceIds: ['res-sre-book'],
+        resourceIds: ['res-sre-book', 'res-aws-builders-library'],
+        buildsOn: ['observability'],
       },
       {
         id: 'secure-coding',
@@ -1270,7 +1361,8 @@ export const phases: RoadmapPhase[] = [
         what: 'The OWASP Top 10 — broken access control, injection, cross-site scripting, server-side request forgery and others. Parameterised queries, output encoding, input validation, dependency scanning, encryption in transit and at rest, firewalls and security groups. Secrets never go in Git: use environment variables locally and a secrets manager in production.',
         why: 'Security bugs are the most expensive bugs. FDEs in particular work inside customers’ security requirements.',
         practice: 'Complete the SQL injection, XSS and access-control labs on PortSwigger, then audit your own projects for the same flaws.',
-        resourceIds: ['res-owasp-top-ten', 'res-owasp-cheatsheets', 'res-portswigger-academy'],
+        resourceIds: ['res-owasp-top-ten', 'res-owasp-cheatsheets', 'res-portswigger-academy', 'res-cs50-cybersecurity'],
+        buildsOn: ['authn-authz'],
       },
       {
         id: 'cloud-networking',
@@ -1282,6 +1374,7 @@ export const phases: RoadmapPhase[] = [
         why: 'Comes up when debugging "why can’t my service reach the database?" and in FDE customer environments.',
         practice: 'Draw where your database should sit — public or private subnet — and explain why.',
         resourceIds: ['res-aws-skill-builder', 'res-cloudflare-learning'],
+        buildsOn: ['cloud-fundamentals'],
       },
     ],
     weekPlan: [
@@ -1314,7 +1407,7 @@ export const phases: RoadmapPhase[] = [
         'How you’d debug a latency spike using only your dashboards and traces',
         'How you kept the whole project inside the free tier',
       ],
-      resourceIds: ['res-terraform-tutorials', 'res-github-actions', 'res-aws-budgets', 'res-opentelemetry-docs', 'res-sre-book'],
+      resourceIds: ['res-terraform-tutorials', 'res-github-actions', 'res-aws-budgets', 'res-opentelemetry-docs', 'res-sre-book', 'res-roadmap-devops-projects'],
     },
     miniExercises: [
       'Write a least-privilege IAM policy and test that it denies what it should.',
@@ -1364,6 +1457,10 @@ export const phases: RoadmapPhase[] = [
     number: 7,
     title: 'AI engineering',
     tagline: 'ML foundations, LLMs, embeddings, RAG, agents, MCP, evaluation and AI architecture.',
+    level: 'Advanced',
+    whyNow:
+      'AI engineering is software engineering applied to models. With APIs, data, async systems and production skills in place, the AI features you build will actually hold up.',
+    leadsTo: 'Step 8 turns everything into a portfolio and strong interview performance.',
     weekStart: 30,
     weekEnd: 39,
     hours: '~20 h/week',
@@ -1378,7 +1475,8 @@ export const phases: RoadmapPhase[] = [
         what: 'Supervised learning, training, validation and test splits, overfitting and regularisation, bias and variance, loss functions and gradient descent, and evaluation metrics — precision, recall, F1, ROC-AUC — with the trade-off between them.',
         why: 'AI engineers need it to evaluate models and talk to ML teams. ML-heavy roles need it at "must" depth.',
         practice: 'Train a classifier with scikit-learn, then explain why accuracy is misleading on an imbalanced dataset.',
-        resourceIds: ['res-google-mlcc', 'res-statquest', 'res-yt-campusx-100days-ml'],
+        resourceIds: ['res-google-mlcc', 'res-statquest', 'res-yt-campusx-100days-ml', 'res-kaggle-intro-ml', 'res-ms-ai-beginners'],
+        buildsOn: ['python-core'],
       },
       {
         id: 'deep-learning-basics',
@@ -1389,7 +1487,8 @@ export const phases: RoadmapPhase[] = [
         what: 'Neural networks as stacked layers of weighted sums and non-linearities, trained by backpropagation. In PyTorch: tensors, autograd, and the training loop of forward pass, loss, backward pass and optimiser step. Embeddings are learned vector representations.',
         why: 'Makes LLMs, embeddings and fine-tuning make sense rather than feel like magic.',
         practice: 'Write a PyTorch training loop for a small image classifier from memory.',
-        resourceIds: ['res-pytorch-tutorials', 'res-fastai', 'res-3blue1brown'],
+        resourceIds: ['res-pytorch-tutorials', 'res-fastai', 'res-3blue1brown', 'res-yt-3b1b-neural-networks', 'res-yt-karpathy-zero-to-hero'],
+        buildsOn: ['ml-fundamentals'],
       },
       {
         id: 'transformers-llms',
@@ -1400,7 +1499,8 @@ export const phases: RoadmapPhase[] = [
         what: 'Text becomes tokens; attention lets every token weigh every other token in the context window; the model predicts the next token, and sampling settings (temperature, top-p) choose among the candidates. Pretraining learns language; instruction tuning and preference training make the model follow instructions. Hallucinations happen because the model generates plausible text, not verified facts.',
         why: 'Every design decision in an AI application — context length, cost, latency, reliability — traces back to these mechanics.',
         practice: 'Follow Karpathy’s "Let’s build GPT" and train the tiny model yourself.',
-        resourceIds: ['res-yt-karpathy-gpt-scratch', 'res-hf-nlp-course', 'res-llms-from-scratch'],
+        resourceIds: ['res-yt-karpathy-gpt-scratch', 'res-hf-nlp-course', 'res-llms-from-scratch', 'res-yt-karpathy-zero-to-hero'],
+        buildsOn: ['deep-learning-basics'],
       },
       {
         id: 'prompt-context-engineering',
@@ -1412,7 +1512,8 @@ export const phases: RoadmapPhase[] = [
         why: 'The cheapest lever on AI quality, used by every role here, including when you use AI tools to code.',
         tradeoffs: 'Prompt changes are fast but fragile. Without evals, you can’t tell an improvement from a regression.',
         practice: 'Extract structured data from 50 messy emails into a validated schema, and measure the error rate.',
-        resourceIds: ['res-claude-prompt-engineering', 'res-openai-cookbook'],
+        resourceIds: ['res-claude-prompt-engineering', 'res-openai-cookbook', 'res-prompting-guide', 'res-dlai-courses'],
+        buildsOn: ['transformers-llms'],
       },
       {
         id: 'embeddings-vector-search',
@@ -1424,6 +1525,7 @@ export const phases: RoadmapPhase[] = [
         why: 'The retrieval half of RAG, semantic search and recommendation.',
         practice: 'Implement cosine similarity by hand, then compare keyword, vector and hybrid search on the same queries.',
         resourceIds: ['res-pinecone-learn', 'res-pgvector'],
+        buildsOn: ['vector-databases', 'transformers-llms'],
       },
       {
         id: 'rag',
@@ -1436,6 +1538,7 @@ export const phases: RoadmapPhase[] = [
         tradeoffs: 'Smaller chunks retrieve precisely and lose context; larger ones keep context and add noise.',
         practice: 'Build a RAG pipeline over one project’s documentation and classify twenty failures as retrieval misses or generation misses.',
         resourceIds: ['res-yt-campusx-rag-explained', 'res-pinecone-learn', 'res-chip-genai-platform'],
+        buildsOn: ['embeddings-vector-search', 'prompt-context-engineering'],
       },
       {
         id: 'tool-calling-agents',
@@ -1447,7 +1550,8 @@ export const phases: RoadmapPhase[] = [
         why: 'The fastest-growing area of AI engineering, and central to FDE work at AI companies.',
         tradeoffs: 'Agents are flexible, expensive and unpredictable. Use the simplest workflow that solves the problem.',
         practice: 'Build an agent with three tools, a step limit, logging of every tool call, and approval before any write action.',
-        resourceIds: ['res-anthropic-effective-agents', 'res-hf-agents-course', 'res-yt-campusx-agentic-langgraph'],
+        resourceIds: ['res-anthropic-effective-agents', 'res-hf-agents-course', 'res-yt-campusx-agentic-langgraph', 'res-ms-ai-agents-beginners', 'res-langchain-academy'],
+        buildsOn: ['prompt-context-engineering', 'rest-api-design'],
       },
       {
         id: 'mcp',
@@ -1458,7 +1562,8 @@ export const phases: RoadmapPhase[] = [
         what: 'An open protocol that connects AI applications (hosts and clients) to servers exposing tools, resources and prompts, over standard transports — so one integration works across many AI tools.',
         why: 'Increasingly how companies connect models to internal systems, which is squarely FDE territory.',
         practice: 'Build an MCP server that exposes two tools over one of your own APIs, and use it from an MCP-capable client.',
-        resourceIds: ['res-mcp-docs', 'res-yt-campusx-mcp'],
+        resourceIds: ['res-mcp-docs', 'res-yt-campusx-mcp', 'res-ms-mcp-beginners'],
+        buildsOn: ['tool-calling-agents'],
       },
       {
         id: 'llm-evaluation',
@@ -1469,7 +1574,8 @@ export const phases: RoadmapPhase[] = [
         what: 'A golden dataset of real inputs with expected properties; assertion-based checks (format, required facts, forbidden content); retrieval metrics such as recall at k; LLM-as-judge, calibrated against your own labels; and running all of it in CI as regression tests.',
         why: 'Without evals, every prompt change is a guess. This is the habit that most separates production AI engineers from demo builders.',
         practice: 'Write fifty eval cases for your RAG app, run them in CI, and show one change that improved the score.',
-        resourceIds: ['res-hamel-evals', 'res-yt-campusx-llm-eval'],
+        resourceIds: ['res-hamel-evals', 'res-yt-campusx-llm-eval', 'res-dlai-courses'],
+        buildsOn: ['testing-pyramid', 'rag'],
       },
       {
         id: 'ai-architecture',
@@ -1481,6 +1587,7 @@ export const phases: RoadmapPhase[] = [
         why: 'What turns a prototype into a product. AI system design interviews are built around it.',
         practice: 'Put an interface in front of your model calls so you can swap providers, add a fallback model, and log cost per request.',
         resourceIds: ['res-chip-genai-platform', 'res-yt-krish-llm-gateway-litellm', 'res-yt-arize-otel-tracing'],
+        buildsOn: ['rag', 'reliability-patterns'],
       },
       {
         id: 'ai-security',
@@ -1492,6 +1599,7 @@ export const phases: RoadmapPhase[] = [
         why: 'Every agent with tools is an attack surface. Enterprise customers ask about this first.',
         practice: 'Plant an injection inside a document your RAG app retrieves, watch what happens, then mitigate it.',
         resourceIds: ['res-yt-krish-ai-security', 'res-owasp-cheatsheets'],
+        buildsOn: ['secure-coding', 'tool-calling-agents'],
       },
       {
         id: 'fine-tuning',
@@ -1504,6 +1612,7 @@ export const phases: RoadmapPhase[] = [
         tradeoffs: 'Try prompting first, then RAG, then fine-tuning. Fine-tuning needs good data and evals, and must be redone for new base models.',
         practice: 'Fine-tune a small open model with LoRA on Colab and compare it against a prompted baseline using the same evals.',
         resourceIds: ['res-unsloth-docs', 'res-mlabonne-llm-course', 'res-google-colab'],
+        buildsOn: ['deep-learning-basics', 'llm-evaluation'],
       },
       {
         id: 'inference-deployment',
@@ -1515,6 +1624,7 @@ export const phases: RoadmapPhase[] = [
         why: 'Cost and latency decisions, and privacy requirements where customer data can’t leave their environment.',
         practice: 'Run the same prompt through a local model and a hosted one, and compare quality, latency and cost.',
         resourceIds: ['res-ollama', 'res-vllm-docs'],
+        buildsOn: ['transformers-llms', 'containers-deep'],
       },
       {
         id: 'mlops',
@@ -1526,6 +1636,7 @@ export const phases: RoadmapPhase[] = [
         why: 'Reproducibility and safe change in production ML and LLM systems.',
         practice: 'Track ten runs of your eval suite in MLflow with the prompt version and model as parameters.',
         resourceIds: ['res-made-with-ml', 'res-mlflow-docs'],
+        buildsOn: ['ml-fundamentals', 'cicd'],
       },
       {
         id: 'ai-frameworks',
@@ -1537,7 +1648,8 @@ export const phases: RoadmapPhase[] = [
         why: 'Many job listings mention them. Learn them after you have built the same thing with raw API calls, so you know what they hide.',
         tradeoffs: 'They speed up prototypes and can make debugging and upgrades harder.',
         practice: 'Rebuild one feature from your raw-API version in a framework and compare the code.',
-        resourceIds: ['res-langchain-tutorials', 'res-llamaindex-docs', 'res-yt-campusx-genai-langchain'],
+        resourceIds: ['res-langchain-tutorials', 'res-llamaindex-docs', 'res-yt-campusx-genai-langchain', 'res-langchain-academy'],
+        buildsOn: ['tool-calling-agents'],
       },
     ],
     weekPlan: [
@@ -1627,6 +1739,10 @@ export const phases: RoadmapPhase[] = [
     number: 8,
     title: 'Specialise, polish, and interview',
     tagline: 'One primary role, one capstone, and a focused interview sprint.',
+    level: 'Job-ready',
+    whyNow:
+      'The foundation is done. Specialise in one role, polish what you’ve built, and practise interviewing until it feels routine.',
+    leadsTo: 'Applying — use the job-readiness checklist in Progress to know when you’re ready.',
     weekStart: 38,
     weekEnd: 46,
     hours: '~20 h/week — about half interview practice',
@@ -1641,7 +1757,7 @@ export const phases: RoadmapPhase[] = [
         what: 'A one-page resume with quantified, specific bullets; three pinned repositories with clear READMEs, architecture diagrams and a demo video or GIF; a LinkedIn profile aligned to the role you’re targeting.',
         why: 'Recruiters skim. Your projects need to be understandable in thirty seconds.',
         practice: 'For each project, write a README that opens with what it does, a diagram, how to run it, and the three most interesting decisions you made.',
-        resourceIds: ['res-harvard-resume-guide', 'res-tih-swe-guide'],
+        resourceIds: ['res-harvard-resume-guide', 'res-tih-swe-guide', 'res-project-based-learning'],
       },
       {
         id: 'behavioral',
@@ -1663,7 +1779,8 @@ export const phases: RoadmapPhase[] = [
         what: 'Timed practice with another person, under realistic conditions: coding, system design and behavioural.',
         why: 'Twenty real mocks do more than a hundred videos about interviewing. Nerves only drop with practice.',
         practice: 'Weekly peer mocks in this phase. After each one, write down a single thing to change.',
-        resourceIds: ['res-pramp', 'res-interviewing-io'],
+        resourceIds: ['res-pramp', 'res-interviewing-io', 'res-grind75'],
+        buildsOn: ['sd-framework'],
       },
       {
         id: 'open-source',
@@ -1674,7 +1791,8 @@ export const phases: RoadmapPhase[] = [
         what: 'Finding a good first issue, reading an unfamiliar codebase, following contribution guidelines, and getting a pull request reviewed and merged.',
         why: 'A merged pull request on a known project is strong proof that you can work in someone else’s code — which is the actual job.',
         practice: 'Get one pull request merged on a project you actually use.',
-        resourceIds: ['res-first-contributions', 'res-good-first-issue'],
+        resourceIds: ['res-first-contributions', 'res-good-first-issue', 'res-build-your-own-x'],
+        buildsOn: ['git-workflows'],
       },
     ],
     weekPlan: [

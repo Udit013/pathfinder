@@ -16,10 +16,10 @@ import { useThemeEffect } from '@/lib/useTheme'
  *
  * Everything else is split out. Measured on the production build rather than
  * estimated: splitting took first load from 202KB to 171KB transferred (index +
- * shared chunk + CSS). It has since grown to 186KB as the resource library grew
- * to 262 entries — that data is the bulk of the increase, for the reason below.
+ * shared chunk + CSS). It has since grown to 195KB as the resource library grew
+ * to 318 entries — that data is the bulk of the increase, for the reason below.
  * The remaining routes arrive as small chunks on demand. The Engineer's Roadmap
- * is the largest (~53KB gzipped of content) and only loads when opened.
+ * is the largest (~60KB gzipped of content) and only loads when opened.
  *
  * The shared chunk stays large because Today itself needs the resource library
  * to pick the day's quest resources. Deferring that would trade a smaller

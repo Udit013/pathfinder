@@ -3,6 +3,7 @@ import { ArrowDown, ArrowRight, ArrowUpRight, Check, Copy } from 'lucide-react'
 import { Badge } from '@/ui/Badge'
 import { Card } from '@/ui/Card'
 import { resourcesByIds } from '@/data/resources'
+import type { Resource } from '@/types'
 import {
   masteryLabels,
   projectCheckId,
@@ -11,9 +12,20 @@ import {
   type RoadmapProject,
   type RoleId,
 } from '@/data/engineeringRoadmap'
-import { roleLabels, useChecklist } from './shared'
-import { credentialLabels } from '@/types'
-import { cn } from '@/lib/utils'
+import {
+  bucketLabels,
+  bucketOf,
+  formatOf,
+  hasFreeCredential,
+  roleLabels,
+  statusLabels,
+  useChecklist,
+  type Bucket,
+  type Format,
+  type StepStatus,
+} from './shared'
+import { credentialLabels, resourceKindLabels } from '@/types'
+import { cn, formatMinutes } from '@/lib/utils'
 
 const masteryTone: Record<Mastery, 'accent' | 'positive' | 'neutral' | 'spark'> = {
   must: 'accent',
@@ -292,4 +304,110 @@ export function Bullets({ items, tone = 'ink' }: { items: string[]; tone?: 'ink'
 
 export function Label({ children }: { children: React.ReactNode }) {
   return <p className="text-xs font-semibold tracking-[0.12em] text-ink-faint uppercase">{children}</p>
+}
+
+// ─── Step status ─────────────────────────────────────────────────────────────
+
+const statusStyles: Record<StepStatus, string> = {
+  done: 'bg-positive-soft text-positive-ink',
+  skipped: 'bg-sunken text-ink-soft',
+  'in-progress': 'bg-accent-soft text-accent-ink',
+  'not-started': 'bg-surface text-ink-faint ring-1 ring-line ring-inset',
+}
+
+export function StatusChip({ status }: { status: StepStatus }) {
+  return (
+    <span className={cn('inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-[0.6875rem] font-medium', statusStyles[status])}>
+      {statusLabels[status]}
+    </span>
+  )
+}
+
+// ─── Resources grouped by what to open first ─────────────────────────────────
+
+const bucketOrder: Bucket[] = ['start', 'practice', 'deeper', 'reference']
+
+/**
+ * A topic's resources, split into "Start here", "Practise", "Go deeper" and
+ * "Reference", so the first click is obvious. Each row shows its format,
+ * length and whether it carries a free certificate. `format` narrows it to
+ * one kind of resource (the Resources tab's filter).
+ */
+export function GroupedResources({
+  ids,
+  format,
+  certificatesOnly,
+}: {
+  ids: string[]
+  format?: Format | null
+  certificatesOnly?: boolean
+}) {
+  const resources = resourcesByIds([...new Set(ids)]).filter(
+    (resource) =>
+      (!format || formatOf(resource) === format) && (!certificatesOnly || hasFreeCredential(resource)),
+  )
+  if (resources.length === 0) return null
+  const groups = bucketOrder
+    .map((bucket) => ({ bucket, items: resources.filter((resource) => bucketOf(resource) === bucket) }))
+    .filter((group) => group.items.length > 0)
+
+  return (
+    <div className="space-y-3">
+      {groups.map((group) => (
+        <div key={group.bucket}>
+          <p className="text-xs font-semibold text-ink">
+            {bucketLabels[group.bucket].label}
+            <span className="ml-1.5 font-normal text-ink-faint">— {bucketLabels[group.bucket].hint}</span>
+          </p>
+          <ul className="mt-1 space-y-0.5">
+            {group.items.map((resource) => (
+              <GroupedRow key={resource.id} resource={resource} />
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function GroupedRow({ resource }: { resource: Resource }) {
+  const certificate = hasFreeCredential(resource)
+  const paidCertificate = resource.credential === 'free_course_paid_certificate'
+  const costLabel = resource.cost === 'free' ? 'Free' : resource.cost === 'free_tier' ? 'Free tier' : 'Paid'
+  return (
+    <li>
+      <a
+        href={resource.url}
+        target="_blank"
+        rel="noreferrer noopener"
+        className="group -mx-2 flex min-h-11 items-start gap-2 rounded-lg px-2 py-1.5 transition-colors hover:bg-sunken"
+      >
+        <ArrowUpRight className="mt-1 size-3.5 shrink-0 text-ink-faint group-hover:text-accent-ink" aria-hidden />
+        <span className="min-w-0">
+          <span className="block text-sm leading-snug text-ink group-hover:underline">{resource.title}</span>
+          <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-xs text-ink-faint">
+            <span>{resource.provider}</span>
+            <span aria-hidden>·</span>
+            <span>{resourceKindLabels[resource.kind]}</span>
+            <span aria-hidden>·</span>
+            <span>~{formatMinutes(resource.estimatedMinutes)}</span>
+            <span aria-hidden>·</span>
+            <span className={resource.cost === 'free' ? 'text-positive-ink' : undefined}>{costLabel}</span>
+            {certificate ? (
+              <span className="rounded-full bg-positive-soft px-1.5 py-px text-[0.6875rem] font-medium text-positive-ink">
+                {credentialLabels[resource.credential]}
+              </span>
+            ) : paidCertificate ? (
+              <span className="rounded-full bg-sunken px-1.5 py-px text-[0.6875rem] text-ink-soft">
+                {credentialLabels[resource.credential]}
+              </span>
+            ) : null}
+          </span>
+          {resource.cost !== 'free' && resource.accessNote ? (
+            <span className="mt-0.5 block text-xs leading-snug text-ink-faint">{resource.accessNote}</span>
+          ) : null}
+        </span>
+      </a>
+    </li>
+  )
 }
