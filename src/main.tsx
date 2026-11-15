@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './styles/theme.css'
 import { App } from './app/App'
+import { ErrorBoundary } from './app/ErrorBoundary'
 
 if (import.meta.env.DEV) {
   const { validateContent } = await import('./data/validate')
@@ -16,6 +17,9 @@ if (!container) throw new Error('Root element not found')
 
 createRoot(container).render(
   <StrictMode>
-    <App />
+    {/* Last resort for errors outside a route (Today, onboarding, the shell). */}
+    <ErrorBoundary fullPage>
+      <App />
+    </ErrorBoundary>
   </StrictMode>,
 )

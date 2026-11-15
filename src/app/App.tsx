@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from 'react'
 import { BrowserRouter, Navigate, Outlet, Route, Routes, useLocation } from 'react-router'
 import { AppShell } from './layouts/AppShell'
 import { NotFoundPage } from './NotFoundPage'
+import { ErrorBoundary } from './ErrorBoundary'
 import { TodayPage } from '@/features/today/TodayPage'
 import { OnboardingFlow } from '@/features/onboarding/OnboardingFlow'
 import { LoadingScreen, RouteFallback } from '@/ui/States'
@@ -130,7 +131,14 @@ export function App() {
  * than nothing, so it fades in only if the chunk is genuinely slow to arrive.
  */
 function Lazy({ children }: { children: React.ReactNode }) {
-  return <Suspense fallback={<RouteFallback />}>{children}</Suspense>
+  // Keyed by path so an error on one page clears when you navigate away, and
+  // inside the shell so the navigation stays usable while it's showing.
+  const { pathname } = useLocation()
+  return (
+    <ErrorBoundary key={pathname}>
+      <Suspense fallback={<RouteFallback />}>{children}</Suspense>
+    </ErrorBoundary>
+  )
 }
 
 /** Onboarding is a one-time gate, not a wall to walk back into. */

@@ -19,15 +19,26 @@ import { cn } from '@/lib/utils'
  * The prompt is always shown and always editable before copying. Generating
  * text on someone's behalf and hiding it would be the wrong shape for this.
  */
-export function AiCompanion({
-  open,
-  onClose,
-  initialKind,
-}: {
+type Props = {
   open: boolean
   onClose: () => void
   initialKind?: PromptKind
-}) {
+}
+
+/**
+ * The closed state renders nothing and subscribes to nothing.
+ *
+ * Several of these are mounted at once (the header, plus page buttons), and
+ * the dialog reads the whole store to write prompts. Gating here means that
+ * cost is only paid while one is actually open — not on every state change
+ * anywhere in the app.
+ */
+export function AiCompanion(props: Props) {
+  if (!props.open) return null
+  return <AiCompanionDialog onClose={props.onClose} initialKind={props.initialKind} />
+}
+
+function AiCompanionDialog({ onClose, initialKind }: Omit<Props, 'open'>) {
   const state = useAppStore()
   const dialogRef = useRef<HTMLDivElement>(null)
   const [kind, setKind] = useState<PromptKind | null>(initialKind ?? null)
@@ -37,33 +48,59 @@ export function AiCompanion({
   const actions = useMemo(() => availableActions(state), [state])
   const built = useMemo(() => (kind ? buildPrompt(kind, state) : null), [kind, state])
 
-  // Regenerate the draft when a different action is chosen, but never overwrite
-  // edits the user has already made to the current one.
+  // Regenerate the draft only when a different action is chosen. Keyed on
+  // `kind` rather than `built`: `built` changes with any store update, which
+  // would silently wipe what the person had typed.
+  const builtRef = useRef(built)
+  builtRef.current = built
   useEffect(() => {
-    if (built) setDraft(built.text)
+    if (builtRef.current) setDraft(builtRef.current.text)
     setCopied(false)
-  }, [built])
+  }, [kind])
+
+  // Parents pass an inline onClose, so it changes every render. Read it through
+  // a ref so the effect below runs once — re-running it would call focus() and
+  // pull focus out of the textarea mid-sentence.
+  const onCloseRef = useRef(onClose)
+  onCloseRef.current = onClose
 
   useEffect(() => {
-    if (!open) return
+    const returnFocusTo = document.activeElement as HTMLElement | null
+    const dialog = dialogRef.current
+
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose()
+      if (event.key === 'Escape') {
+        onCloseRef.current()
+        return
+      }
+      // Keep Tab inside the dialog while it's open.
+      if (event.key !== 'Tab' || !dialog) return
+      const focusable = dialog.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), a[href], textarea, input, [tabindex]:not([tabindex="-1"])',
+      )
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (!first || !last) return
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
     }
+
     document.addEventListener('keydown', onKey)
     // Focus the panel so screen readers announce it and Escape works at once.
-    dialogRef.current?.focus()
+    dialog?.focus()
     document.body.style.overflow = 'hidden'
     return () => {
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
+      // Return focus to whatever opened the dialog.
+      returnFocusTo?.focus?.()
     }
-  }, [open, onClose])
-
-  useEffect(() => {
-    if (open) setKind(initialKind ?? null)
-  }, [open, initialKind])
-
-  if (!open) return null
+  }, [])
 
   const copy = async () => {
     try {
